@@ -1,4 +1,4 @@
-package MatFat;
+package matFat;
 
 public class MatFatController {
 
