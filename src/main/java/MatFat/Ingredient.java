@@ -32,6 +32,7 @@ public class Ingredient {
         if (ingredientName.length() > 50)
             throw new IllegalArgumentException("Too long Ingredient-name");
 
+        /// XXX unneccesary?
         boolean iNameMatch = Pattern.matches("[a-zA-Z]*", ingredientName);
 
         if (!iNameMatch)
@@ -51,7 +52,7 @@ public class Ingredient {
         if (ingredientAmount <= 0)
             throw new IllegalArgumentException("The amount of ingredient must be greater than 0");
 
-        if (ingredientAmount > 1000000)
+        if (ingredientAmount > (10 ^ 6))
             throw new IllegalArgumentException("Way too much ingredients...");
 
     }
@@ -76,9 +77,20 @@ public class Ingredient {
         this.ingredientMeasurement = ingredientMeasurement;
     }
 
+    // TODO .equals
+    public boolean equals(Ingredient ing) {
+        return true;
+    }
+
     public static void main(String[] args) {
         Ingredient ing = new Ingredient("Melk", 2, "dl");
         ing.setIngredientName("c");
         System.out.println(ing.getIngredientName());
+    }
+
+    @Override
+    public String toString() {
+        return "Ingredient [ingredientAmount=" + ingredientAmount + ", ingredientMeasurement=" + ingredientMeasurement
+                + ", ingredientName=" + ingredientName + "]";
     }
 }
