@@ -1,7 +1,8 @@
 package matFat;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Ingredient {
@@ -10,9 +11,9 @@ public class Ingredient {
     private Integer ingredientAmount;
     private String ingredientMeasurement;
 
-    // XXX fix class type?
     // TODO add more cooking measurements
-    private final static List<String> sizeTypes = Arrays.asList("g", "kg", "ml", "cl", "dl", "l");
+    private final static Set<String> sizeTypes = new HashSet<>(
+            Arrays.asList("g", "kg", "ml", "cl", "dl", "l", "pk", "stk"));
 
     public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement) {
         setIngredientName(ingredientName);
@@ -32,7 +33,7 @@ public class Ingredient {
         if (ingredientName.length() > 50)
             throw new IllegalArgumentException("Too long Ingredient-name");
 
-        /// XXX unneccesary?
+        // TODO add norwegian charachters?
         boolean iNameMatch = Pattern.matches("[a-zA-Z]*", ingredientName);
 
         if (!iNameMatch)
@@ -52,7 +53,7 @@ public class Ingredient {
         if (ingredientAmount <= 0)
             throw new IllegalArgumentException("The amount of ingredient must be greater than 0");
 
-        if (ingredientAmount > (10 ^ 6))
+        if (ingredientAmount > (Math.pow(10, 6)))
             throw new IllegalArgumentException("Way too much ingredients...");
 
     }
@@ -77,15 +78,22 @@ public class Ingredient {
         this.ingredientMeasurement = ingredientMeasurement;
     }
 
-    // TODO .equals
-    public boolean equals(Ingredient ing) {
-        return true;
+    /**
+     * 
+     * @param ingredient
+     * @return true if name is similar
+     */
+    public boolean equals(Ingredient ingredient) {
+        if (this.ingredientName.toLowerCase() == ingredient.ingredientName.toLowerCase()) {
+            return true;
+        }
+        return false;
     }
 
     public static void main(String[] args) {
         Ingredient ing = new Ingredient("Melk", 2, "dl");
-        ing.setIngredientName("c");
-        System.out.println(ing.getIngredientName());
+        // ing.setIngredientAmount(400);
+        System.out.println(ing.getIngredientAmount());
     }
 
     @Override
@@ -93,4 +101,5 @@ public class Ingredient {
         return "Ingredient [ingredientAmount=" + ingredientAmount + ", ingredientMeasurement=" + ingredientMeasurement
                 + ", ingredientName=" + ingredientName + "]";
     }
+
 }
