@@ -6,19 +6,44 @@ import java.util.List;
 import java.util.Set;
 
 public class Meal {
-
     // Attributes
-    private List<Ingredient> ingredientList = new ArrayList<>();
+    private String mealName;
     private char difficulty;
-    // XXX Coorect type of Set?
+    private List<Ingredient> ingredientList = new ArrayList<>();
     private Set<String> tags = new HashSet<>();
     private final static char[] acceptedDifficulties = { 'E', 'M', 'H' };
 
     // Constructor
-    public Meal() {
+    public Meal(String mealName, char difficulty, List<Ingredient> ingredientList, Set<String> tags) {
+        setMealName(mealName);
+        setDifficulty(difficulty);
+
+        for (Ingredient ing : ingredientList) {
+            addIngredient(ing);
+        }
+
+        for (String tag : tags) {
+            addTag(tag);
+        }
     }
 
     // Method
+
+    private void checkMealName(String mealName) throws IllegalArgumentException {
+        if (mealName.length() < 3)
+            throw new IllegalArgumentException("Too short mealName");
+        if (mealName.length() > 20)
+            throw new IllegalArgumentException("Too long mealName");
+    }
+
+    public void setMealName(String mealName) throws IllegalArgumentException {
+        checkMealName(mealName);
+        this.mealName = mealName;
+    }
+
+    public String getMealName() {
+        return mealName;
+    }
 
     public char getDifficulty() {
         return difficulty;
@@ -32,6 +57,7 @@ public class Meal {
         throw new IllegalArgumentException("Not accepted difficulty");
     }
 
+    // TODO add lowercase?
     public void setDifficulty(char difficulty) throws IllegalArgumentException {
         checkDifficulty(difficulty);
         this.difficulty = difficulty;
@@ -44,6 +70,11 @@ public class Meal {
     public void addIngredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement) {
         // TODO check for duplicates (not same ingredient added twice)
         Ingredient newIngredient = new Ingredient(ingredientName, ingredientAmount, ingredientMeasurement);
+        ingredientList.add(newIngredient);
+    }
+
+    public void addIngredient(Ingredient newIngredient) {
+        // TODO add checks
         ingredientList.add(newIngredient);
     }
 
@@ -86,11 +117,4 @@ public class Meal {
         }
     }
 
-    public static void main(String[] args) {
-        Meal meal = new Meal();
-        meal.addTag("Hot");
-        System.out.println(meal.getTags());
-        meal.removeTag("Hot");
-        System.out.println(meal.getTags());
-    }
 }
