@@ -14,6 +14,7 @@ public class Ingredient {
     // TODO add more cooking measurements
     private final static Set<String> sizeTypes = new HashSet<>(
             Arrays.asList("g", "kg", "ml", "cl", "dl", "l", "pk", "stk"));
+    private final static String ingNameReg = "[a-zA-ZæøåÆØÅ]*";
 
     public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement) {
         setIngredientName(ingredientName);
@@ -34,7 +35,7 @@ public class Ingredient {
             throw new IllegalArgumentException("Too long Ingredient-name");
 
         // TODO add norwegian charachters?
-        boolean iNameMatch = Pattern.matches("[a-zA-Z]*", ingredientName);
+        boolean iNameMatch = Pattern.matches(ingNameReg, ingredientName);
 
         if (!iNameMatch)
             throw new IllegalArgumentException("Ingredient-name can onlyconsist of chars");

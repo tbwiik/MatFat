@@ -15,8 +15,8 @@ public class MatFatApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        primaryStage.setTitle("Example App");
-        primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("App.fxml"))));
+        primaryStage.setTitle("MatFat App");
+        primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("MainPage.fxml"))));
         primaryStage.show();
     }
 

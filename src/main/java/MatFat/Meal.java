@@ -57,7 +57,7 @@ public class Meal {
         throw new IllegalArgumentException("Not accepted difficulty");
     }
 
-    // TODO add lowercase?
+    // TODO add lowercase? Yes. Use event listener?
     public void setDifficulty(char difficulty) throws IllegalArgumentException {
         checkDifficulty(difficulty);
         this.difficulty = difficulty;
@@ -97,8 +97,6 @@ public class Meal {
     }
 
     private void checkTag(String tag) {
-        // XXX Make method (also used similar in IngredientName check)
-        // Where do you place it?
         if (tag.length() > 10)
             throw new IllegalArgumentException("Too long tag");
         if (tag.length() < 3)
