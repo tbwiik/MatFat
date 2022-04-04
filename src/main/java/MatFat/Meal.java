@@ -5,16 +5,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import matFat.Ingredient.MEASUREMENTS;
+
 public class Meal {
     // Attributes
+    private int id;
     private String mealName;
     private char difficulty;
     private List<Ingredient> ingredientList = new ArrayList<>();
     private Set<String> tags = new HashSet<>();
+
+    private static int id_counter;
     private final static char[] acceptedDifficulties = { 'E', 'M', 'H' };
 
     // Constructor
     public Meal(String mealName, char difficulty, List<Ingredient> ingredientList, Set<String> tags) {
+        setId();
         setMealName(mealName);
         setDifficulty(difficulty);
 
@@ -28,6 +34,19 @@ public class Meal {
     }
 
     // Method
+    // TODO change exception?
+    public void setId() throws IllegalArgumentException {
+        if (this.id == 0) {
+            id_counter++;
+            this.id = id_counter;
+        } else {
+            throw new IllegalArgumentException("Id already set");
+        }
+    }
+
+    public Integer getId() {
+        return id;
+    }
 
     private void checkMealName(String mealName) throws IllegalArgumentException {
         if (mealName.length() < 3)
@@ -67,9 +86,17 @@ public class Meal {
         return ingredientList;
     }
 
+    // TODO make own Duplicate exception?
+    private void checkDupIngredient(Ingredient newIngredient) throws IllegalArgumentException {
+        if (this.ingredientList.contains(newIngredient))
+            throw new IllegalArgumentException("Duplicate Ingredient");
+
+        // XXX use Predicate/Comparator???
+    }
+
     public void addIngredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement) {
-        // TODO check for duplicates (not same ingredient added twice)
         Ingredient newIngredient = new Ingredient(ingredientName, ingredientAmount, ingredientMeasurement);
+        checkDupIngredient(newIngredient);
         ingredientList.add(newIngredient);
     }
 
@@ -84,11 +111,15 @@ public class Meal {
         ingredientList.remove(ingredient);
     }
 
-    public void updateIngredient(Ingredient ingredient, String ingredientName, Integer ingredientAmount,
-            String ingredientMeasurement) {
-        // TODO change such that only one thing can be edited
+    public void updateIngredient(Ingredient ingredient, String ingredientName) {
         ingredient.setIngredientName(ingredientName);
+    }
+
+    public void updateIngredient(Ingredient ingredient, Integer ingredientAmount) {
         ingredient.setIngredientAmount(ingredientAmount);
+    }
+
+    public void updateIngredient(Ingredient ingredient, MEASUREMENTS ingredientMeasurement) {
         ingredient.setIngredientMeasurement(ingredientMeasurement);
     }
 
@@ -115,4 +146,14 @@ public class Meal {
         }
     }
 
+    @Override
+    public String toString() {
+        // TODO write better using Stringbuilder
+        return "Meal [difficulty=" + difficulty + ", id=" + id + ", ingredientList=" + ingredientList + ", mealName="
+                + mealName + ", tags=" + tags + "]";
+    }
+
+    public static void main(String[] args) {
+        Ingredient ing = new Ingredient("Lol", 2, "stk");
+    }
 }

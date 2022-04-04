@@ -1,20 +1,38 @@
 package matFat;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Ingredient {
 
     private String ingredientName;
     private Integer ingredientAmount;
-    private String ingredientMeasurement;
+    private MEASUREMENTS ingredientMeasurement;
 
-    // TODO add more cooking measurements
-    private final static Set<String> sizeTypes = new HashSet<>(
-            Arrays.asList("g", "kg", "ml", "cl", "dl", "l", "pk", "stk"));
+    public static enum MEASUREMENTS {
+        g, // gram
+        kg, // kilogram
+        ml, // millilitre
+        cl, // centilitre
+        dl, // desilitre
+        l, // litre
+        pcs, // packages
+        pk, // pakke (norwegian)
+        stk, // stykk (norwegian)
+        ts, // teaspoon
+        tbsp, // tablespoon
+        cup, // cup
+        Oz, // ounce
+        dz, // dozen
+    }
+
+    // TODO Change regex such that you must have more than one chars
     private final static String ingNameReg = "[a-zA-ZæøåÆØÅ]*";
+
+    public Ingredient(String ingredientName, Integer ingredientAmount, MEASUREMENTS ingredientMeasurement) {
+        setIngredientName(ingredientName);
+        setIngredientAmount(ingredientAmount);
+        this.ingredientMeasurement = ingredientMeasurement;
+    }
 
     public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement) {
         setIngredientName(ingredientName);
@@ -34,7 +52,6 @@ public class Ingredient {
         if (ingredientName.length() > 50)
             throw new IllegalArgumentException("Too long Ingredient-name");
 
-        // TODO add norwegian charachters?
         boolean iNameMatch = Pattern.matches(ingNameReg, ingredientName);
 
         if (!iNameMatch)
@@ -64,18 +81,20 @@ public class Ingredient {
         this.ingredientAmount = ingredientAmount;
     }
 
-    public String getIngredientMeasurement() {
+    public MEASUREMENTS getIngredientMeasurement() {
         return ingredientMeasurement;
     }
 
-    private void checkIngredientMeasurement(String ingredientMeasurement) throws IllegalArgumentException {
-        boolean isValidType = sizeTypes.contains(ingredientMeasurement);
-        if (!isValidType)
-            throw new IllegalArgumentException("Not accepted type of measurement");
+    public void setIngredientMeasurement(String ingredientMeasurement) throws IllegalArgumentException {
+        try {
+            this.ingredientMeasurement = MEASUREMENTS.valueOf(ingredientMeasurement);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Not accepted measurement-type: " + ingredientMeasurement);
+        }
     }
 
-    public void setIngredientMeasurement(String ingredientMeasurement) throws IllegalArgumentException {
-        checkIngredientMeasurement(ingredientMeasurement);
+    public void setIngredientMeasurement(MEASUREMENTS ingredientMeasurement) {
         this.ingredientMeasurement = ingredientMeasurement;
     }
 
@@ -84,6 +103,7 @@ public class Ingredient {
      * @param ingredient
      * @return true if name is similar
      */
+    // TODO remove this one if other is good enough
     public boolean equals(Ingredient ingredient) {
         if (this.ingredientName.toLowerCase() == ingredient.ingredientName.toLowerCase()) {
             return true;
@@ -91,14 +111,36 @@ public class Ingredient {
         return false;
     }
 
-    public static void main(String[] args) {
-        Ingredient ing = new Ingredient("Melk", 2, "dl");
-        // ing.setIngredientAmount(400);
-        System.out.println(ing.getIngredientAmount());
+    // XXX this necessary
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((ingredientName == null) ? 0 : ingredientName.hashCode());
+        return result;
+    }
+
+    // TODO change this?
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Ingredient other = (Ingredient) obj;
+        if (ingredientName == null) {
+            if (other.ingredientName != null)
+                return false;
+        } else if (!ingredientName.toLowerCase().equals(other.ingredientName.toLowerCase()))
+            return false;
+        return true;
     }
 
     @Override
     public String toString() {
+        // TODO write better using StringBuilder
         return "Ingredient [ingredientAmount=" + ingredientAmount + ", ingredientMeasurement=" + ingredientMeasurement
                 + ", ingredientName=" + ingredientName + "]";
     }
