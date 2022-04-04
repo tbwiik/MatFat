@@ -1,0 +1,36 @@
+{
+
+1: {
+mealID : 1,
+mealName : Veganburger,
+difficulty : E,
+ingredientlist: {
+	Burgerbrod 2 stk
+	Salat 1 stk
+	Veganburger 2 stk	},
+tagSet : {quick vegan easy },
+}
+
+2: {
+mealID : 2,
+mealName : Tomatsuppe,
+difficulty : E,
+ingredientlist: {
+	TomatsuppeToro 1 stk
+	Polse 500 g
+	Makaroni 500 g	},
+tagSet : {quick easy },
+}
+
+3: {
+mealID : 3,
+mealName : Pasta Carbonara,
+difficulty : M,
+ingredientlist: {
+	Pasta 1 pk
+	Egg 2 stk
+	Meat 400 g	},
+tagSet : {meat easy },
+}
+
+}

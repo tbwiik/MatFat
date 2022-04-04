@@ -11,9 +11,11 @@ import org.junit.jupiter.api.Test;
 
 public class MealTest {
 
+    Integer id;
     Meal meal;
     String mealName;
     char difficulty;
+    Ingredient ing1;
     List<Ingredient> ingList = new ArrayList<>();
     Set<String> tags = new HashSet<>();
 
@@ -23,7 +25,8 @@ public class MealTest {
         mealName = "Pasta Carbonara";
         difficulty = 'E';
 
-        Ingredient ing1 = new Ingredient("Pasta", 1, "pk");
+        // XXX Add every ingredient as attributes (only need one for testing)
+        ing1 = new Ingredient("Pasta", 1, "pk");
         Ingredient ing2 = new Ingredient("Egg", 2, "stk");
         Ingredient ing3 = new Ingredient("Meat", 400, "g");
 
@@ -72,6 +75,19 @@ public class MealTest {
 
     @Test
     public void testUpdateIngredient() {
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            meal.updateIngredient(ing1, ";D:%");
+        });
+
+        meal.updateIngredient(ing1, "3");
+        Assertions.assertEquals(3, ing1.getIngredientAmount());
+
+        meal.updateIngredient(ing1, "kg");
+        Assertions.assertEquals("kg", ing1.getIngredientMeasurement());
+
+        meal.updateIngredient(ing1, "Pastaaa");
+        Assertions.assertEquals("Pastaaa", ing1.getIngredientName());
 
     }
 
