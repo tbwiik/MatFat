@@ -1,5 +1,7 @@
 package matFat;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Ingredient {
@@ -7,6 +9,7 @@ public class Ingredient {
     private String ingredientName;
     private Integer ingredientAmount;
     private MEASUREMENTS ingredientMeasurement;
+    private Set<String> tags = new HashSet<>();
 
     public static enum MEASUREMENTS {
         g, // gram
@@ -25,8 +28,7 @@ public class Ingredient {
         dz, // dozen
     }
 
-    // TODO Change regex such that you must have more than one chars
-    private final static String ingNameReg = "[a-zA-ZæøåÆØÅ]*";
+    private final static String NAMEREG_STRING = "[a-zA-ZæøåÆØÅ]*";
 
     public Ingredient(String ingredientName, Integer ingredientAmount, MEASUREMENTS ingredientMeasurement) {
         setIngredientName(ingredientName);
@@ -38,6 +40,16 @@ public class Ingredient {
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         setIngredientMeasurement(ingredientMeasurement);
+    }
+
+    public Ingredient(String[] args) throws IllegalArgumentException {
+        setIngredientName(args[0]);
+        try {
+            setIngredientAmount(Integer.parseInt(args[1]));
+        } catch (NumberFormatException nFormatException) {
+            throw new IllegalArgumentException("Cannot parse ingredient-amount to int");
+        }
+        setIngredientMeasurement(args[2]);
     }
 
     public String getIngredientName() {
@@ -52,10 +64,10 @@ public class Ingredient {
         if (ingredientName.length() > 50)
             throw new IllegalArgumentException("Too long Ingredient-name");
 
-        boolean iNameMatch = Pattern.matches(ingNameReg, ingredientName);
+        boolean iNameMatch = Pattern.matches(NAMEREG_STRING, ingredientName);
 
         if (!iNameMatch)
-            throw new IllegalArgumentException("Ingredient-name can onlyconsist of chars");
+            throw new IllegalArgumentException("Ingredient-name can only consist of chars");
     }
 
     public void setIngredientName(String ingredientName) throws IllegalArgumentException {
@@ -98,29 +110,31 @@ public class Ingredient {
         this.ingredientMeasurement = ingredientMeasurement;
     }
 
-    /**
-     * 
-     * @param ingredient
-     * @return true if name is similar
-     */
-    // TODO remove this one if other is good enough
-    public boolean equals(Ingredient ingredient) {
-        if (this.ingredientName.toLowerCase() == ingredient.ingredientName.toLowerCase()) {
-            return true;
+    // Basicly same as checkIngredientName
+    private void checkIngredientTag(String tag) throws IllegalArgumentException {
+        if (tag.length() < 3)
+            throw new IllegalArgumentException("Too short tag");
+
+        if (tag.length() > 10)
+            throw new IllegalArgumentException("Too long tag");
+
+        boolean iNameMatch = Pattern.matches(NAMEREG_STRING, ingredientName);
+
+        if (!iNameMatch)
+            throw new IllegalArgumentException("Tag can only consist of chars");
+    }
+
+    public void setTags(String... tags) throws IllegalArgumentException {
+        for (String tag : tags) {
+            checkIngredientTag(tag);
+            this.tags.add(tag);
         }
-        return false;
     }
 
-    // XXX this necessary
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((ingredientName == null) ? 0 : ingredientName.hashCode());
-        return result;
+    public Set<String> getTags() {
+        return tags;
     }
 
-    // TODO change this?
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -136,6 +150,14 @@ public class Ingredient {
         } else if (!ingredientName.toLowerCase().equals(other.ingredientName.toLowerCase()))
             return false;
         return true;
+    }
+
+    public void updateIngredient(Integer ingredientAmount, MEASUREMENTS ingredientMeasurement)
+            throws IllegalMeasurementException {
+        if (!this.ingredientMeasurement.equals(ingredientMeasurement))
+            throw new IllegalMeasurementException("Not similar measurement-types");
+
+        setIngredientAmount(ingredientAmount);
     }
 
     @Override
