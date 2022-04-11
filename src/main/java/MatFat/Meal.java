@@ -8,44 +8,24 @@ import java.util.Set;
 import matFat.Ingredient.MEASUREMENTS;
 
 public class Meal {
-    // Attributes
-    private int id;
+
     private String mealName;
     private char difficulty;
-    private List<Ingredient> ingredientList = new ArrayList<>();
+    private IngredientContainer ingredientContainer;
     private Set<String> tags = new HashSet<>();
 
-    private static int id_counter;
-    private final static char[] acceptedDifficulties = { 'E', 'M', 'H' };
+    private final static char[] ACCEPTED_DIFFICUILTIES = { 'E', 'M', 'H' };
 
-    // Constructor
-    public Meal(String mealName, char difficulty, List<Ingredient> ingredientList, Set<String> tags) {
-        setId();
+    public Meal(String mealName, char difficulty, List<Ingredient> ingredients, Set<String> tags) {
+
         setMealName(mealName);
         setDifficulty(difficulty);
 
-        for (Ingredient ing : ingredientList) {
-            addIngredient(ing);
-        }
+        this.ingredientContainer = new IngredientContainer(ingredients);
 
-        for (String tag : tags) {
-            addTag(tag);
-        }
-    }
+        tags.addAll(tags);
+        tags.addAll(ingredientContainer.getTags());
 
-    // Method
-    // TODO change exception?
-    public void setId() throws IllegalArgumentException {
-        if (this.id == 0) {
-            id_counter++;
-            this.id = id_counter;
-        } else {
-            throw new IllegalArgumentException("Id already set");
-        }
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     private void checkMealName(String mealName) throws IllegalArgumentException {
@@ -69,8 +49,8 @@ public class Meal {
     }
 
     private void checkDifficulty(char difficulty) throws IllegalArgumentException {
-        for (int i = 0; i < acceptedDifficulties.length; i++) {
-            if (acceptedDifficulties[i] == difficulty)
+        for (int i = 0; i < ACCEPTED_DIFFICUILTIES.length; i++) {
+            if (ACCEPTED_DIFFICUILTIES[i] == difficulty)
                 return;
         }
         throw new IllegalArgumentException("Not accepted difficulty");
@@ -82,68 +62,25 @@ public class Meal {
         this.difficulty = difficulty;
     }
 
-    public List<Ingredient> getIngredientList() {
-        return ingredientList;
-    }
-
-    // TODO make own Duplicate exception?
-    private void checkDupIngredient(Ingredient newIngredient) throws IllegalArgumentException {
-        if (this.ingredientList.contains(newIngredient))
-            throw new IllegalArgumentException("Duplicate Ingredient");
-
-        // XXX use Predicate/Comparator???
-    }
-
-    public void addIngredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement) {
-        Ingredient newIngredient = new Ingredient(ingredientName, ingredientAmount, ingredientMeasurement);
-        checkDupIngredient(newIngredient);
-        ingredientList.add(newIngredient);
-    }
-
-    public void addIngredient(Ingredient newIngredient) {
-        // TODO add checks
-        ingredientList.add(newIngredient);
-    }
-
-    public void removeIngredient(Ingredient ingredient) {
-        if (!ingredientList.contains(ingredient))
-            throw new IllegalArgumentException("This ingredient does not exist in meal");
-        ingredientList.remove(ingredient);
-    }
-
-    public void updateIngredient(Ingredient ingredient, String ingredientName) {
-        ingredient.setIngredientName(ingredientName);
-    }
-
-    public void updateIngredient(Ingredient ingredient, Integer ingredientAmount) {
-        ingredient.setIngredientAmount(ingredientAmount);
-    }
-
-    public void updateIngredient(Ingredient ingredient, MEASUREMENTS ingredientMeasurement) {
-        ingredient.setIngredientMeasurement(ingredientMeasurement);
-    }
-
     public Set<String> getTags() {
         return tags;
     }
 
-    private void checkTag(String tag) {
-        if (tag.length() > 10)
-            throw new IllegalArgumentException("Too long tag");
-        if (tag.length() < 3)
-            throw new IllegalArgumentException("Too short tag");
-    }
-
     public void addTag(String tag) {
-        checkTag(tag);
+        Ingredient.checkIngredientTag(tag);
         tags.add(tag);
     }
 
+    /**
+     * Remove tag from tag-set
+     * <p>
+     * Overwrites whatever tags {@linkplain Ingredient} or
+     * {@linkplain IngredientContainer} has.
+     * 
+     * @param tag
+     */
     public void removeTag(String tag) {
-        for (String iTag : tags) {
-            if (iTag.equals(tag))
-                tags.remove(tag);
-        }
+        tags.remove(tag);
     }
 
     @Override
