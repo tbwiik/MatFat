@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Set;
 
@@ -16,23 +18,52 @@ import matFat.Ingredient.MEASUREMENTS;
 
 public class fHandler implements fHandlerInterface {
 
-    HashMap<Integer, Meal> allMeals;
-    Integer id;
-    Meal meal;
+    Set<Meal> allMeals = new HashSet<>();
 
+    // TODO written, never tested, not entirely finished either
+    // Need to implement recipe
     @Override
-    public HashMap<Integer, Meal> readFromFile(String filename) {
+    public Set<Meal> readFromFile(String filename) throws IllegalArgumentException {
 
         BufferedReader reader = null;
 
         try {
             reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename)));
             while (reader.ready()) {
-                String line = reader.readLine();
-                //TODO Fix reading
-                meal.addIngredient(toIng(line));
-                allMeals.put(key, value)
+
+                try {
+
+                    reader.readLine(); // Ignores first line
+                    String mealName = reader.readLine().split(":")[1];
+                    char difficulty = reader.readLine().split(":")[1].charAt(0);
+                    List<Ingredient> ingredientList = new ArrayList<>();
+                    Set<String> tags = new HashSet<>();
+
+                    reader.readLine();
+                    while (true) {
+                        String line = reader.readLine().strip();
+                        if (line.equals("},"))
+                            break;
+                        ingredientList.add(new Ingredient(line.split(" ")));
+                    }
+
+                    reader.readLine();
+                    while (true) {
+                        String line = reader.readLine().strip();
+                        if (line.equals("},"))
+                            break;
+                        tags.add(line);
+                    }
+
+                    allMeals.add(new Meal(mealName, difficulty, new IngredientContainer(ingredientList), tags, recipe))
+
+                } catch (IllegalArgumentException | IndexOutOfBoundsException exceptions) {
+                    exceptions.printStackTrace();
+                    // XXX change exception?
+                    throw new IllegalArgumentException("Cannot read from file due to wrong format");
+                }
             }
+
         } catch (IOException ioeRead) {
             ioeRead.printStackTrace();
         } finally {
@@ -43,9 +74,11 @@ public class fHandler implements fHandlerInterface {
             }
         }
 
-        return null;
+        return allMeals;
     }
 
+    // XXX wtf did i use this for??? - probably to create and ingredient...
+    // This should throw some exceptions?!?!
     private Ingredient toIng(final String inputline) {
         String[] ingComp = inputline.split(" ");
         String name = ingComp[0];
@@ -54,10 +87,13 @@ public class fHandler implements fHandlerInterface {
         return new Ingredient(name, amount, measurement);
     }
 
-    @Override
-    public void writeToFile(HashMap<Integer, Meal> meals, String filename) {
+    // XXX Honestly think this should work. Need to fix reading first to be able to
+    // check...?
 
-        String content = hashMapToStr(meals);
+    @Override
+    public void writeToFile(Set<Meal> meals, String filename) {
+
+        String content = mealSetToStr(meals);
 
         try {
             BufferedWriter writer = new BufferedWriter(
@@ -66,18 +102,18 @@ public class fHandler implements fHandlerInterface {
             writer.flush();
             writer.close();
         } catch (Exception e) {
-            // TODO change quote
+            // TODO change error quote
             System.err.println("Shit happened");
             e.printStackTrace();
         }
     }
 
-    private String hashMapToStr(HashMap<Integer, Meal> meals) {
+    private String mealSetToStr(Set<Meal> meals) {
 
         StringBuilder sBuilder = new StringBuilder();
 
-        sBuilder.append("{\n\n");
-        meals.forEach((key, value) -> sBuilder.append(mealToStr(value) + "\n"));
+        sBuilder.append("{\n");
+        meals.forEach((meal) -> sBuilder.append(mealToStr(meal) + "\n"));
         sBuilder.append("}\n");
 
         return sBuilder.toString();
@@ -87,31 +123,36 @@ public class fHandler implements fHandlerInterface {
      * Converts list of ingredients to text-format
      * 
      * @param ingList List of Ingredients
-     * @return String in JSON format of IngredientList
+     * @return String of formatted list
      */
-    private String listToStr(List<Ingredient> ingList) {
+    private String ingListToStr(List<Ingredient> ingList) {
 
         StringBuilder sBuilder = new StringBuilder();
 
-        sBuilder.append("ingredientlist: {");
+        sBuilder.append("ingredientlist:{");
         ingList.forEach((ingredient) -> {
             sBuilder.append(
                     "\n\t" + ingredient.getIngredientName() +
                             " " + ingredient.getIngredientAmount() +
                             " " + ingredient.getIngredientMeasurement());
         });
-        sBuilder.append("\t},");
+        sBuilder.append("\n},");
 
         return sBuilder.toString();
     }
 
-    private String setToStr(Set<String> tagSet) {
+    // XXX Consider smashing this together with ingListToStr
+    private String ingContainerToStr(IngredientContainer ingCont) {
+        return ingListToStr(ingCont.getIngredients());
+    }
+
+    private String tagSetToStr(Set<String> tagSet) {
 
         StringBuilder sBuilder = new StringBuilder();
 
-        sBuilder.append("tagSet : {");
-        tagSet.stream().forEach((tag) -> sBuilder.append(tag + " "));
-        sBuilder.append("}");
+        sBuilder.append("tagSet:{\n");
+        tagSet.stream().forEach((tag) -> sBuilder.append(tag + "\n"));
+        sBuilder.append("},\n");
 
         return sBuilder.toString();
     }
@@ -121,22 +162,17 @@ public class fHandler implements fHandlerInterface {
         StringBuilder sBuilder = new StringBuilder();
 
         sBuilder.append(
-                meal.getId() + ": {\n" +
-                        "mealID : " + meal.getId() + ",\n" +
+                "{\n" +
                         "mealName : " + meal.getMealName() + ",\n" +
                         "difficulty : " + meal.getDifficulty() + ",\n" +
-                        listToStr(meal.getIngredientList()) + "\n" +
-                        setToStr(meal.getTags()) + ",\n" +
+                        ingContainerToStr(meal.getIngredientContainer()) + "\n" +
+                        tagSetToStr(meal.getTags()) + ",\n" +
                         "}\n");
 
         return sBuilder.toString();
     }
 
     public static void main(String[] args) {
-        // HashMap<String, Integer> foo = new HashMap<>();
-        // foo.put("1", 1);
-        // foo.put("2", 2);
-        // fHandler fhandler = new fHandler();
-        // fhandler.writeToFile(foo, "testfile");
+        System.out.println(Math.pow(10, 7));
     }
 }

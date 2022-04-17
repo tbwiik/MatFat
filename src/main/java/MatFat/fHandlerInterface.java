@@ -1,11 +1,11 @@
 package matFat;
 
-import java.util.HashMap;
+import java.util.Set;
 
 public interface fHandlerInterface {
 
-    public HashMap<Integer, Meal> readFromFile(String filename);
+    public Set<Meal> readFromFile(String filename);
 
-    public void writeToFile(HashMap<Integer, Meal> meals, String filename);
+    public void writeToFile(Set<Meal> meals, String filename);
 
 }
