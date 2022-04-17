@@ -1,54 +1,50 @@
 package matFat;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class Menu {
 
     private List<Meal> mealList = new ArrayList<>();
     private int numberOfMeals;
     private Set<String> tags = new HashSet<>();
-    private List<Ingredient> ingredients = new ArrayList<>();
+    private IngredientContainer ingredientContainer; // Make a list/set or have one giant container??
 
-    public Menu(List<Meal> mealList, int numberOfMeals, Set<String> tags) {
-        this.mealList.addAll(mealList);
-        this.numberOfMeals = numberOfMeals;
-        this.tags.addAll(tags);
+    public Menu(List<Meal> mealList, Set<String> tags) {
 
     }
 
-    public List<Meal> getMenu() {
-        return menu;
+    public List<Meal> getMealList() {
+        return mealList;
+    }
+
+    // Consider deleting method and do in constructor instead
+    private void setMealList(List<Meal> mealList) {
+        this.mealList = mealList;
     }
 
     public int getNumberOfMeals() {
         return numberOfMeals;
     }
 
+    // Consider do in constructor
+    private void setNumberOfMeals() {
+        this.numberOfMeals = mealList.size();
+    }
+
     public Set<String> getTags() {
         return tags;
     }
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
+    public void addTag(String tag) throws IllegalArgumentException {
+        Ingredient.checkTag(tag);
+        this.tags.add(tag);
     }
 
-    /**
-     * Generate a list of ingredients where duplicates are summaried together
-     * 
-     * 
-     * @param ingredients
-     * @return non-duplicate ingredient-list
-     */
-    private List<String> setIngredient(List<String> ingredients) {
-
+    public IngredientContainer getIngredientContainer() {
+        return ingredientContainer;
     }
 
-    // TODO write toString using Stringbuilder
 }

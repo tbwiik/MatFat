@@ -5,18 +5,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import matFat.Ingredient.MEASUREMENTS;
-
 public class Meal {
 
     private String mealName;
     private char difficulty;
     private IngredientContainer ingredientContainer;
     private Set<String> tags = new HashSet<>();
+    private List<String> recipe = new ArrayList<>();
 
     private final static char[] ACCEPTED_DIFFICUILTIES = { 'E', 'M', 'H' };
 
-    public Meal(String mealName, char difficulty, List<Ingredient> ingredients, Set<String> tags) {
+    public Meal(String mealName, char difficulty, List<Ingredient> ingredients, Set<String> tags, List<String> recipe) {
 
         setMealName(mealName);
         setDifficulty(difficulty);
@@ -26,6 +25,23 @@ public class Meal {
         tags.addAll(tags);
         tags.addAll(ingredientContainer.getTags());
 
+        setRecipe(recipe);
+
+    }
+
+    private void addTag(List<Ingredient> ingredients) {
+        // TODO only add tags if every ingredient has it.
+        // E.g. a meal is not vegan if it contains one ingredient being meat
+
+        Set<String> tags = ingredients.get(0).getTags();
+
+        // Remove difference in tags from var "tags"
+        // e.g. only keep tag if ingredient also has it
+        for (Ingredient ingredient : ingredients) {
+            if (tags.contains(ingredient.getTags())) {
+
+            }
+        }
     }
 
     private void checkMealName(String mealName) throws IllegalArgumentException {
@@ -67,7 +83,7 @@ public class Meal {
     }
 
     public void addTag(String tag) {
-        Ingredient.checkIngredientTag(tag);
+        Ingredient.checkTag(tag);
         tags.add(tag);
     }
 
@@ -83,14 +99,15 @@ public class Meal {
         tags.remove(tag);
     }
 
-    @Override
-    public String toString() {
-        // TODO write better using Stringbuilder
-        return "Meal [difficulty=" + difficulty + ", id=" + id + ", ingredientList=" + ingredientList + ", mealName="
-                + mealName + ", tags=" + tags + "]";
+    private void setRecipe(List<String> recipe) {
+        // TODO write checks for recipe
     }
 
-    public static void main(String[] args) {
-        Ingredient ing = new Ingredient("Lol", 2, "stk");
+    public List<String> getRecipe() {
+        return recipe;
+    }
+
+    public IngredientContainer getIngredientContainer() {
+        return ingredientContainer;
     }
 }

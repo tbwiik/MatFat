@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 public class Ingredient {
 
     private String ingredientName;
+    // XXX Consider changing to primitive datatype
     private Integer ingredientAmount;
     private MEASUREMENTS ingredientMeasurement;
     private Set<String> tags = new HashSet<>();
@@ -83,6 +84,7 @@ public class Ingredient {
         if (ingredientAmount <= 0)
             throw new IllegalArgumentException("The amount of ingredient must be greater than 0");
 
+        // XXX Bad coding to compare a double and int this way?
         if (ingredientAmount > (Math.pow(10, 6)))
             throw new IllegalArgumentException("Way too much ingredients...");
 
@@ -111,14 +113,15 @@ public class Ingredient {
     }
 
     // Basicly same as checkIngredientName
-    private void checkIngredientTag(String tag) throws IllegalArgumentException {
+    // Static because of use in Meal
+    public static void checkTag(String tag) throws IllegalArgumentException {
         if (tag.length() < 3)
             throw new IllegalArgumentException("Too short tag");
 
         if (tag.length() > 10)
             throw new IllegalArgumentException("Too long tag");
 
-        boolean iNameMatch = Pattern.matches(NAMEREG_STRING, ingredientName);
+        boolean iNameMatch = Pattern.matches(NAMEREG_STRING, tag);
 
         if (!iNameMatch)
             throw new IllegalArgumentException("Tag can only consist of chars");
@@ -126,7 +129,7 @@ public class Ingredient {
 
     public void setTags(String... tags) throws IllegalArgumentException {
         for (String tag : tags) {
-            checkIngredientTag(tag);
+            checkTag(tag);
             this.tags.add(tag);
         }
     }
