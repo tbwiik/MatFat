@@ -1,4 +1,4 @@
-Veganburger:{
+{
 mealName:Veganburger,
 difficulty:E,
 ingredientlist:{
@@ -12,7 +12,7 @@ tagSet:{
 	easy
 },
 }
-Tomatsuppe:{
+{
 mealName:Tomatsuppe,
 difficulty:E,
 ingredientlist:{
@@ -25,7 +25,7 @@ tagSet:{
 	easy 
 },
 }
-Pasta Carbonara:{
+{
 mealName:Pasta Carbonara,
 difficulty:M,
 ingredientlist:{
