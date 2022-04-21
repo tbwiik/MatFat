@@ -5,23 +5,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import matFat.Ingredient.MEASUREMENTS;
-
 public class IngredientContainer {
 
     private List<Ingredient> ingredients = new ArrayList<>();
     private Set<String> tags = new HashSet<>();
     private int numberOfIngredients;
 
+    /**
+     * Creates container with {@linkplain Ingredient}
+     * <p>
+     * Add ingredients to container according to
+     * {@linkplain IngredientContainer#addIngredient()}.
+     * Merges similar ingredients to one
+     * 
+     * @param ingredients
+     */
     public IngredientContainer(List<Ingredient> ingredients) {
-        generateIngredientSummary(ingredients);
-    }
-
-    private void generateIngredientSummary(List<Ingredient> ingredients) throws IllegalArgumentException {
 
         for (Ingredient ingredient : ingredients) {
             addIngredient(ingredient);
         }
+
+        generateTags();
 
     }
 
@@ -38,9 +43,8 @@ public class IngredientContainer {
      * Add tags from each ingredient to container
      * 
      * @param ingredient
-     * @throws IllegalArgumentException if updating ingredient
      */
-    public void addIngredient(Ingredient ingredient) throws IllegalArgumentException {
+    public void addIngredient(Ingredient ingredient) {
 
         if (!this.ingredients.contains(ingredient))
             this.ingredients.add(ingredient);
@@ -55,8 +59,8 @@ public class IngredientContainer {
             }
         }
 
-        // Adds tags from ingredient to container-set
-        tags.addAll(ingredient.getTags());
+        // Intersection
+        tags.retainAll(ingredient.getTags());
 
     }
 
@@ -71,10 +75,17 @@ public class IngredientContainer {
     public void removeIngredient(Ingredient ingredientToRemove) throws IllegalArgumentException {
         if (!ingredients.contains(ingredientToRemove))
             throw new IllegalArgumentException("Container does not contain this ingredient");
-        ingredients.forEach((ingredient) -> {
-            if (ingredient.equals(ingredientToRemove))
+        // ingredients.forEach((ingredient) -> {
+        // if (ingredient.equals(ingredientToRemove))
+        // ingredients.remove(ingredient);
+        // });
+
+        for (Ingredient ingredient : ingredients) {
+            if (ingredient.equals(ingredientToRemove)) {
                 ingredients.remove(ingredient);
-        });
+                break;
+            }
+        }
 
         generateTags();
 
@@ -83,9 +94,22 @@ public class IngredientContainer {
     /**
      * Generate tags to {@linkplain IngredientContainer} based on all
      * {@linkplain Ingredient} tags
+     * <p>
+     * Only add tags that every ingredient has.
+     * This ensures that tags in container is valid for whole container.
+     * E.g. dont add vegan if container contains meat as ingredient
+     * 
      */
     private void generateTags() {
-        ingredients.forEach((ingredient) -> tags.addAll(ingredient.getTags()));
+
+        // Adds tags to have an amount of tags to start with
+        tags.addAll(ingredients.get(0).getTags());
+
+        // Iterates through ingredients and only keep tags that are similar
+        ingredients.forEach((ingredient) -> {
+            tags.retainAll(ingredient.getTags());
+        });
+
     }
 
     public List<Ingredient> getIngredients() {

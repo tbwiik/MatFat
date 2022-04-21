@@ -31,18 +31,27 @@ public class Ingredient {
 
     private final static String NAMEREG_STRING = "[a-zA-ZæøåÆØÅ]*";
 
-    public Ingredient(String ingredientName, Integer ingredientAmount, MEASUREMENTS ingredientMeasurement) {
+    // Constructor for enum measurement
+    public Ingredient(String ingredientName, Integer ingredientAmount, MEASUREMENTS ingredientMeasurement,
+            String... tags)
+            throws IllegalArgumentException {
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         this.ingredientMeasurement = ingredientMeasurement;
+        setTags(tags);
     }
 
-    public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement) {
+    // Constructor for String measurement
+    public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement, String... tags)
+            throws IllegalArgumentException {
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         setIngredientMeasurement(ingredientMeasurement);
+        setTags(tags);
     }
 
+    // Constructor for String arguments
+    // TODO add tags
     public Ingredient(String[] args) throws IllegalArgumentException {
         setIngredientName(args[0]);
         try {
@@ -84,8 +93,8 @@ public class Ingredient {
         if (ingredientAmount <= 0)
             throw new IllegalArgumentException("The amount of ingredient must be greater than 0");
 
-        // XXX Bad coding to compare a double and int this way?
-        if (ingredientAmount > (Math.pow(10, 6)))
+        // XXX Change datatype?
+        if ((int) ingredientAmount > (int) (Math.pow(10, 6)))
             throw new IllegalArgumentException("Way too much ingredients...");
 
     }
@@ -155,6 +164,7 @@ public class Ingredient {
         return true;
     }
 
+    // TODO Implement String input as measurement?
     public void updateIngredient(Integer ingredientAmount, MEASUREMENTS ingredientMeasurement)
             throws IllegalMeasurementException {
         if (!this.ingredientMeasurement.equals(ingredientMeasurement))
