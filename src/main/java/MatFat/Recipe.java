@@ -8,17 +8,22 @@ public class Recipe {
 
     List<String> recipe = new ArrayList<>();
 
-    public Recipe(String... recipe) {
+    public Recipe(List<String> recipe) throws IllegalArgumentException {
         setRecipe(recipe);
     }
 
-    private void setRecipe(String... recipe) throws IllegalArgumentException {
+    private void setRecipe(List<String> recipe) throws IllegalArgumentException {
         // XXX Consider making public to be able to rewrite whole recipe in one push.
 
         for (String recipeLine : recipe) {
             checkRecipeLine(recipeLine);
             this.recipe.add(recipeLine);
         }
+
+        // recipe.forEach((recipeLine) -> {
+        // checkRecipeLine(recipeLine);
+        // this.recipe.add(recipeLine);
+        // });
 
     }
 
@@ -41,7 +46,9 @@ public class Recipe {
         return new ArrayList<>(recipe);
     }
 
-    public String getRecipeLine(int index) {
+    public String getRecipeLine(int index) throws IndexOutOfBoundsException {
+        if (index <= 0 || index > recipe.size())
+            throw new IndexOutOfBoundsException("Recipe-index out of bounds");
         return recipe.get(index);
     }
 

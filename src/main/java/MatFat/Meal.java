@@ -15,15 +15,29 @@ public class Meal {
 
     private final static char[] ACCEPTED_DIFFICUILTIES = { 'E', 'M', 'H' };
 
-    public Meal(String mealName, char difficulty, List<Ingredient> ingredients, List<String> recipe, String... tags) {
+    public Meal(String mealName, char difficulty, List<Ingredient> ingredients, List<String> recipe, String... tags)
+            throws IllegalArgumentException {
 
         setMealName(mealName);
         setDifficulty(difficulty);
         this.ingredientContainer = new IngredientContainer(ingredients);
-        this.recipe = new Recipe(recipe); // Will maybe end up throwing exception due to nonvalid input. Check after
-                                          // actually writing class
+        this.recipe = new Recipe(recipe);
         setTags(tags);
     }
+
+    // TODO delete constructor?
+    /*
+     * public Meal(String mealName, char difficulty, IngredientContainer
+     * ingredientContainer, Recipe recipe,
+     * String... tags) throws IllegalArgumentException {
+     * 
+     * setMealName(mealName);
+     * setDifficulty(difficulty);
+     * this.ingredientContainer = ingredientContainer;
+     * this.recipe = recipe;
+     * setTags(tags);
+     * }
+     */
 
     private void setTags(String... tags) {
         this.tags.addAll(ingredientContainer.getTags());
@@ -35,7 +49,7 @@ public class Meal {
     private void checkMealName(String mealName) throws IllegalArgumentException {
         if (mealName.length() < 3)
             throw new IllegalArgumentException("Too short mealName");
-        if (mealName.length() > 20)
+        if (mealName.length() > 30)
             throw new IllegalArgumentException("Too long mealName");
     }
 
@@ -99,9 +113,9 @@ public class Meal {
      * @throws IllegalArgumentException if removing tag not existing in meal
      */
     public void removeTag(String tag) throws IllegalArgumentException {
-        if (tags.contains(tag))
-            tags.remove(tag);
-        throw new IllegalArgumentException("Tag does not exist");
+        if (!tags.contains(tag))
+            throw new IllegalArgumentException("Tag does not exist");
+        tags.remove(tag);
     }
 
     public List<Ingredient> getIngredients() {

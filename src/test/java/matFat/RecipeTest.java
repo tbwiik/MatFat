@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 public class RecipeTest {
 
     Recipe recipe;
+
+    List<String> recipeList = new ArrayList<>();
     String rline1;
     String rline2;
     String rline3;
@@ -23,7 +25,11 @@ public class RecipeTest {
         rline2 = "Mix";
         rline3 = "Add wet ingredients";
 
-        recipe = new Recipe(rline1, rline2, rline3);
+        recipeList.add(rline1);
+        recipeList.add(rline2);
+        recipeList.add(rline3);
+
+        recipe = new Recipe(recipeList);
 
     }
 
@@ -66,5 +72,14 @@ public class RecipeTest {
 
     }
 
+    @Test
+    void testGetRecipeLine() {
+
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+            recipe.getRecipeLine(5);
+        });
+    }
+
     // TODO write tests for getters. Test internal field not changable
+
 }

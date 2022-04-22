@@ -11,52 +11,84 @@ import org.junit.jupiter.api.Test;
 
 public class MealTest {
 
-    Integer id;
     Meal meal;
     String mealName;
     char difficulty;
-    Ingredient ing1;
+
+    Ingredient ing1, ing2, ing3;
     List<Ingredient> ingList = new ArrayList<>();
-    Set<String> tags = new HashSet<>();
+
+    String recLine1, recLine2, recLine3;
+    List<String> recipeList = new ArrayList<>();
+
+    String tag1, tag2;
+    Set<String> tags = new HashSet<>(); // Used for test of constructor and tags
 
     @BeforeEach
     private void setup() {
 
         mealName = "Pasta Carbonara";
+
         difficulty = 'E';
 
-        // XXX Add every ingredient as attributes (only need one for testing)
         ing1 = new Ingredient("Pasta", 1, "pk");
-        Ingredient ing2 = new Ingredient("Egg", 2, "stk");
-        Ingredient ing3 = new Ingredient("Meat", 400, "g");
-
+        ing2 = new Ingredient("Egg", 2, "stk");
+        ing3 = new Ingredient("Meat", 400, "g");
         ingList.add(ing1);
         ingList.add(ing2);
         ingList.add(ing3);
 
-        String tag1 = "Meat";
-        String tag2 = "Fast";
+        recLine1 = "Boil water and cook pasta";
+        recLine2 = "Add raw egg to pasta";
+        recLine3 = "Steak meat and add to pasta";
+        recipeList.add(recLine1);
+        recipeList.add(recLine2);
+        recipeList.add(recLine3);
 
-        tags.add(tag1);
-        tags.add(tag2);
+        tag1 = "Meat";
+        tag2 = "Fast";
+        tags.add(tag1); // Used for test of constructor and tags
+        tags.add(tag2); // Used for test of constructor and tags
 
-        meal = new Meal(mealName, difficulty, ingList, tags);
+        meal = new Meal(mealName, difficulty, ingList, recipeList, tag1, tag2);
+
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         Assertions.assertEquals(mealName, meal.getMealName());
         Assertions.assertEquals(difficulty, meal.getDifficulty());
-        Assertions.assertEquals(ingList, meal.getIngredientList());
+        Assertions.assertEquals(ingList, meal.getIngredients());
+        Assertions.assertEquals(recipeList, meal.getRecipe());
         Assertions.assertEquals(tags, meal.getTags());
     }
 
     @Test
-    public void testSetDifficulty() {
+    void testSetName() {
 
+        // Tests valid case
+        meal.setMealName("Pastalove");
+        Assertions.assertEquals("Pastalove", meal.getMealName());
+
+        // Tests invalid case - too short name
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            meal.setMealName("Fo");
+        });
+
+        // Tests invalid case - too long name
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            meal.setMealName("thisIsALittleBitTooLongMealNameTooUse");
+        });
+    }
+
+    @Test
+    void testSetDifficulty() {
+
+        // Tests valid case for changing difficulty
         meal.setDifficulty('M');
         Assertions.assertEquals('M', meal.getDifficulty());
 
+        // Tests invalid case for changing difficulty
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             meal.setDifficulty('F');
         });
@@ -64,40 +96,31 @@ public class MealTest {
     }
 
     @Test
-    public void testAddIngredient() {
+    void testAddTag() {
 
-    }
+        meal.addTag("tasty");
+        tags.add("tasty");
+        Assertions.assertEquals(tags, meal.getTags());
 
-    @Test
-    public void testRemoveIngredient() {
-
-    }
-
-    @Test
-    public void testUpdateIngredient() {
-
+        // Tests negative case
+        // XXX Already tested in ingredient. necessary here?
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            meal.updateIngredient(ing1, ";D:%");
+            meal.addTag("e");
         });
-
-        meal.updateIngredient(ing1, "3");
-        Assertions.assertEquals(3, ing1.getIngredientAmount());
-
-        meal.updateIngredient(ing1, "kg");
-        Assertions.assertEquals("kg", ing1.getIngredientMeasurement());
-
-        meal.updateIngredient(ing1, "Pastaaa");
-        Assertions.assertEquals("Pastaaa", ing1.getIngredientName());
-
     }
 
     @Test
-    public void testAddTag() {
+    void testRemoveTag() {
 
-    }
+        // Tests valid case
+        meal.removeTag(tag1);
+        tags.remove(tag1);
+        Assertions.assertEquals(tags, meal.getTags());
 
-    @Test
-    public void testRemoveTag() {
+        // Tests invalid case
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            meal.removeTag("foo");
+        });
 
     }
 }
