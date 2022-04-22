@@ -10,37 +10,25 @@ public class Meal {
     private String mealName;
     private char difficulty;
     private IngredientContainer ingredientContainer;
+    private Recipe recipe;
     private Set<String> tags = new HashSet<>();
-    private List<String> recipe = new ArrayList<>();
 
     private final static char[] ACCEPTED_DIFFICUILTIES = { 'E', 'M', 'H' };
 
-    public Meal(String mealName, char difficulty, List<Ingredient> ingredients, Set<String> tags, List<String> recipe) {
+    public Meal(String mealName, char difficulty, List<Ingredient> ingredients, List<String> recipe, String... tags) {
 
         setMealName(mealName);
         setDifficulty(difficulty);
-
         this.ingredientContainer = new IngredientContainer(ingredients);
-
-        tags.addAll(tags);
-        tags.addAll(ingredientContainer.getTags());
-
-        setRecipe(recipe);
-
+        this.recipe = new Recipe(recipe); // Will maybe end up throwing exception due to nonvalid input. Check after
+                                          // actually writing class
+        setTags(tags);
     }
 
-    private void addTag(List<Ingredient> ingredients) {
-        // TODO only add tags if every ingredient has it.
-        // E.g. a meal is not vegan if it contains one ingredient being meat
-
-        Set<String> tags = ingredients.get(0).getTags();
-
-        // Remove difference in tags from var "tags"
-        // e.g. only keep tag if ingredient also has it
-        for (Ingredient ingredient : ingredients) {
-            if (tags.contains(ingredient.getTags())) {
-
-            }
+    private void setTags(String... tags) {
+        this.tags.addAll(ingredientContainer.getTags());
+        for (String tag : tags) {
+            addTag(tag);
         }
     }
 
@@ -79,10 +67,22 @@ public class Meal {
     }
 
     public Set<String> getTags() {
-        return tags;
+        return new HashSet<>(tags);
     }
 
-    public void addTag(String tag) {
+    /**
+     * Add tag to meal
+     * <p>
+     * Overwrites whatever tags {@linkplain Ingredient} or
+     * {@linkplain IngredientContainer} has.
+     * E. g. If specified to add "meat" it add thus even though everything in it is
+     * vegan
+     * 
+     * @param tag
+     * @throws IllegalArgumentException if unvalid length or format per
+     *                                  {@linkplain Ingredient#checkTag(String)}
+     */
+    public void addTag(String tag) throws IllegalArgumentException {
         Ingredient.checkTag(tag);
         tags.add(tag);
     }
@@ -92,22 +92,24 @@ public class Meal {
      * <p>
      * Overwrites whatever tags {@linkplain Ingredient} or
      * {@linkplain IngredientContainer} has.
+     * E. g. If specified to remove "vegan" it removes thus even though everything
+     * in it is vegan
      * 
      * @param tag
+     * @throws IllegalArgumentException if removing tag not existing in meal
      */
-    public void removeTag(String tag) {
-        tags.remove(tag);
+    public void removeTag(String tag) throws IllegalArgumentException {
+        if (tags.contains(tag))
+            tags.remove(tag);
+        throw new IllegalArgumentException("Tag does not exist");
     }
 
-    private void setRecipe(List<String> recipe) {
-        // TODO write checks for recipe
+    public List<Ingredient> getIngredients() {
+        return new ArrayList<>(ingredientContainer.getIngredients());
     }
 
     public List<String> getRecipe() {
-        return recipe;
+        return new ArrayList<>(recipe.getRecipe());
     }
 
-    public IngredientContainer getIngredientContainer() {
-        return ingredientContainer;
-    }
 }

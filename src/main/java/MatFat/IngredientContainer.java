@@ -113,11 +113,11 @@ public class IngredientContainer {
     }
 
     public List<Ingredient> getIngredients() {
-        return ingredients;
+        return new ArrayList<>(ingredients);
     }
 
     public Set<String> getTags() {
-        return tags;
+        return new HashSet<>(tags);
     }
 
     public int getNumberOfIngredients() {

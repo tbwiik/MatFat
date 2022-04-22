@@ -96,4 +96,5 @@ public class IngredientContainerTest {
 
     }
 
+    // TODO write tests for getters. Test internal field not changable
 }

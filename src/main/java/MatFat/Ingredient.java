@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 public class Ingredient {
 
     private String ingredientName;
-    // XXX Consider changing to primitive datatype
     private Integer ingredientAmount;
     private MEASUREMENTS ingredientMeasurement;
     private Set<String> tags = new HashSet<>();
@@ -44,6 +43,7 @@ public class Ingredient {
     // Constructor for String measurement
     public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement, String... tags)
             throws IllegalArgumentException {
+
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         setIngredientMeasurement(ingredientMeasurement);
@@ -51,15 +51,27 @@ public class Ingredient {
     }
 
     // Constructor for String arguments
-    // TODO add tags
-    public Ingredient(String[] args) throws IllegalArgumentException {
-        setIngredientName(args[0]);
+    /**
+     * Constructs Ingredient based on String args.
+     * <p>
+     * Used in filehandling
+     * 
+     * @param ingArgs name, amount, measurement, tags
+     * @throws IllegalArgumentException
+     */
+    public Ingredient(String[] ingArgs) throws IllegalArgumentException {
+        setIngredientName(ingArgs[0]);
         try {
-            setIngredientAmount(Integer.parseInt(args[1]));
+            setIngredientAmount(Integer.parseInt(ingArgs[1]));
         } catch (NumberFormatException nFormatException) {
             throw new IllegalArgumentException("Cannot parse ingredient-amount to int");
         }
-        setIngredientMeasurement(args[2]);
+        setIngredientMeasurement(ingArgs[2]);
+
+        for (int i = 3; i < ingArgs.length; i++) {
+            tags.add(ingArgs[i]);
+        }
+
     }
 
     public String getIngredientName() {

@@ -116,4 +116,5 @@ public class IngredientTest {
         Assertions.assertTrue(ingredient.equals(newIng));
     }
 
+    // TODO write tests for getters. Test internal field not changable
 }
