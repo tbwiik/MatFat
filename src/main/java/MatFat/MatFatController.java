@@ -24,11 +24,11 @@ public class MatFatController {
     @FXML
     private Button generateMenuButton, addRecipeButton;
 
+    // Fix this
     @FXML
     private void generateMenuButton() {
         // TODO add actual functionality. Current block only for testing
         menu = new Menu(tags, numberOfMeals);
-
         try {
             menuInfoText.setText("This is your dinnah");
         } catch (Exception e) {
