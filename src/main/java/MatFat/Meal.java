@@ -11,9 +11,11 @@ public class Meal {
     private char difficulty;
     private IngredientContainer ingredientContainer;
     private Recipe recipe;
-    private Set<String> tags = new HashSet<>();
+    private TagBox tagBox = new TagBox();
 
     private final static char[] ACCEPTED_DIFFICUILTIES = { 'E', 'M', 'H' };
+    private final static int MIN_LENGTH_NAME = 3;
+    private final static int MAX_LENGTH_NAME = 30;
 
     public Meal(String mealName, char difficulty, List<Ingredient> ingredients, List<String> recipe, String... tags)
             throws IllegalArgumentException {
@@ -39,17 +41,15 @@ public class Meal {
      * }
      */
 
-    private void setTags(String... tags) {
-        this.tags.addAll(ingredientContainer.getTags());
-        for (String tag : tags) {
-            addTag(tag);
-        }
+    private void setTags(String... tags) throws IllegalArgumentException {
+        tagBox.addTags(ingredientContainer.getTags());
+        tagBox.addTags(tags);
     }
 
     private void checkMealName(String mealName) throws IllegalArgumentException {
-        if (mealName.length() < 3)
+        if (mealName.length() < MIN_LENGTH_NAME)
             throw new IllegalArgumentException("Too short mealName");
-        if (mealName.length() > 30)
+        if (mealName.length() > MAX_LENGTH_NAME)
             throw new IllegalArgumentException("Too long mealName");
     }
 
@@ -81,7 +81,7 @@ public class Meal {
     }
 
     public Set<String> getTags() {
-        return new HashSet<>(tags);
+        return new HashSet<>(tagBox.getTags());
     }
 
     /**
@@ -94,11 +94,10 @@ public class Meal {
      * 
      * @param tag
      * @throws IllegalArgumentException if unvalid length or format per
-     *                                  {@linkplain Ingredient#checkTag(String)}
+     *                                  {@linkplain TagBox#checkTag(String)}
      */
     public void addTag(String tag) throws IllegalArgumentException {
-        Ingredient.checkTag(tag);
-        tags.add(tag);
+        tagBox.addTag(tag);
     }
 
     /**
@@ -110,12 +109,10 @@ public class Meal {
      * in it is vegan
      * 
      * @param tag
-     * @throws IllegalArgumentException if removing tag not existing in meal
+     * @throws IllegalArgumentException if removing a tag not existing in meal
      */
     public void removeTag(String tag) throws IllegalArgumentException {
-        if (!tags.contains(tag))
-            throw new IllegalArgumentException("Tag does not exist");
-        tags.remove(tag);
+        tagBox.removeTag(tag);
     }
 
     public List<Ingredient> getIngredients() {

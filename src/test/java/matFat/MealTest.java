@@ -21,7 +21,7 @@ public class MealTest {
     String recLine1, recLine2, recLine3;
     List<String> recipeList = new ArrayList<>();
 
-    String tag1, tag2;
+    String tag1, tag2, extraTag;
     Set<String> tags = new HashSet<>(); // Used for test of constructor and tags
 
     @BeforeEach
@@ -47,6 +47,7 @@ public class MealTest {
 
         tag1 = "Meat";
         tag2 = "Fast";
+        extraTag = "tasty";
         tags.add(tag1); // Used for test of constructor and tags
         tags.add(tag2); // Used for test of constructor and tags
 
@@ -98,8 +99,8 @@ public class MealTest {
     @Test
     void testAddTag() {
 
-        meal.addTag("tasty");
-        tags.add("tasty");
+        meal.addTag(extraTag);
+        tags.add(extraTag);
         Assertions.assertEquals(tags, meal.getTags());
 
         // Tests negative case

@@ -43,31 +43,6 @@ public class TagBox {
         return new HashSet<>(tags);
     }
 
-    // XXX Rewrite documentation? Also ineffective code i think. See use in IngCont
-    // XXX Have this here or in IngCont?
-    /**
-     * Generate tags to {@linkplain IngredientContainer} based on all
-     * {@linkplain Ingredient} tags
-     * <p>
-     * Only add tags that every ingredient has.
-     * This ensures that tags in container is valid for whole container.
-     * E.g. dont add vegan if container contains meat as ingredient
-     * <p>
-     * Overwrites prior content of whole tagBox!
-     * 
-     */
-    public void generateTags(IngredientContainer ingredientContainer) {
-
-        // Adds tags to have an amount of tags to start with
-        tags.addAll(ingredientContainer.getIngredient(0).getTags());
-
-        // Iterates through ingredients and only keep tags that are similar
-        ingredientContainer.getIngredients().forEach((ingredient) -> {
-            tags.retainAll(ingredient.getTags());
-        });
-
-    }
-
     public void retainAll(Set<String> tags) {
         this.tags.retainAll(tags);
     }
@@ -77,9 +52,15 @@ public class TagBox {
         tags.add(tag);
     }
 
-    // XXX Necessary?
     public void addTags(Set<String> tags) throws IllegalArgumentException {
         tags.forEach((tag) -> addTag(tag));
+    }
+
+    // XXX use .this to write this to shorter?
+    public void addTags(String... tags) throws IllegalArgumentException {
+        for (String tag : tags) {
+            addTag(tag);
+        }
     }
 
     public void removeTag(String tag) throws IllegalArgumentException {
@@ -88,8 +69,10 @@ public class TagBox {
         tags.remove(tag);
     }
 
-    // XXX necessary?
     public void removeTags(String... tags) throws IllegalArgumentException {
-        this.tags.forEach((tag) -> removeTag(tag));
+        for (String tag : tags) {
+            removeTag(tag);
+        }
     }
+
 }

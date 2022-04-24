@@ -9,42 +9,52 @@ public class Menu {
 
     private List<Meal> mealList = new ArrayList<>();
     private int numberOfMeals;
-    private Set<String> tags = new HashSet<>();
+    private TagBox tagBox = new TagBox();
     private IngredientContainer ingredientContainer; // Make a list/set or have one giant container??
 
-    public Menu(List<Meal> mealList, Set<String> tags) {
+    public Menu(List<Meal> mealList, String... tags) throws IllegalArgumentException {
+
+        this.mealList = mealList;
+
+        for (String tag : tags) {
+            addTag(tag);
+        }
+
+        numberOfMeals = mealList.size();
+    }
+
+    private void setIngredientContainer() {
 
     }
 
     public List<Meal> getMealList() {
-        return mealList;
-    }
-
-    // Consider deleting method and do in constructor instead
-    private void setMealList(List<Meal> mealList) {
-        this.mealList = mealList;
+        return new ArrayList<>(mealList);
     }
 
     public int getNumberOfMeals() {
         return numberOfMeals;
     }
 
-    // Consider do in constructor
-    private void setNumberOfMeals() {
-        this.numberOfMeals = mealList.size();
-    }
-
     public Set<String> getTags() {
-        return tags;
+        return new HashSet<>(tagBox.getTags());
     }
 
     public void addTag(String tag) throws IllegalArgumentException {
-        Ingredient.checkTag(tag);
-        this.tags.add(tag);
+        tagBox.addTag(tag);
     }
 
     public IngredientContainer getIngredientContainer() {
         return ingredientContainer;
+    }
+
+    public void addMeal(Meal meal) {
+        mealList.add(meal);
+    }
+
+    public void removeMeal(Meal meal) throws IllegalArgumentException {
+        if (!mealList.contains(meal))
+            throw new IllegalArgumentException("Meal not in menu");
+        mealList.remove(meal);
     }
 
 }

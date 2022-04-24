@@ -82,20 +82,21 @@ public class IngredientContainerTest {
         });
     }
 
-    // TODO Move this too tagBoxTest?
-    // @Test
-    // void testGenerateTags() {
+    @Test
+    void testGenerateTags() {
 
-    // Set<String> tags = new HashSet<>();
+        Set<String> tagSet = new HashSet<>();
 
-    // tags.add("vegan");
-    // Assertions.assertEquals(tags, ingredientContainer.getTags());
+        // Test case where every ingredient in container has "vegan" tag
+        tagSet.add("vegan");
+        Assertions.assertEquals(tagSet, ingredientContainer.getTags());
 
-    // ingredientContainer.addIngredient(ing4);
-    // tags.remove("vegan");
-    // Assertions.assertEquals(tags, ingredientContainer.getTags());
+        // Test case where another tag is added -> result no tag in box
+        ingredientContainer.addIngredient(ing4);
+        tagSet.remove("vegan");
+        Assertions.assertEquals(tagSet, ingredientContainer.getTags());
 
-    // }
+    }
 
     // TODO write tests for getters. Test internal field not changable?
 }

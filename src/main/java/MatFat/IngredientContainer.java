@@ -8,7 +8,7 @@ import java.util.Set;
 public class IngredientContainer {
 
     private List<Ingredient> ingredients = new ArrayList<>();
-    private TagBox tagBox;
+    private TagBox tagBox = new TagBox();
     private int numberOfIngredients;
 
     /**
@@ -26,7 +26,7 @@ public class IngredientContainer {
             addIngredient(ingredient);
         }
 
-        tagBox.generateTags(this);
+        generateTags();
 
     }
 
@@ -46,21 +46,26 @@ public class IngredientContainer {
      */
     public void addIngredient(Ingredient ingredient) {
 
-        if (!this.ingredients.contains(ingredient))
+        if (!this.ingredients.contains(ingredient)) {
             this.ingredients.add(ingredient);
-
-        for (Ingredient item : this.ingredients) {
-            if (item.equals(ingredient)) {
-                try {
-                    item.updateIngredient(ingredient.getIngredientAmount(), ingredient.getIngredientMeasurement());
-                } catch (IllegalMeasurementException IllegalMeasurementException) {
-                    this.ingredients.add(ingredient);
+        } else {
+            for (Ingredient item : this.ingredients) {
+                if (item.equals(ingredient)) {
+                    try {
+                        item.updateIngredient(ingredient.getIngredientAmount(), ingredient.getIngredientMeasurement());
+                    } catch (IllegalMeasurementException IllegalMeasurementException) {
+                        this.ingredients.add(ingredient);
+                    }
                 }
             }
         }
 
         // Intersection
-        tagBox.retainAll(ingredient.getTags());
+        if (tagBox.getTags().isEmpty()) {
+            tagBox.addTags(ingredient.getTags());
+        } else {
+            tagBox.retainAll(ingredient.getTags());
+        }
 
     }
 
@@ -87,7 +92,7 @@ public class IngredientContainer {
             }
         }
 
-        tagBox.generateTags(this);
+        generateTags();
 
     }
 
@@ -96,8 +101,8 @@ public class IngredientContainer {
     }
 
     public Ingredient getIngredient(int index) throws IndexOutOfBoundsException {
-        if (index <= 0 || index > ingredients.size())
-            throw new IndexOutOfBoundsException();
+        if (index < 0 || index > ingredients.size())
+            throw new IndexOutOfBoundsException("Index in ingredient-container out of bounds");
         return ingredients.get(index);
     }
 
@@ -109,25 +114,25 @@ public class IngredientContainer {
         return numberOfIngredients;
     }
 
-    // /**
-    // * Generate tags to {@linkplain IngredientContainer} based on all
-    // * {@linkplain Ingredient} tags
-    // * <p>
-    // * Only add tags that every ingredient has.
-    // * This ensures that tags in container is valid for whole container.
-    // * E.g. dont add vegan if container contains meat as ingredient
-    // *
-    // */
-    // public void generateTags() {
+    /**
+     * Generate tags to {@linkplain IngredientContainer} based on all
+     * {@linkplain Ingredient} tags
+     * <p>
+     * Only add tags that every ingredient has.
+     * This ensures that tags in container is valid for whole container.
+     * E.g. dont add vegan if container contains meat as ingredient
+     *
+     */
+    public void generateTags() {
 
-    // // Adds tags to have an amount of tags to start with
-    // tagBox.addTags(ingredients.get(0).getTags());
+        // Adds tags to have an amount of tags to start with
+        tagBox.addTags(ingredients.get(0).getTags());
 
-    // // Iterates through ingredients and only keep tags that are similar
-    // ingredients.forEach((ingredient) -> {
-    // tagBox.retainAll(ingredient.getTags());
-    // });
+        // Iterates through ingredients and only keep tags that are similar
+        ingredients.forEach((ingredient) -> {
+            tagBox.retainAll(ingredient.getTags());
+        });
 
-    // }
+    }
 
 }
