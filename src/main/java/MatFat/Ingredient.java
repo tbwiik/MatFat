@@ -9,7 +9,7 @@ public class Ingredient {
     private String ingredientName;
     private Integer ingredientAmount;
     private MEASUREMENTS ingredientMeasurement;
-    private Set<String> tags = new HashSet<>();
+    private TagBox tagBox;
 
     public static enum MEASUREMENTS {
         g, // gram
@@ -28,8 +28,6 @@ public class Ingredient {
         dz, // dozen
     }
 
-    private final static String NAMEREG_STRING = "[a-zA-ZæøåÆØÅ]*";
-
     // Constructor for enum measurement
     public Ingredient(String ingredientName, Integer ingredientAmount, MEASUREMENTS ingredientMeasurement,
             String... tags)
@@ -37,7 +35,7 @@ public class Ingredient {
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         this.ingredientMeasurement = ingredientMeasurement;
-        setTags(tags);
+        this.tagBox = new TagBox(tags);
     }
 
     // Constructor for String measurement
@@ -47,7 +45,7 @@ public class Ingredient {
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         setIngredientMeasurement(ingredientMeasurement);
-        setTags(tags);
+        this.tagBox = new TagBox(tags);
     }
 
     // Constructor for String arguments
@@ -69,7 +67,7 @@ public class Ingredient {
         setIngredientMeasurement(ingArgs[2]);
 
         for (int i = 3; i < ingArgs.length; i++) {
-            tags.add(ingArgs[i]);
+            tagBox.addTag(ingArgs[i]);
         }
 
     }
@@ -86,7 +84,7 @@ public class Ingredient {
         if (ingredientName.length() > 50)
             throw new IllegalArgumentException("Too long Ingredient-name");
 
-        boolean iNameMatch = Pattern.matches(NAMEREG_STRING, ingredientName);
+        boolean iNameMatch = Pattern.matches(TagBox.NAMEREG_STRING, ingredientName);
 
         if (!iNameMatch)
             throw new IllegalArgumentException("Ingredient-name can only consist of chars");
@@ -124,7 +122,6 @@ public class Ingredient {
         try {
             this.ingredientMeasurement = MEASUREMENTS.valueOf(ingredientMeasurement);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new IllegalArgumentException("Not accepted measurement-type: " + ingredientMeasurement);
         }
     }
@@ -133,30 +130,8 @@ public class Ingredient {
         this.ingredientMeasurement = ingredientMeasurement;
     }
 
-    // Basicly same as checkIngredientName
-    // Static because of use in Meal
-    public static void checkTag(String tag) throws IllegalArgumentException {
-        if (tag.length() < 3)
-            throw new IllegalArgumentException("Too short tag");
-
-        if (tag.length() > 10)
-            throw new IllegalArgumentException("Too long tag");
-
-        boolean iNameMatch = Pattern.matches(NAMEREG_STRING, tag);
-
-        if (!iNameMatch)
-            throw new IllegalArgumentException("Tag can only consist of chars");
-    }
-
-    public void setTags(String... tags) throws IllegalArgumentException {
-        for (String tag : tags) {
-            checkTag(tag);
-            this.tags.add(tag);
-        }
-    }
-
     public Set<String> getTags() {
-        return tags;
+        return new HashSet<>(tagBox.getTags());
     }
 
     @Override

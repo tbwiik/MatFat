@@ -8,7 +8,7 @@ import java.util.Set;
 public class IngredientContainer {
 
     private List<Ingredient> ingredients = new ArrayList<>();
-    private Set<String> tags = new HashSet<>();
+    private TagBox tagBox;
     private int numberOfIngredients;
 
     /**
@@ -26,7 +26,7 @@ public class IngredientContainer {
             addIngredient(ingredient);
         }
 
-        generateTags();
+        tagBox.generateTags(this);
 
     }
 
@@ -60,7 +60,7 @@ public class IngredientContainer {
         }
 
         // Intersection
-        tags.retainAll(ingredient.getTags());
+        tagBox.retainAll(ingredient.getTags());
 
     }
 
@@ -87,28 +87,7 @@ public class IngredientContainer {
             }
         }
 
-        generateTags();
-
-    }
-
-    /**
-     * Generate tags to {@linkplain IngredientContainer} based on all
-     * {@linkplain Ingredient} tags
-     * <p>
-     * Only add tags that every ingredient has.
-     * This ensures that tags in container is valid for whole container.
-     * E.g. dont add vegan if container contains meat as ingredient
-     * 
-     */
-    private void generateTags() {
-
-        // Adds tags to have an amount of tags to start with
-        tags.addAll(ingredients.get(0).getTags());
-
-        // Iterates through ingredients and only keep tags that are similar
-        ingredients.forEach((ingredient) -> {
-            tags.retainAll(ingredient.getTags());
-        });
+        tagBox.generateTags(this);
 
     }
 
@@ -116,12 +95,39 @@ public class IngredientContainer {
         return new ArrayList<>(ingredients);
     }
 
+    public Ingredient getIngredient(int index) throws IndexOutOfBoundsException {
+        if (index <= 0 || index > ingredients.size())
+            throw new IndexOutOfBoundsException();
+        return ingredients.get(index);
+    }
+
     public Set<String> getTags() {
-        return new HashSet<>(tags);
+        return new HashSet<>(tagBox.getTags());
     }
 
     public int getNumberOfIngredients() {
         return numberOfIngredients;
     }
+
+    // /**
+    // * Generate tags to {@linkplain IngredientContainer} based on all
+    // * {@linkplain Ingredient} tags
+    // * <p>
+    // * Only add tags that every ingredient has.
+    // * This ensures that tags in container is valid for whole container.
+    // * E.g. dont add vegan if container contains meat as ingredient
+    // *
+    // */
+    // public void generateTags() {
+
+    // // Adds tags to have an amount of tags to start with
+    // tagBox.addTags(ingredients.get(0).getTags());
+
+    // // Iterates through ingredients and only keep tags that are similar
+    // ingredients.forEach((ingredient) -> {
+    // tagBox.retainAll(ingredient.getTags());
+    // });
+
+    // }
 
 }

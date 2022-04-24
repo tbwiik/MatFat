@@ -1,8 +1,5 @@
 package matFat;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,23 +71,6 @@ public class IngredientTest {
     @Test
     void testSetTags() {
 
-        // Checks positive case
-        // XXX Shorten this
-        Set<String> tag = new HashSet<>();
-        tag.add("lol");
-
-        ingredient.setTags("lol");
-        Assertions.assertEquals(tag, ingredient.getTags());
-
-        // Check too short tag
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            ingredient.setTags("c");
-        });
-
-        // Check too long tag
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            ingredient.setTags("ccccccccccc");
-        });
     }
 
     @Test

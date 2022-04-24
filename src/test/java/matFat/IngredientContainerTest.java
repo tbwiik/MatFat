@@ -82,19 +82,20 @@ public class IngredientContainerTest {
         });
     }
 
-    @Test
-    void testGenerateTags() {
+    // TODO Move this too tagBoxTest?
+    // @Test
+    // void testGenerateTags() {
 
-        Set<String> tags = new HashSet<>();
+    // Set<String> tags = new HashSet<>();
 
-        tags.add("vegan");
-        Assertions.assertEquals(tags, ingredientContainer.getTags());
+    // tags.add("vegan");
+    // Assertions.assertEquals(tags, ingredientContainer.getTags());
 
-        ingredientContainer.addIngredient(ing4);
-        tags.remove("vegan");
-        Assertions.assertEquals(tags, ingredientContainer.getTags());
+    // ingredientContainer.addIngredient(ing4);
+    // tags.remove("vegan");
+    // Assertions.assertEquals(tags, ingredientContainer.getTags());
 
-    }
+    // }
 
-    // TODO write tests for getters. Test internal field not changable
+    // TODO write tests for getters. Test internal field not changable?
 }
