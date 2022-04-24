@@ -24,7 +24,7 @@ public class MatFatController {
     @FXML
     private Button generateMenuButton, addRecipeButton;
 
-    // Fix this
+    // Fix this asdjb
     @FXML
     private void generateMenuButton() {
         // TODO add actual functionality. Current block only for testing
