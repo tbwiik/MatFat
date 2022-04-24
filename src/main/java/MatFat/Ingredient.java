@@ -31,7 +31,7 @@ public class Ingredient {
     // Constructor for enum measurement
     public Ingredient(String ingredientName, Integer ingredientAmount, MEASUREMENTS ingredientMeasurement,
             String... tags)
-            throws IllegalArgumentException {
+            throws IllegalArgumentException, IllegalAmountException {
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         this.ingredientMeasurement = ingredientMeasurement;
@@ -40,7 +40,7 @@ public class Ingredient {
 
     // Constructor for String measurement
     public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement, String... tags)
-            throws IllegalArgumentException {
+            throws IllegalArgumentException, IllegalAmountException {
 
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
@@ -57,7 +57,7 @@ public class Ingredient {
      * @param ingArgs name, amount, measurement, tags
      * @throws IllegalArgumentException
      */
-    public Ingredient(String[] ingArgs) throws IllegalArgumentException {
+    public Ingredient(String[] ingArgs) throws IllegalArgumentException, IllegalAmountException {
         setIngredientName(ingArgs[0]);
         try {
             setIngredientAmount(Integer.parseInt(ingArgs[1]));
@@ -99,17 +99,17 @@ public class Ingredient {
         return ingredientAmount;
     }
 
-    private void checkIngredientAmount(Integer ingredientAmount) throws IllegalArgumentException {
+    private void checkIngredientAmount(Integer ingredientAmount) throws IllegalAmountException {
         if (ingredientAmount <= 0)
-            throw new IllegalArgumentException("The amount of ingredient must be greater than 0");
+            throw new IllegalAmountException("The amount of ingredient must be greater than 0");
 
         // XXX Change datatype?
         if ((int) ingredientAmount > (int) (Math.pow(10, 6)))
-            throw new IllegalArgumentException("Way too much ingredients...");
+            throw new IllegalAmountException("Way too much ingredients...");
 
     }
 
-    public void setIngredientAmount(Integer ingredientAmount) throws IllegalArgumentException {
+    public void setIngredientAmount(Integer ingredientAmount) throws IllegalAmountException {
         checkIngredientAmount(ingredientAmount);
         this.ingredientAmount = ingredientAmount;
     }
@@ -153,7 +153,7 @@ public class Ingredient {
 
     // TODO Implement String input as measurement?
     public void updateIngredient(Integer ingredientAmount, MEASUREMENTS ingredientMeasurement)
-            throws IllegalMeasurementException {
+            throws IllegalMeasurementException, IllegalAmountException {
         if (!this.ingredientMeasurement.equals(ingredientMeasurement))
             throw new IllegalMeasurementException("Not similar measurement-types");
 

@@ -16,37 +16,14 @@ public class Menu {
 
         this.mealList = mealList;
         initializeIngredientContainer();
-        initializeTags(tags);
+        tagBox.addTags(tags);
         numberOfMeals = mealList.size();
-    }
-
-    private void initializeTags(String... tags) {
-        generateTags();
-
-        for (String tag : tags) {
-            addTag(tag);
-        }
-
     }
 
     private void initializeIngredientContainer() {
 
         mealList.forEach((meal) -> {
             ingredientContainer.addIngredients(meal.getIngredients());
-        });
-
-    }
-
-    // XXX Utilize abstract class /interface to reuse code more places?? Many
-    // classes have a similar method as this one
-    private void generateTags() {
-
-        tagBox.addTags(mealList.get(0).getIngredient(0).getTags());
-
-        mealList.forEach((meal) -> {
-            meal.getIngredients().forEach((ingredient) -> {
-                tagBox.retainAll(ingredient.getTags());
-            });
         });
 
     }
@@ -60,11 +37,20 @@ public class Menu {
     }
 
     public Set<String> getTags() {
-        return new HashSet<>(tagBox.getTags());
+        Set<String> allTags = new HashSet<>();
+        allTags.addAll(ingredientContainer.getTags());
+        allTags.addAll(tagBox.getTags());
+        return allTags;
     }
 
+    // TODO exact similar code in Meal. how to utilize TagBoxUser??
+    // writing twice?
     public void addTag(String tag) throws IllegalArgumentException {
         tagBox.addTag(tag);
+    }
+
+    public void removeTag(String tag) throws IllegalArgumentException {
+        tagBox.removeTag(tag);
     }
 
     public IngredientContainer getIngredientContainer() {
@@ -73,6 +59,7 @@ public class Menu {
 
     public void addMeal(Meal meal) {
         mealList.add(meal);
+        ingredientContainer.addIngredients(meal.getIngredients());
         numberOfMeals++;
     }
 
@@ -80,6 +67,7 @@ public class Menu {
         if (!mealList.contains(meal))
             throw new IllegalArgumentException("Meal not in menu");
         mealList.remove(meal);
+        ingredientContainer.removeIngredients(meal.getIngredients());
         numberOfMeals--;
     }
 

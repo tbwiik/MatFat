@@ -56,6 +56,7 @@ public class IngredientContainer {
                     } catch (IllegalMeasurementException IllegalMeasurementException) {
                         this.ingredients.add(ingredient);
                     }
+                    break;
                 }
             }
         }
@@ -70,36 +71,49 @@ public class IngredientContainer {
     }
 
     public void addIngredients(List<Ingredient> ingredients) {
-        ingredients.forEach((ingredient) -> {
-            addIngredient(ingredient);
-        });
+        ingredients.forEach((ingredient) -> addIngredient(ingredient));
     }
 
-    /**
-     * Remove ingredient if {@linkplain Ingredient#equals(Object) equals()} to one
-     * in container
-     * 
-     * @param ingredientToRemove ingredient to remove
-     * @throws IllegalArgumentException if trying to remove ingredient not in
-     *                                  container
-     */
-    public void removeIngredient(Ingredient ingredientToRemove) throws IllegalArgumentException {
+    // TODO feels like this code is ineffectively written... Clean up?
+    // TODO write documentation
+    public void removeIngredient(Ingredient ingredientToRemove)
+            throws IllegalArgumentException, IllegalAmountException {
+
+        boolean updated = false;
+
         if (!ingredients.contains(ingredientToRemove))
             throw new IllegalArgumentException("Container does not contain this ingredient");
-        // ingredients.forEach((ingredient) -> {
-        // if (ingredient.equals(ingredientToRemove))
-        // ingredients.remove(ingredient);
-        // });
 
         for (Ingredient ingredient : ingredients) {
             if (ingredient.equals(ingredientToRemove)) {
-                ingredients.remove(ingredient);
-                break;
+                if (ingredient.getIngredientMeasurement().equals(ingredientToRemove.getIngredientMeasurement())) {
+                    int ingAmount = ingredient.getIngredientAmount();
+                    int ingRemAmount = ingredientToRemove.getIngredientAmount();
+                    if (ingAmount < ingRemAmount)
+                        throw new IllegalAmountException("Removing too high amount of ingredient");
+                    if (ingAmount == ingRemAmount)
+                        this.ingredients.remove(ingredient);
+                    if (ingAmount > ingRemAmount)
+                        ingredient.updateIngredient(ingAmount - ingRemAmount,
+                                ingredientToRemove.getIngredientMeasurement());
+
+                    updated = true;
+                    break;
+                }
             }
         }
 
+        // XXX is this redundant code? what about different measurements??
+        if (!updated)
+            throw new IllegalArgumentException("No such ingredient");
+
         generateTags();
 
+    }
+
+    public void removeIngredients(List<Ingredient> ingredientsToRemove)
+            throws IllegalArgumentException, IllegalAmountException {
+        ingredientsToRemove.forEach((ingredient) -> removeIngredient(ingredient));
     }
 
     public List<Ingredient> getIngredients() {

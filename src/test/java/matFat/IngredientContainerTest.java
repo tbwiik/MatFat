@@ -68,12 +68,20 @@ public class IngredientContainerTest {
     @Test
     void testRemoveIngredient() {
 
-        // Check positive case for removing ingredient
+        // Check positive case for removing whole ingredient
         List<Ingredient> updatedIngList = new ArrayList<>();
         updatedIngList.add(ing2);
         updatedIngList.add(ing3);
 
         ingredientContainer.removeIngredient(ing1);
+        Assertions.assertEquals(updatedIngList, ingredientContainer.getIngredients());
+
+        // Check positive case for removing part of ingredient
+        Ingredient newIng = new Ingredient("Veganburger", 1, "stk");
+        updatedIngList.remove(ing3);
+        updatedIngList.add(newIng);
+
+        ingredientContainer.removeIngredient(newIng);
         Assertions.assertEquals(updatedIngList, ingredientContainer.getIngredients());
 
         // Check negative case for removing ingredient

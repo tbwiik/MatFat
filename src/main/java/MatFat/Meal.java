@@ -24,25 +24,6 @@ public class Meal {
         setDifficulty(difficulty);
         this.ingredientContainer = new IngredientContainer(ingredients);
         this.recipe = new Recipe(recipe);
-        initializeTags(tags);
-    }
-
-    // TODO delete constructor?
-    /*
-     * public Meal(String mealName, char difficulty, IngredientContainer
-     * ingredientContainer, Recipe recipe,
-     * String... tags) throws IllegalArgumentException {
-     * 
-     * setMealName(mealName);
-     * setDifficulty(difficulty);
-     * this.ingredientContainer = ingredientContainer;
-     * this.recipe = recipe;
-     * setTags(tags);
-     * }
-     */
-
-    private void initializeTags(String... tags) throws IllegalArgumentException {
-        tagBox.addTags(ingredientContainer.getTags());
         tagBox.addTags(tags);
     }
 
@@ -81,7 +62,10 @@ public class Meal {
     }
 
     public Set<String> getTags() {
-        return new HashSet<>(tagBox.getTags());
+        Set<String> allTags = new HashSet<>();
+        allTags.addAll(ingredientContainer.getTags());
+        allTags.addAll(tagBox.getTags());
+        return allTags;
     }
 
     /**
@@ -89,9 +73,10 @@ public class Meal {
      * <p>
      * Overwrites whatever tags {@linkplain Ingredient} or
      * {@linkplain IngredientContainer} has.
-     * E. g. If specified to add "meat" it add thus even though everything in it is
+     * E. g. If specified to add "meat" it add thus even though everything in it
+     * is
      * vegan
-     * 
+     *
      * @param tag
      * @throws IllegalArgumentException if unvalid length or format per
      *                                  {@linkplain TagBox#checkTag(String)}
@@ -107,7 +92,7 @@ public class Meal {
      * {@linkplain IngredientContainer} has.
      * E. g. If specified to remove "vegan" it removes thus even though everything
      * in it is vegan
-     * 
+     *
      * @param tag
      * @throws IllegalArgumentException if removing a tag not existing in meal
      */
@@ -119,7 +104,6 @@ public class Meal {
         return new ArrayList<>(ingredientContainer.getIngredients());
     }
 
-    // XXX Very similar in IngCont
     public Ingredient getIngredient(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index > ingredientContainer.getIngredients().size())
             throw new IndexOutOfBoundsException("Index in ingredient-container out of bounds");

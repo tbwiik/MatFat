@@ -103,11 +103,6 @@ public class MealTest {
         tags.add(extraTag);
         Assertions.assertEquals(tags, meal.getTags());
 
-        // Tests negative case
-        // XXX Already tested in ingredient. necessary here?
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            meal.addTag("e");
-        });
     }
 
     @Test
