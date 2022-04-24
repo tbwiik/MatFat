@@ -69,6 +69,12 @@ public class IngredientContainer {
 
     }
 
+    public void addIngredients(List<Ingredient> ingredients) {
+        ingredients.forEach((ingredient) -> {
+            addIngredient(ingredient);
+        });
+    }
+
     /**
      * Remove ingredient if {@linkplain Ingredient#equals(Object) equals()} to one
      * in container

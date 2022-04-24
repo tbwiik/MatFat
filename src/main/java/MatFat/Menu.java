@@ -10,20 +10,44 @@ public class Menu {
     private List<Meal> mealList = new ArrayList<>();
     private int numberOfMeals;
     private TagBox tagBox = new TagBox();
-    private IngredientContainer ingredientContainer; // Make a list/set or have one giant container??
+    private IngredientContainer ingredientContainer;
 
     public Menu(List<Meal> mealList, String... tags) throws IllegalArgumentException {
 
         this.mealList = mealList;
+        initializeIngredientContainer();
+        initializeTags(tags);
+        numberOfMeals = mealList.size();
+    }
+
+    private void initializeTags(String... tags) {
+        generateTags();
 
         for (String tag : tags) {
             addTag(tag);
         }
 
-        numberOfMeals = mealList.size();
     }
 
-    private void setIngredientContainer() {
+    private void initializeIngredientContainer() {
+
+        mealList.forEach((meal) -> {
+            ingredientContainer.addIngredients(meal.getIngredients());
+        });
+
+    }
+
+    // XXX Utilize abstract class /interface to reuse code more places?? Many
+    // classes have a similar method as this one
+    private void generateTags() {
+
+        tagBox.addTags(mealList.get(0).getIngredient(0).getTags());
+
+        mealList.forEach((meal) -> {
+            meal.getIngredients().forEach((ingredient) -> {
+                tagBox.retainAll(ingredient.getTags());
+            });
+        });
 
     }
 
@@ -49,12 +73,14 @@ public class Menu {
 
     public void addMeal(Meal meal) {
         mealList.add(meal);
+        numberOfMeals++;
     }
 
     public void removeMeal(Meal meal) throws IllegalArgumentException {
         if (!mealList.contains(meal))
             throw new IllegalArgumentException("Meal not in menu");
         mealList.remove(meal);
+        numberOfMeals--;
     }
 
 }

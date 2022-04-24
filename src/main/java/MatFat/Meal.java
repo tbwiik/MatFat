@@ -24,7 +24,7 @@ public class Meal {
         setDifficulty(difficulty);
         this.ingredientContainer = new IngredientContainer(ingredients);
         this.recipe = new Recipe(recipe);
-        setTags(tags);
+        initializeTags(tags);
     }
 
     // TODO delete constructor?
@@ -41,7 +41,7 @@ public class Meal {
      * }
      */
 
-    private void setTags(String... tags) throws IllegalArgumentException {
+    private void initializeTags(String... tags) throws IllegalArgumentException {
         tagBox.addTags(ingredientContainer.getTags());
         tagBox.addTags(tags);
     }
@@ -117,6 +117,13 @@ public class Meal {
 
     public List<Ingredient> getIngredients() {
         return new ArrayList<>(ingredientContainer.getIngredients());
+    }
+
+    // XXX Very similar in IngCont
+    public Ingredient getIngredient(int index) throws IndexOutOfBoundsException {
+        if (index < 0 || index > ingredientContainer.getIngredients().size())
+            throw new IndexOutOfBoundsException("Index in ingredient-container out of bounds");
+        return ingredientContainer.getIngredient(index);
     }
 
     public List<String> getRecipe() {
