@@ -57,8 +57,8 @@ public class IngredientContainerTest {
 
         List<Ingredient> updatedIngList = new ArrayList<>();
         updatedIngList.add(ing1);
-        ing2.updateIngredient(2, MEASUREMENTS.stk);
-        updatedIngList.add(ing2);
+        updatedIngList.add(new Ingredient(ing2.getIngredientName(),
+                ing2.getIngredientAmount() + dupIng.getIngredientAmount(), ing2.getIngredientMeasurement()));
         updatedIngList.add(ing3);
 
         ingredientContainer.addIngredient(dupIng);
@@ -101,8 +101,11 @@ public class IngredientContainerTest {
 
         // Test case where another tag is added -> result no tag in box
         ingredientContainer.addIngredient(ing4);
-        tagSet.remove("vegan");
-        Assertions.assertEquals(tagSet, ingredientContainer.getTags());
+        Assertions.assertEquals(new HashSet<>(), ingredientContainer.getTags());
+
+        // Test that tagBox is still empty
+        ingredientContainer.addIngredient(new Ingredient("apple", 2, "stk", "fruit"));
+        Assertions.assertEquals(new HashSet<>(), ingredientContainer.getTags());
 
     }
 

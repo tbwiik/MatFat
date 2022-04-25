@@ -11,6 +11,8 @@ public class Ingredient {
     private MEASUREMENTS ingredientMeasurement;
     private TagBox tagBox;
 
+    private static final String INGNAMEREG_STRING = "[a-zA-ZæøåÆØÅ\s]*";
+
     public static enum MEASUREMENTS {
         g, // gram
         kg, // kilogram
@@ -84,7 +86,7 @@ public class Ingredient {
         if (ingredientName.length() > 50)
             throw new IllegalArgumentException("Too long Ingredient-name");
 
-        boolean iNameMatch = Pattern.matches(TagBox.NAMEREG_STRING, ingredientName);
+        boolean iNameMatch = Pattern.matches(INGNAMEREG_STRING, ingredientName);
 
         if (!iNameMatch)
             throw new IllegalArgumentException("Ingredient-name can only consist of chars");

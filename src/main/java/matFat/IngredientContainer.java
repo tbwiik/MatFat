@@ -8,7 +8,7 @@ import java.util.Set;
 public class IngredientContainer {
 
     private List<Ingredient> ingredients = new ArrayList<>();
-    private TagBox tagBox = new TagBox();
+    private TagBox tagBox;
     private int numberOfIngredients;
 
     /**
@@ -26,8 +26,10 @@ public class IngredientContainer {
             addIngredient(ingredient);
         }
 
-        generateTags();
+    }
 
+    // Used for making it possible to generate container in menu
+    public IngredientContainer() {
     }
 
     /**
@@ -61,17 +63,31 @@ public class IngredientContainer {
             }
         }
 
-        // Intersection
-        if (tagBox.getTags().isEmpty()) {
-            tagBox.addTags(ingredient.getTags());
-        } else {
-            tagBox.retainAll(ingredient.getTags());
-        }
+        addTag(ingredient);
 
     }
 
+    /**
+     * Add intersection of tags based on {@linkplain Ingredient}
+     * <p>
+     * Add and initialize {@linkplain TagBox} if null
+     * 
+     * @param ingredient
+     */
+    private void addTag(Ingredient ingredient) {
+
+        if (tagBox == null) {
+            tagBox = new TagBox(ingredient.getTags());
+        } else {
+            tagBox.retainAll(ingredient.getTags());
+        }
+    }
+
     public void addIngredients(List<Ingredient> ingredients) {
-        ingredients.forEach((ingredient) -> addIngredient(ingredient));
+        ingredients.forEach((ingredient) -> {
+            addIngredient(ingredient);
+            addTag(ingredient);
+        });
     }
 
     // TODO feels like this code is ineffectively written... Clean up?
@@ -145,12 +161,10 @@ public class IngredientContainer {
      */
     public void generateTags() {
 
-        // Adds tags to have an amount of tags to start with
-        tagBox.addTags(ingredients.get(0).getTags());
+        tagBox = new TagBox();
 
-        // Iterates through ingredients and only keep tags that are similar
         ingredients.forEach((ingredient) -> {
-            tagBox.retainAll(ingredient.getTags());
+            addTag(ingredient);
         });
 
     }

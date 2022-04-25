@@ -68,34 +68,10 @@ public class Meal {
         return allTags;
     }
 
-    /**
-     * Add tag to meal
-     * <p>
-     * Overwrites whatever tags {@linkplain Ingredient} or
-     * {@linkplain IngredientContainer} has.
-     * E. g. If specified to add "meat" it add thus even though everything in it
-     * is
-     * vegan
-     *
-     * @param tag
-     * @throws IllegalArgumentException if unvalid length or format per
-     *                                  {@linkplain TagBox#checkTag(String)}
-     */
     public void addTag(String tag) throws IllegalArgumentException {
         tagBox.addTag(tag);
     }
 
-    /**
-     * Remove tag from tag-set
-     * <p>
-     * Overwrites whatever tags {@linkplain Ingredient} or
-     * {@linkplain IngredientContainer} has.
-     * E. g. If specified to remove "vegan" it removes thus even though everything
-     * in it is vegan
-     *
-     * @param tag
-     * @throws IllegalArgumentException if removing a tag not existing in meal
-     */
     public void removeTag(String tag) throws IllegalArgumentException {
         tagBox.removeTag(tag);
     }

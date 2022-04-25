@@ -10,11 +10,11 @@ public class Menu {
     private List<Meal> mealList = new ArrayList<>();
     private int numberOfMeals;
     private TagBox tagBox = new TagBox();
-    private IngredientContainer ingredientContainer;
+    private IngredientContainer ingredientContainer = new IngredientContainer();
 
     public Menu(List<Meal> mealList, String... tags) throws IllegalArgumentException {
 
-        this.mealList = mealList;
+        this.mealList = new ArrayList<>(mealList);
         initializeIngredientContainer();
         tagBox.addTags(tags);
         numberOfMeals = mealList.size();
@@ -53,8 +53,8 @@ public class Menu {
         tagBox.removeTag(tag);
     }
 
-    public IngredientContainer getIngredientContainer() {
-        return ingredientContainer;
+    public List<Ingredient> getIngredients() {
+        return ingredientContainer.getIngredients();
     }
 
     public void addMeal(Meal meal) {
