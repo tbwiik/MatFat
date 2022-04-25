@@ -20,11 +20,6 @@ public class Recipe {
             this.recipe.add(recipeLine);
         }
 
-        // recipe.forEach((recipeLine) -> {
-        // checkRecipeLine(recipeLine);
-        // this.recipe.add(recipeLine);
-        // });
-
     }
 
     /**

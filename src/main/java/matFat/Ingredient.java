@@ -11,7 +11,7 @@ public class Ingredient {
     private MEASUREMENTS ingredientMeasurement;
     private TagBox tagBox;
 
-    private static final String INGNAMEREG_STRING = "[a-zA-ZæøåÆØÅ\s]*";
+    private static final String INGNAMEREG_STRING = "[a-zA-ZæøåÆØÅ-]*"; // Dont allow whitespace due to filehandling
 
     public static enum MEASUREMENTS {
         g, // gram
@@ -68,7 +68,8 @@ public class Ingredient {
         }
         setIngredientMeasurement(ingArgs[2]);
 
-        for (int i = 3; i < ingArgs.length; i++) {
+        tagBox = new TagBox(ingArgs[3]); // Initialize TagBox
+        for (int i = 4; i < ingArgs.length; i++) {
             tagBox.addTag(ingArgs[i]);
         }
 
@@ -136,6 +137,15 @@ public class Ingredient {
         return new HashSet<>(tagBox.getTags());
     }
 
+    // TODO Implement String input as measurement?
+    public void updateIngredient(Integer ingredientAmount, MEASUREMENTS ingredientMeasurement)
+            throws IllegalMeasurementException, IllegalAmountException {
+        if (!this.ingredientMeasurement.equals(ingredientMeasurement))
+            throw new IllegalMeasurementException("Not similar measurement-types");
+
+        setIngredientAmount(ingredientAmount);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -145,21 +155,14 @@ public class Ingredient {
         if (getClass() != obj.getClass())
             return false;
         Ingredient other = (Ingredient) obj;
+        if (ingredientMeasurement != other.ingredientMeasurement)
+            return false;
         if (ingredientName == null) {
             if (other.ingredientName != null)
                 return false;
-        } else if (!ingredientName.toLowerCase().equals(other.ingredientName.toLowerCase()))
+        } else if (!ingredientName.equals(other.ingredientName))
             return false;
         return true;
-    }
-
-    // TODO Implement String input as measurement?
-    public void updateIngredient(Integer ingredientAmount, MEASUREMENTS ingredientMeasurement)
-            throws IllegalMeasurementException, IllegalAmountException {
-        if (!this.ingredientMeasurement.equals(ingredientMeasurement))
-            throw new IllegalMeasurementException("Not similar measurement-types");
-
-        setIngredientAmount(ingredientAmount);
     }
 
     @Override

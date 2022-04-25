@@ -91,9 +91,13 @@ public class IngredientTest {
     @Test
     void testEquals() {
 
-        // Checks psoitive case for equals. Note: different measurement
-        Ingredient newIng = new Ingredient("Melk", 4, "l");
-        Assertions.assertTrue(ingredient.equals(newIng));
+        // Test positive case for equals
+        Ingredient newIng1 = new Ingredient("Melk", 4, "dl");
+        Assertions.assertTrue(ingredient.equals(newIng1));
+
+        // Test negative case for equals
+        Ingredient newIng2 = new Ingredient("Melk", 2, "l");
+        Assertions.assertFalse(ingredient.equals(newIng2));
     }
 
     // TODO write tests for getters. Test internal field not changable

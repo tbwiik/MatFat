@@ -3,6 +3,7 @@ package matFat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class IngredientContainer {
@@ -46,6 +47,7 @@ public class IngredientContainer {
      * 
      * @param ingredient
      */
+
     public void addIngredient(Ingredient ingredient) {
 
         if (!this.ingredients.contains(ingredient)) {
@@ -53,11 +55,7 @@ public class IngredientContainer {
         } else {
             for (Ingredient item : this.ingredients) {
                 if (item.equals(ingredient)) {
-                    try {
-                        item.updateIngredient(ingredient.getIngredientAmount(), ingredient.getIngredientMeasurement());
-                    } catch (IllegalMeasurementException IllegalMeasurementException) {
-                        this.ingredients.add(ingredient);
-                    }
+                    item.updateIngredient(ingredient.getIngredientAmount(), ingredient.getIngredientMeasurement());
                     break;
                 }
             }
@@ -90,38 +88,30 @@ public class IngredientContainer {
         });
     }
 
-    // TODO feels like this code is ineffectively written... Clean up?
     // TODO write documentation
     public void removeIngredient(Ingredient ingredientToRemove)
             throws IllegalArgumentException, IllegalAmountException {
 
-        boolean updated = false;
+        Optional<Ingredient> optIng = ingredients.stream()
+                .filter((ingredient) -> ingredient.equals(ingredientToRemove))
+                .findFirst();
 
-        if (!ingredients.contains(ingredientToRemove))
+        if (optIng.isPresent()) {
+            Ingredient ingredient = optIng.get();
+
+            int ingAmount = ingredient.getIngredientAmount();
+            int ingRemAmount = ingredientToRemove.getIngredientAmount();
+
+            if (ingAmount < ingRemAmount)
+                throw new IllegalAmountException("Removing too high amount of ingredient");
+            if (ingAmount == ingRemAmount)
+                this.ingredients.remove(ingredient);
+            if (ingAmount > ingRemAmount)
+                ingredient.updateIngredient(ingAmount - ingRemAmount, ingredientToRemove.getIngredientMeasurement());
+
+        } else {
             throw new IllegalArgumentException("Container does not contain this ingredient");
-
-        for (Ingredient ingredient : ingredients) {
-            if (ingredient.equals(ingredientToRemove)) {
-                if (ingredient.getIngredientMeasurement().equals(ingredientToRemove.getIngredientMeasurement())) {
-                    int ingAmount = ingredient.getIngredientAmount();
-                    int ingRemAmount = ingredientToRemove.getIngredientAmount();
-                    if (ingAmount < ingRemAmount)
-                        throw new IllegalAmountException("Removing too high amount of ingredient");
-                    if (ingAmount == ingRemAmount)
-                        this.ingredients.remove(ingredient);
-                    if (ingAmount > ingRemAmount)
-                        ingredient.updateIngredient(ingAmount - ingRemAmount,
-                                ingredientToRemove.getIngredientMeasurement());
-
-                    updated = true;
-                    break;
-                }
-            }
         }
-
-        // XXX is this redundant code? what about different measurements??
-        if (!updated)
-            throw new IllegalArgumentException("No such ingredient");
 
         generateTags();
 

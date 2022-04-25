@@ -43,7 +43,7 @@ public class MenuTest {
         il1.add(i12);
         il1.add(i13);
 
-        Ingredient i21 = new Ingredient("Tomatsuppe Toro", 1, "stk", tagVegan);
+        Ingredient i21 = new Ingredient("Tomatsuppe-Toro", 1, "stk", tagVegan);
         Ingredient i22 = new Ingredient("Pølse", 500, "g", tagMeat);
         Ingredient i23 = new Ingredient("Makaroni", 500, "g", tagQuick);
         il2.add(i21);
@@ -138,6 +138,11 @@ public class MenuTest {
     }
 
     @Test
+    void testAddMealToEmptyMenu() {
+        // TODO
+    }
+
+    @Test
     void testRemoveMeal() {
 
         // Test removing meal not in menu
@@ -160,6 +165,19 @@ public class MenuTest {
 
         IngredientContainer newIngCont = new IngredientContainer(il1);
         Assertions.assertEquals(newIngCont.getIngredients(), menu.getIngredients());
+
+    }
+
+    @Test
+    void testWriteToFile() {
+        FileHandler fHandler = new FileHandler();
+        fHandler.writeToFile(menu, "testfile");
+    }
+
+    @Test
+    void testReadFromFile() {
+        FileHandler fileHandler = new FileHandler();
+        Menu menu = fileHandler.readFromFile("testfile");
 
     }
 }

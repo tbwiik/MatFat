@@ -5,19 +5,33 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Menu {
+public class Menu extends TagBoxUser {
 
     private List<Meal> mealList = new ArrayList<>();
     private int numberOfMeals;
-    private TagBox tagBox = new TagBox();
     private IngredientContainer ingredientContainer = new IngredientContainer();
 
     public Menu(List<Meal> mealList, String... tags) throws IllegalArgumentException {
 
         this.mealList = new ArrayList<>(mealList);
         initializeIngredientContainer();
-        tagBox.addTags(tags);
+        tagBox = new TagBox(tags);
         numberOfMeals = mealList.size();
+    }
+
+    // TODO similar problem in meal related to filewriting
+    public Menu(List<Meal> mealList, Set<String> tags) throws IllegalArgumentException {
+
+        this.mealList = new ArrayList<>(mealList);
+        initializeIngredientContainer();
+        tagBox = new TagBox(tags);
+        numberOfMeals = mealList.size();
+
+    }
+
+    // Used in filehandling
+    public Menu() {
+        tagBox = new TagBox();
     }
 
     private void initializeIngredientContainer() {
@@ -41,16 +55,6 @@ public class Menu {
         allTags.addAll(ingredientContainer.getTags());
         allTags.addAll(tagBox.getTags());
         return allTags;
-    }
-
-    // TODO exact similar code in Meal. how to utilize TagBoxUser??
-    // writing twice?
-    public void addTag(String tag) throws IllegalArgumentException {
-        tagBox.addTag(tag);
-    }
-
-    public void removeTag(String tag) throws IllegalArgumentException {
-        tagBox.removeTag(tag);
     }
 
     public List<Ingredient> getIngredients() {

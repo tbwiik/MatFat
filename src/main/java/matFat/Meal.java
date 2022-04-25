@@ -5,13 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Meal {
+public class Meal extends TagBoxUser {
 
     private String mealName;
     private char difficulty;
     private IngredientContainer ingredientContainer;
     private Recipe recipe;
-    private TagBox tagBox = new TagBox();
 
     private final static char[] ACCEPTED_DIFFICUILTIES = { 'E', 'M', 'H' };
     private final static int MIN_LENGTH_NAME = 3;
@@ -24,7 +23,20 @@ public class Meal {
         setDifficulty(difficulty);
         this.ingredientContainer = new IngredientContainer(ingredients);
         this.recipe = new Recipe(recipe);
-        tagBox.addTags(tags);
+        tagBox = new TagBox(tags);
+    }
+
+    // This excists because not being able to convert from Set<String> to String[],
+    // used in filehandling
+    // TODO solve this?
+    public Meal(String mealName, char difficulty, List<Ingredient> ingredients, List<String> recipe, Set<String> tags)
+            throws IllegalArgumentException {
+
+        setMealName(mealName);
+        setDifficulty(difficulty);
+        this.ingredientContainer = new IngredientContainer(ingredients);
+        this.recipe = new Recipe(recipe);
+        tagBox = new TagBox(tags);
     }
 
     private void checkMealName(String mealName) throws IllegalArgumentException {
@@ -68,14 +80,6 @@ public class Meal {
         return allTags;
     }
 
-    public void addTag(String tag) throws IllegalArgumentException {
-        tagBox.addTag(tag);
-    }
-
-    public void removeTag(String tag) throws IllegalArgumentException {
-        tagBox.removeTag(tag);
-    }
-
     public List<Ingredient> getIngredients() {
         return new ArrayList<>(ingredientContainer.getIngredients());
     }
@@ -84,6 +88,10 @@ public class Meal {
         if (index < 0 || index > ingredientContainer.getIngredients().size())
             throw new IndexOutOfBoundsException("Index in ingredient-container out of bounds");
         return ingredientContainer.getIngredient(index);
+    }
+
+    public IngredientContainer getIngredientContainer(IngredientContainer ingredientContainer) {
+        return ingredientContainer;
     }
 
     public List<String> getRecipe() {
