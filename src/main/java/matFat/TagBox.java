@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import matFat.exceptions.IllegalAmountException;
+
 public class TagBox {
 
     private Set<String> tags = new HashSet<>();
@@ -81,6 +83,12 @@ public class TagBox {
         if (!tags.contains(tag))
             throw new IllegalArgumentException("Tag not in box");
         tags.remove(tag);
+    }
+
+    public void removeTags(Set<String> tags) throws IllegalArgumentException {
+        for (String tag : tags) {
+            removeTag(tag);
+        }
     }
 
     public void removeTags(String... tags) throws IllegalArgumentException {

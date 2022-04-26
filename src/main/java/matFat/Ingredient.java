@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import matFat.exceptions.IllegalAmountException;
+import matFat.exceptions.IllegalMeasurementException;
+
 public class Ingredient {
 
     private String ingredientName;
@@ -30,7 +33,16 @@ public class Ingredient {
         dz, // dozen
     }
 
-    // Constructor for enum measurement
+    /**
+     * Constructs Ingredient object where measurement is enum
+     * 
+     * @param ingredientName
+     * @param ingredientAmount
+     * @param ingredientMeasurement
+     * @param tags
+     * @throws IllegalArgumentException
+     * @throws IllegalAmountException
+     */
     public Ingredient(String ingredientName, Integer ingredientAmount, MEASUREMENTS ingredientMeasurement,
             String... tags)
             throws IllegalArgumentException, IllegalAmountException {
@@ -40,7 +52,7 @@ public class Ingredient {
         this.tagBox = new TagBox(tags);
     }
 
-    // Constructor for String measurement
+    // TODO put these together?
     public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement, String... tags)
             throws IllegalArgumentException, IllegalAmountException {
 
@@ -50,14 +62,14 @@ public class Ingredient {
         this.tagBox = new TagBox(tags);
     }
 
-    // Constructor for String arguments
     /**
-     * Constructs Ingredient based on String args.
+     * Constructs Ingredient
      * <p>
      * Used in filehandling
      * 
-     * @param ingArgs name, amount, measurement, tags
+     * @param ingArgs name, amount, measurement, tags...
      * @throws IllegalArgumentException
+     * @throws IllegalAmountException
      */
     public Ingredient(String[] ingArgs) throws IllegalArgumentException, IllegalAmountException {
         setIngredientName(ingArgs[0]);
@@ -68,10 +80,10 @@ public class Ingredient {
         }
         setIngredientMeasurement(ingArgs[2]);
 
-        tagBox = new TagBox(ingArgs[3]); // Initialize TagBox
-        for (int i = 4; i < ingArgs.length; i++) {
+        if (ingArgs.length > 3)
+            tagBox = new TagBox(ingArgs[3]); // Initialize TagBox
+        for (int i = 4; i < ingArgs.length; i++)
             tagBox.addTag(ingArgs[i]);
-        }
 
     }
 
@@ -79,6 +91,12 @@ public class Ingredient {
         return ingredientName;
     }
 
+    /**
+     * Checks if ingreidnetName meets specified requirements
+     * 
+     * @param ingredientName
+     * @throws IllegalArgumentException
+     */
     private void checkIngredientName(String ingredientName) throws IllegalArgumentException {
 
         if (ingredientName.length() < 3)
@@ -93,6 +111,13 @@ public class Ingredient {
             throw new IllegalArgumentException("Ingredient-name can only consist of chars");
     }
 
+    /**
+     * Sets new name of Ingredient
+     * 
+     * @param ingredientName
+     * @throws IllegalArgumentException if unvalid name per
+     *                                  {@linkplain #checkIngredientName(String)}
+     */
     public void setIngredientName(String ingredientName) throws IllegalArgumentException {
         checkIngredientName(ingredientName);
         this.ingredientName = ingredientName;
@@ -102,6 +127,12 @@ public class Ingredient {
         return ingredientAmount;
     }
 
+    /**
+     * Checks if amount meets specified requirements
+     * 
+     * @param ingredientAmount
+     * @throws IllegalAmountException
+     */
     private void checkIngredientAmount(Integer ingredientAmount) throws IllegalAmountException {
         if (ingredientAmount <= 0)
             throw new IllegalAmountException("The amount of ingredient must be greater than 0");
@@ -112,6 +143,13 @@ public class Ingredient {
 
     }
 
+    /**
+     * Sets new amount of Ingredient
+     * 
+     * @param ingredientAmount
+     * @throws IllegalAmountException if unvalid input per
+     *                                {@linkplain #checkIngredientAmount(Integer)}
+     */
     public void setIngredientAmount(Integer ingredientAmount) throws IllegalAmountException {
         checkIngredientAmount(ingredientAmount);
         this.ingredientAmount = ingredientAmount;
@@ -121,14 +159,36 @@ public class Ingredient {
         return ingredientMeasurement;
     }
 
-    public void setIngredientMeasurement(String ingredientMeasurement) throws IllegalArgumentException {
+    /**
+     * Converts measurement from String to enun format
+     * 
+     * @param ingredientMeasurement
+     * @return measurement in enum format
+     * @throws IllegalMeasurementException if unvalid measurement
+     */
+    private MEASUREMENTS convertIngredientMeasurement(String ingredientMeasurement) throws IllegalMeasurementException {
         try {
-            this.ingredientMeasurement = MEASUREMENTS.valueOf(ingredientMeasurement);
+            return MEASUREMENTS.valueOf(ingredientMeasurement);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Not accepted measurement-type: " + ingredientMeasurement);
+            throw new IllegalMeasurementException("Not accepted measurement-type: " + ingredientMeasurement);
         }
     }
 
+    /**
+     * Sets new measurement of Ingredient
+     * 
+     * @param ingredientMeasurement
+     * @throws IllegalMeasurementException
+     */
+    public void setIngredientMeasurement(String ingredientMeasurement) throws IllegalMeasurementException {
+        this.ingredientMeasurement = convertIngredientMeasurement(ingredientMeasurement);
+    }
+
+    /**
+     * Sets new measurement of Ingredient
+     * 
+     * @param ingredientMeasurement
+     */
     public void setIngredientMeasurement(MEASUREMENTS ingredientMeasurement) {
         this.ingredientMeasurement = ingredientMeasurement;
     }
@@ -137,13 +197,15 @@ public class Ingredient {
         return new HashSet<>(tagBox.getTags());
     }
 
-    // TODO Implement String input as measurement?
-    public void updateIngredient(Integer ingredientAmount, MEASUREMENTS ingredientMeasurement)
-            throws IllegalMeasurementException, IllegalAmountException {
-        if (!this.ingredientMeasurement.equals(ingredientMeasurement))
-            throw new IllegalMeasurementException("Not similar measurement-types");
-
-        setIngredientAmount(ingredientAmount);
+    /**
+     * Update ingredient with new amount
+     * 
+     * @param ingredientAmount
+     * @throws IllegalAmountException if adding/removing too high amount
+     */
+    public void updateIngredient(Integer ingredientAmount)
+            throws IllegalAmountException {
+        setIngredientAmount(this.ingredientAmount + ingredientAmount);
     }
 
     @Override

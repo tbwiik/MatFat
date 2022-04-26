@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import matFat.exceptions.IllegalAmountException;
+
 public class IngredientContainer {
 
     private List<Ingredient> ingredients = new ArrayList<>();
@@ -40,9 +42,6 @@ public class IngredientContainer {
      * <p>
      * Update ingredient in container if it already exist
      * <p>
-     * If ingredient exist in container but measurement is different the new
-     * ingredient will be added to container - not updated
-     * <p>
      * Add tags from each ingredient to container
      * 
      * @param ingredient
@@ -55,36 +54,20 @@ public class IngredientContainer {
         } else {
             for (Ingredient item : this.ingredients) {
                 if (item.equals(ingredient)) {
-                    item.updateIngredient(ingredient.getIngredientAmount(), ingredient.getIngredientMeasurement());
+                    item.updateIngredient(ingredient.getIngredientAmount());
                     break;
                 }
             }
         }
 
-        addTag(ingredient);
+        addTags(ingredient);
 
-    }
-
-    /**
-     * Add intersection of tags based on {@linkplain Ingredient}
-     * <p>
-     * Add and initialize {@linkplain TagBox} if null
-     * 
-     * @param ingredient
-     */
-    private void addTag(Ingredient ingredient) {
-
-        if (tagBox == null) {
-            tagBox = new TagBox(ingredient.getTags());
-        } else {
-            tagBox.retainAll(ingredient.getTags());
-        }
     }
 
     public void addIngredients(List<Ingredient> ingredients) {
         ingredients.forEach((ingredient) -> {
             addIngredient(ingredient);
-            addTag(ingredient);
+            addTags(ingredient);
         });
     }
 
@@ -104,10 +87,12 @@ public class IngredientContainer {
 
             if (ingAmount < ingRemAmount)
                 throw new IllegalAmountException("Removing too high amount of ingredient");
-            if (ingAmount == ingRemAmount)
+            if (ingAmount == ingRemAmount) {
                 this.ingredients.remove(ingredient);
+                numberOfIngredients--;
+            }
             if (ingAmount > ingRemAmount)
-                ingredient.updateIngredient(ingAmount - ingRemAmount, ingredientToRemove.getIngredientMeasurement());
+                ingredient.updateIngredient(ingAmount - ingRemAmount);
 
         } else {
             throw new IllegalArgumentException("Container does not contain this ingredient");
@@ -122,22 +107,39 @@ public class IngredientContainer {
         ingredientsToRemove.forEach((ingredient) -> removeIngredient(ingredient));
     }
 
-    public List<Ingredient> getIngredients() {
-        return new ArrayList<>(ingredients);
-    }
-
     public Ingredient getIngredient(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index > ingredients.size())
             throw new IndexOutOfBoundsException("Index in ingredient-container out of bounds");
         return ingredients.get(index);
     }
 
-    public Set<String> getTags() {
-        return new HashSet<>(tagBox.getTags());
+    public List<Ingredient> getIngredients() {
+        return new ArrayList<>(ingredients);
     }
 
+    // TODO make sure that this is implemented everywhere
     public int getNumberOfIngredients() {
         return numberOfIngredients;
+    }
+
+    /**
+     * Add intersection of tags based on {@linkplain Ingredient}
+     * <p>
+     * Add and initialize {@linkplain TagBox} if null
+     * 
+     * @param ingredient
+     */
+    private void addTags(Ingredient ingredient) {
+
+        if (tagBox == null) {
+            tagBox = new TagBox(ingredient.getTags());
+        } else {
+            tagBox.retainAll(ingredient.getTags());
+        }
+    }
+
+    public Set<String> getTags() {
+        return new HashSet<>(tagBox.getTags());
     }
 
     /**
@@ -154,7 +156,7 @@ public class IngredientContainer {
         tagBox = new TagBox();
 
         ingredients.forEach((ingredient) -> {
-            addTag(ingredient);
+            addTags(ingredient);
         });
 
     }

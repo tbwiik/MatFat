@@ -1,4 +1,4 @@
-package matFat;
+package matFat.exceptions;
 
 public class IllegalAmountException extends IllegalArgumentException {
 

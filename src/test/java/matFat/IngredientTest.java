@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import matFat.Ingredient.MEASUREMENTS;
+import matFat.exceptions.IllegalAmountException;
+import matFat.exceptions.IllegalMeasurementException;
 
 public class IngredientTest {
 
@@ -44,7 +46,7 @@ public class IngredientTest {
         Assertions.assertEquals(100, ingredient.getIngredientAmount());
 
         // Checks too high amount
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        Assertions.assertThrows(IllegalAmountException.class, () -> {
             ingredient.setIngredientAmount((int) Math.pow(10, 7));
         });
 
@@ -63,7 +65,7 @@ public class IngredientTest {
         Assertions.assertEquals(MEASUREMENTS.l, ingredient.getIngredientMeasurement());
 
         // Checks negative case
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        Assertions.assertThrows(IllegalMeasurementException.class, () -> {
             ingredient.setIngredientMeasurement("lol");
         });
     }
@@ -77,8 +79,8 @@ public class IngredientTest {
     void testUpdateIngredient() {
 
         // Checks positive case for updating ingredient
-        ingredient.updateIngredient(5, MEASUREMENTS.dl);
-        Assertions.assertEquals(5, ingredient.getIngredientAmount());
+        ingredient.updateIngredient(5);
+        Assertions.assertEquals(7, ingredient.getIngredientAmount());
 
         // // Checks fail when different measurement
         // Assertions.assertThrows(IllegalMeasurementException.class, () -> {

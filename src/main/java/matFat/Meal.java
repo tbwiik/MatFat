@@ -11,6 +11,7 @@ public class Meal extends TagBoxUser {
     private char difficulty;
     private IngredientContainer ingredientContainer;
     private Recipe recipe;
+    // Inherit TagBox from superclass
 
     private final static char[] ACCEPTED_DIFFICUILTIES = { 'E', 'M', 'H' };
     private final static int MIN_LENGTH_NAME = 3;
@@ -55,10 +56,6 @@ public class Meal extends TagBoxUser {
         return mealName;
     }
 
-    public char getDifficulty() {
-        return difficulty;
-    }
-
     private void checkDifficulty(char difficulty) throws IllegalArgumentException {
         for (int i = 0; i < ACCEPTED_DIFFICUILTIES.length; i++) {
             if (ACCEPTED_DIFFICUILTIES[i] == difficulty)
@@ -67,21 +64,14 @@ public class Meal extends TagBoxUser {
         throw new IllegalArgumentException("Not accepted difficulty");
     }
 
+    public char getDifficulty() {
+        return difficulty;
+    }
+
     // TODO add lowercase? Yes. Use event listener?
     public void setDifficulty(char difficulty) throws IllegalArgumentException {
         checkDifficulty(difficulty);
         this.difficulty = difficulty;
-    }
-
-    public Set<String> getTags() {
-        Set<String> allTags = new HashSet<>();
-        allTags.addAll(ingredientContainer.getTags());
-        allTags.addAll(tagBox.getTags());
-        return allTags;
-    }
-
-    public List<Ingredient> getIngredients() {
-        return new ArrayList<>(ingredientContainer.getIngredients());
     }
 
     public Ingredient getIngredient(int index) throws IndexOutOfBoundsException {
@@ -90,12 +80,19 @@ public class Meal extends TagBoxUser {
         return ingredientContainer.getIngredient(index);
     }
 
-    public IngredientContainer getIngredientContainer(IngredientContainer ingredientContainer) {
-        return ingredientContainer;
+    public List<Ingredient> getIngredients() {
+        return new ArrayList<>(ingredientContainer.getIngredients());
     }
 
     public List<String> getRecipe() {
         return new ArrayList<>(recipe.getRecipe());
+    }
+
+    public Set<String> getTags() {
+        Set<String> allTags = new HashSet<>();
+        allTags.addAll(ingredientContainer.getTags());
+        allTags.addAll(tagBox.getTags());
+        return allTags;
     }
 
 }

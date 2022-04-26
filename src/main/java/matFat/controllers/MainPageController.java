@@ -1,4 +1,4 @@
-package matFat;
+package matFat.controllers;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,11 +7,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import matFat.Menu;
 
-public class MatFatController {
+public class MainPageController {
 
     private Menu menu;
-    // XXX Many of the same attributes as meal. extend instead??
     private Set<String> tags = new HashSet<>();
     private Integer numberOfMeals;
 
