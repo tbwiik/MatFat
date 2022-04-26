@@ -19,7 +19,8 @@ public class IngredientContainer {
      * <p>
      * Add ingredients to container according to
      * {@linkplain IngredientContainer#addIngredient()}.
-     * Merges similar ingredients to one
+     * <p>
+     * Merge similar ingredients to one
      * 
      * @param ingredients
      */

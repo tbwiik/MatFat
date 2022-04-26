@@ -17,6 +17,16 @@ public class Meal extends TagBoxUser {
     private final static int MIN_LENGTH_NAME = 3;
     private final static int MAX_LENGTH_NAME = 30;
 
+    /**
+     * Constructs a meal with undefined length of tags
+     * 
+     * @param mealName
+     * @param difficulty
+     * @param ingredients
+     * @param recipe
+     * @param tags
+     * @throws IllegalArgumentException if invalid input
+     */
     public Meal(String mealName, char difficulty, List<Ingredient> ingredients, List<String> recipe, String... tags)
             throws IllegalArgumentException {
 
@@ -40,6 +50,12 @@ public class Meal extends TagBoxUser {
         tagBox = new TagBox(tags);
     }
 
+    /**
+     * Checks if length of name is valid
+     * 
+     * @param mealName
+     * @throws IllegalArgumentException
+     */
     private void checkMealName(String mealName) throws IllegalArgumentException {
         if (mealName.length() < MIN_LENGTH_NAME)
             throw new IllegalArgumentException("Too short mealName");
@@ -47,6 +63,13 @@ public class Meal extends TagBoxUser {
             throw new IllegalArgumentException("Too long mealName");
     }
 
+    /**
+     * Sets new meal-name
+     * 
+     * @param mealName
+     * @throws IllegalArgumentException if unvalid input per
+     *                                  {@linkplain #checkMealName(String)}
+     */
     public void setMealName(String mealName) throws IllegalArgumentException {
         checkMealName(mealName);
         this.mealName = mealName;
@@ -56,6 +79,12 @@ public class Meal extends TagBoxUser {
         return mealName;
     }
 
+    /**
+     * Checks if accepted difficulty
+     * 
+     * @param difficulty
+     * @throws IllegalArgumentException
+     */
     private void checkDifficulty(char difficulty) throws IllegalArgumentException {
         for (int i = 0; i < ACCEPTED_DIFFICUILTIES.length; i++) {
             if (ACCEPTED_DIFFICUILTIES[i] == difficulty)
@@ -69,6 +98,13 @@ public class Meal extends TagBoxUser {
     }
 
     // TODO add lowercase? Yes. Use event listener?
+    /**
+     * Sets new difficulty
+     * 
+     * @param difficulty
+     * @throws IllegalArgumentException if unvalid input per
+     *                                  {@linkplain #checkDifficulty(char)}
+     */
     public void setDifficulty(char difficulty) throws IllegalArgumentException {
         checkDifficulty(difficulty);
         this.difficulty = difficulty;
@@ -88,6 +124,9 @@ public class Meal extends TagBoxUser {
         return new ArrayList<>(recipe.getRecipe());
     }
 
+    /**
+     * @return tags in meal and container
+     */
     public Set<String> getTags() {
         Set<String> allTags = new HashSet<>();
         allTags.addAll(ingredientContainer.getTags());
