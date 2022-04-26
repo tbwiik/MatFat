@@ -20,11 +20,10 @@ public class TagBoxTest {
         tag2 = "meat";
         changeTag = "fast";
 
-        tagBox = new TagBox(tag1, tag2);
-
-        newTagSet = new HashSet<>();
         newTagSet.add(tag1);
         newTagSet.add(tag2);
+
+        tagBox = new TagBox(newTagSet);
 
     }
 
@@ -56,7 +55,7 @@ public class TagBoxTest {
         newTagSet.add(tag3);
         newTagSet.add(changeTag);
 
-        tagBox.addTags(tag3, changeTag);
+        tagBox.addTags(newTagSet);
         Assertions.assertEquals(newTagSet, tagBox.getTags());
 
     }
@@ -77,7 +76,7 @@ public class TagBoxTest {
     @Test
     void testRemoveTags() {
 
-        tagBox.removeTags(tag1, tag2);
+        tagBox.removeTags(newTagSet);
         Assertions.assertTrue(tagBox.getTags().isEmpty());
 
     }

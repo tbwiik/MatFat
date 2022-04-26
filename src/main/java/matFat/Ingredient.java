@@ -44,22 +44,22 @@ public class Ingredient {
      * @throws IllegalAmountException
      */
     public Ingredient(String ingredientName, Integer ingredientAmount, MEASUREMENTS ingredientMeasurement,
-            Set<String> tags)
+            String... tags)
             throws IllegalArgumentException, IllegalAmountException {
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         this.ingredientMeasurement = ingredientMeasurement;
-        this.tagBox = new TagBox(tags);
+        this.tagBox = new TagBox(strArrayToSet(tags));
     }
 
     // TODO put these together?
-    public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement, Set<String> tags)
+    public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement, String... tags)
             throws IllegalArgumentException, IllegalAmountException {
 
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         setIngredientMeasurement(ingredientMeasurement);
-        this.tagBox = new TagBox(tags);
+        this.tagBox = new TagBox(strArrayToSet(tags));
     }
 
     /**
@@ -191,6 +191,22 @@ public class Ingredient {
      */
     public void setIngredientMeasurement(MEASUREMENTS ingredientMeasurement) {
         this.ingredientMeasurement = ingredientMeasurement;
+    }
+
+    /**
+     * Converts string[] to Set of strings
+     * 
+     * @param strArray
+     * @return Set of Strings
+     */
+    private Set<String> strArrayToSet(String... strArray) {
+
+        Set<String> set = new HashSet<>();
+        for (String tag : strArray) {
+            set.add(tag);
+        }
+
+        return set;
     }
 
     public Set<String> getTags() {

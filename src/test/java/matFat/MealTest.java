@@ -51,7 +51,7 @@ public class MealTest {
         tags.add(tag1); // Used for test of constructor and tags
         tags.add(tag2); // Used for test of constructor and tags
 
-        meal = new Meal(mealName, difficulty, ingList, recipeList, tag1, tag2);
+        meal = new Meal(mealName, difficulty, ingList, recipeList, tags);
 
     }
 

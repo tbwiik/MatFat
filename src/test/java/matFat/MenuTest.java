@@ -36,6 +36,12 @@ public class MenuTest {
         String tagAnimal = "animal";
         tagCheap = "cheap";
 
+        Set<String> m1Tags = new HashSet<>();
+        m1Tags.add(tagQuick);
+
+        Set<String> m2Tags = new HashSet<>();
+        m2Tags.add(tagEasy);
+
         Ingredient i11 = new Ingredient("Burgerbrød", 2, "stk", tagVegan);
         Ingredient i12 = new Ingredient("Salat", 1, "stk", tagVegan);
         Ingredient i13 = new Ingredient("Veganburger", 2, "stk", tagVegan);
@@ -69,14 +75,20 @@ public class MenuTest {
         re3.add("Boil eggs.");
         re3.add("Grill meat.");
 
-        m1 = new Meal("Pasta Carbonara", 'M', il1, re1, tagQuick);
-        m2 = new Meal("Tomatosoup", 'E', il2, re2, tagEasy);
+        m1 = new Meal("Pasta Carbonara", 'M', il1, re1, m1Tags);
+        m2 = new Meal("Tomatosoup", 'E', il2, re2, m2Tags);
         mealList.add(m1);
         mealList.add(m2);
 
-        menu = new Menu(mealList, tagCheap);
+        Set<String> menuTags = new HashSet<>();
+        menuTags.add(tagCheap);
+        menu = new Menu(mealList, menuTags);
 
-        newMeal = new Meal("Pasta with egg and meat", 'E', il3, re3, tagEasy, tagQuick);
+        Set<String> mNewTags = new HashSet<>();
+        mNewTags.add(tagEasy);
+        mNewTags.add(tagQuick);
+
+        newMeal = new Meal("Pasta with egg and meat", 'E', il3, re3, mNewTags);
     }
 
     // XXX delete this?
@@ -135,11 +147,6 @@ public class MenuTest {
         IngredientContainer newIngCont = new IngredientContainer(allIngredients);
         Assertions.assertEquals(newIngCont.getIngredients(), menu.getIngredients());
 
-    }
-
-    @Test
-    void testAddMealToEmptyMenu() {
-        // TODO
     }
 
     @Test
