@@ -1,7 +1,6 @@
 package matFat;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -16,8 +15,7 @@ public class Model {
         this.allMeals = allMeals;
     }
 
-    // XXX Unsure about innkapsling in whole file
-    private void generateMenu(int numberOfMeals, Set<String> tags) throws NoSuchElementException {
+    public void generateMenu(int numberOfMeals, Set<String> tags) throws NoSuchElementException {
 
         List<Meal> validMeals = allMeals.stream().filter((meal) -> validateTags(tags, meal.getTags())).toList();
 
@@ -62,16 +60,8 @@ public class Model {
 
     }
 
-    private Menu getMenu() {
+    public Menu getMenu() {
         return menu;
     }
 
-    public static void main(String[] args) {
-        FileHandler fhandler = new FileHandler();
-        List<Meal> meals = fhandler.readFromFile("").getMealList();
-        Model model = new Model(meals);
-        Set<String> tags = new HashSet<>();
-        model.generateMenu(4, tags);
-        System.out.println(model.getMenu());
-    }
 }

@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,23 +25,21 @@ public class FileHandler implements fHandlerInterface {
         Set<String> menuTags = new HashSet<>();
 
         try {
-            // reader = new BufferedReader(new
-            // InputStreamReader(getClass().getResourceAsStream(filename + ".txt")));
+            reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename + ".txt")));
             // TODO fix reading from file
-            reader = new BufferedReader(new FileReader(
-                    "/Users/torbjornwiik/Docs_nonDrive/TDT4100/TheProject/TDT4100_prosjekt_torbjw/testfile.txt"));
+            // reader = new BufferedReader(new FileReader(
+            // "/Users/torbjornwiik/Docs_nonDrive/TDT4100/TheProject/TDT4100_prosjekt_torbjw/testfile.txt"));
 
             // TODO try/catch this one
-            if (reader.ready()) {
-                reader.readLine(); // Ignores first line
-                menuTags.addAll(Arrays.asList(reader.readLine().split(":")[1].strip().split(" ")));
-                menuTags.forEach((item) -> item.strip()); // TODO effectivize this?
-                menu.addTags(menuTags);
-            }
+            try {
+                if (reader.ready()) {
+                    reader.readLine(); // Ignores first line
+                    menuTags.addAll(Arrays.asList(reader.readLine().split(":")[1].strip().split(" ")));
+                    menuTags.forEach((item) -> item.strip()); // TODO effectivize this?
+                    menu.addTags(menuTags);
+                }
 
-            while (reader.ready()) {
-
-                try {
+                while (reader.ready()) {
 
                     reader.readLine();
                     String mealName = reader.readLine().split(":")[1].strip();
@@ -72,15 +73,17 @@ public class FileHandler implements fHandlerInterface {
                     menu.addMeal(meal);
 
                     reader.readLine();
-
-                } catch (IllegalArgumentException | IndexOutOfBoundsException exceptions) {
-                    exceptions.printStackTrace();
-                    // XXX change exception?
-                    throw new IllegalArgumentException("Cannot read from file due to wrong format");
                 }
+
+            } catch (IllegalArgumentException | IndexOutOfBoundsException exceptions) {
+                exceptions.printStackTrace();
+                // XXX change exception?
+                throw new IllegalArgumentException("Cannot read from file due to wrong format");
             }
 
-        } catch (IOException ioeRead) {
+        } catch (
+
+        IOException ioeRead) {
             ioeRead.printStackTrace();
         } finally {
             try {
@@ -121,8 +124,8 @@ public class FileHandler implements fHandlerInterface {
         String content = menuToStr(menu);
 
         try {
-            BufferedWriter writer = new BufferedWriter(
-                    new FileWriter(new File(filename + ".txt"), true));
+            File file = new File(getClass().getResource(filename).toURI());
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.append(content);
             writer.flush();
             writer.close();

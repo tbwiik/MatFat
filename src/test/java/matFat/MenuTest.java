@@ -172,6 +172,7 @@ public class MenuTest {
     void testWriteToFile() {
         FileHandler fHandler = new FileHandler();
         fHandler.writeToFile(menu, "testfile");
+
     }
 
     @Test

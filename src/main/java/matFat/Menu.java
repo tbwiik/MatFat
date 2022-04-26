@@ -11,6 +11,13 @@ public class Menu extends TagBoxUser {
     private int numberOfMeals;
     private IngredientContainer ingredientContainer = new IngredientContainer();
 
+    /**
+     * Constructs menu with undefined length of tags
+     * 
+     * @param mealList
+     * @param tags
+     * @throws IllegalArgumentException if unvalid tags
+     */
     public Menu(List<Meal> mealList, String... tags) throws IllegalArgumentException {
 
         this.mealList = new ArrayList<>(mealList);
@@ -29,11 +36,19 @@ public class Menu extends TagBoxUser {
 
     }
 
-    // Used in filehandling
+    /**
+     * Constructs empty menu with empty tagBox
+     * <p>
+     * Used in filehandling
+     */
     public Menu() {
+        // TODO fix this better?
         tagBox = new TagBox();
     }
 
+    /**
+     * Constructs igredient-container based on all ingredients in meal-list
+     */
     private void initializeIngredientContainer() {
 
         mealList.forEach((meal) -> {

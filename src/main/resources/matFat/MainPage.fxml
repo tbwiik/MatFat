@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="519.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="matFat.MatFatController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="519.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="matFat.controllers.MainPageController.java">
     <children>
       <VBox alignment="CENTER" prefHeight="519.0" prefWidth="470.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -41,10 +41,23 @@
                   </VBox>
                </children>
             </HBox>
-          <Text fx:id="menuInfoText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="239.0" />
-            <Button fx:id="addRecipeButton" mnemonicParsing="false" text="Generate meal" />
-            <HBox prefHeight="357.0" prefWidth="470.0" />
-            <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" text="Add recipe" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="generateMenuButton" mnemonicParsing="false" text="Generate menu" />
+                  <Button mnemonicParsing="false" text="Remove meal from menu" />
+                  <Button mnemonicParsing="false" text="Add Meal to menu" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="357.0" prefWidth="470.0">
+               <children>
+                <Text fx:id="menuInfoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="239.0" />
+               </children></HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" text="Add new meal" />
+                  <Button mnemonicParsing="false" text="Edit existing meal" />
+               </children>
+            </HBox>
          </children>
       </VBox>
     </children>

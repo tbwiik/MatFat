@@ -30,6 +30,11 @@ public class Meal extends TagBoxUser {
     public Meal(String mealName, char difficulty, List<Ingredient> ingredients, List<String> recipe, String... tags)
             throws IllegalArgumentException {
 
+        Set<String> set = new HashSet<>();
+        for (String tag : tags) {
+            set.add(tag);
+        }
+
         setMealName(mealName);
         setDifficulty(difficulty);
         this.ingredientContainer = new IngredientContainer(ingredients);
@@ -42,6 +47,8 @@ public class Meal extends TagBoxUser {
     // TODO solve this?
     public Meal(String mealName, char difficulty, List<Ingredient> ingredients, List<String> recipe, Set<String> tags)
             throws IllegalArgumentException {
+
+        String[] foo = (String[]) tags.toArray();
 
         setMealName(mealName);
         setDifficulty(difficulty);
