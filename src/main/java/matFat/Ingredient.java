@@ -44,7 +44,7 @@ public class Ingredient {
      * @throws IllegalAmountException
      */
     public Ingredient(String ingredientName, Integer ingredientAmount, MEASUREMENTS ingredientMeasurement,
-            String... tags)
+            Set<String> tags)
             throws IllegalArgumentException, IllegalAmountException {
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
@@ -53,7 +53,7 @@ public class Ingredient {
     }
 
     // TODO put these together?
-    public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement, String... tags)
+    public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement, Set<String> tags)
             throws IllegalArgumentException, IllegalAmountException {
 
         setIngredientName(ingredientName);

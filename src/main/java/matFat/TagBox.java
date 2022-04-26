@@ -14,13 +14,6 @@ public class TagBox {
     private final static int MIN_LENGTH_TAG = 3;
     private final static int MAX_LENGTH_TAG = 10;
 
-    // TODO change such that all tags are lowercase and stripped
-    public TagBox(String... tags) throws IllegalArgumentException {
-
-        setTagsArray(tags);
-
-    }
-
     public TagBox(Set<String> tags) throws IllegalArgumentException {
 
         setTagsSet(tags);
@@ -40,14 +33,6 @@ public class TagBox {
             throw new IllegalArgumentException("Tag can only consist of chars");
     }
 
-    private void setTagsArray(String... tags) throws IllegalArgumentException {
-        for (String tag : tags) {
-            checkTag(tag);
-            this.tags.add(tag);
-        }
-    }
-
-    // TODO utilize setTagsArray() or move this out to an own
     private void setTagsSet(Set<String> tags) throws IllegalAmountException {
         tags.forEach((tag) -> {
             checkTag(tag);
@@ -72,13 +57,6 @@ public class TagBox {
         tags.forEach((tag) -> addTag(tag));
     }
 
-    // XXX use .this to write this to shorter?
-    public void addTags(String... tags) throws IllegalArgumentException {
-        for (String tag : tags) {
-            addTag(tag);
-        }
-    }
-
     public void removeTag(String tag) throws IllegalArgumentException {
         if (!tags.contains(tag))
             throw new IllegalArgumentException("Tag not in box");
@@ -89,22 +67,6 @@ public class TagBox {
         for (String tag : tags) {
             removeTag(tag);
         }
-    }
-
-    public void removeTags(String... tags) throws IllegalArgumentException {
-        for (String tag : tags) {
-            removeTag(tag);
-        }
-    }
-
-    public static void main(String[] args) {
-        String t1 = "new";
-        String t2 = "tag";
-        Set<String> set = new HashSet<>();
-        set.add(t1);
-        set.add(t2);
-        TagBox tb = new TagBox(set);
-        System.out.println(tb.getTags());
     }
 
 }

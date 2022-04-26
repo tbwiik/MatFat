@@ -15,14 +15,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import matFat.exceptions.IllegalFileFormatException;
+
 public class FileHandler implements fHandlerInterface {
 
     @Override
     public Menu readFromFile(String filename) throws IllegalArgumentException {
 
         BufferedReader reader = null;
-        Menu menu = new Menu();
         Set<String> menuTags = new HashSet<>();
+        List<Meal> mealList = new ArrayList<>();
 
         try {
             reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename + ".txt")));
@@ -30,13 +32,11 @@ public class FileHandler implements fHandlerInterface {
             // reader = new BufferedReader(new FileReader(
             // "/Users/torbjornwiik/Docs_nonDrive/TDT4100/TheProject/TDT4100_prosjekt_torbjw/testfile.txt"));
 
-            // TODO try/catch this one
             try {
                 if (reader.ready()) {
-                    reader.readLine(); // Ignores first line
+                    reader.readLine();
                     menuTags.addAll(Arrays.asList(reader.readLine().split(":")[1].strip().split(" ")));
-                    menuTags.forEach((item) -> item.strip()); // TODO effectivize this?
-                    menu.addTags(menuTags);
+                    menuTags.forEach((item) -> item.strip());
                 }
 
                 while (reader.ready()) {
@@ -69,16 +69,14 @@ public class FileHandler implements fHandlerInterface {
                     mealTags.addAll(Arrays.asList(reader.readLine().split(":")[1].strip().split(" ")));
 
                     Meal meal = new Meal(mealName, difficulty, ingList, recipeList, mealTags);
-
-                    menu.addMeal(meal);
+                    mealList.add(meal);
 
                     reader.readLine();
                 }
 
             } catch (IllegalArgumentException | IndexOutOfBoundsException exceptions) {
                 exceptions.printStackTrace();
-                // XXX change exception?
-                throw new IllegalArgumentException("Cannot read from file due to wrong format");
+                throw new IllegalFileFormatException("Cannot read from file due to wrong format");
             }
 
         } catch (
@@ -93,7 +91,7 @@ public class FileHandler implements fHandlerInterface {
             }
         }
 
-        return menu;
+        return new Menu(mealList, menuTags);
 
     }
 

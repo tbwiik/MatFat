@@ -9,24 +9,24 @@ import java.util.Set;
 public class Model {
 
     List<Meal> allMeals = new ArrayList<>();
-    Menu menu = new Menu();
 
     public Model(List<Meal> allMeals) {
         this.allMeals = allMeals;
     }
 
-    public void generateMenu(int numberOfMeals, Set<String> tags) throws NoSuchElementException {
+    public Menu generateMenu(int numberOfMeals, Set<String> tags) throws NoSuchElementException {
 
         List<Meal> validMeals = allMeals.stream().filter((meal) -> validateTags(tags, meal.getTags())).toList();
+        List<Meal> mealList = new ArrayList<>();
 
         if (validMeals.isEmpty())
             throw new NoSuchElementException("No meal meets the required tags");
 
-        while (menu.getNumberOfMeals() < numberOfMeals) {
-            menu.addMeal(getRandomMeal(validMeals));
+        while (mealList.size() < numberOfMeals) {
+            mealList.add(getRandomMeal(validMeals));
         }
 
-        menu.addTags(tags);
+        return new Menu(mealList, tags);
 
     }
 
@@ -58,10 +58,6 @@ public class Model {
 
         return allMealsList.get(rand.nextInt(allMealsList.size()));
 
-    }
-
-    public Menu getMenu() {
-        return menu;
     }
 
 }

@@ -18,7 +18,7 @@ public class Meal extends TagBoxUser {
     private final static int MAX_LENGTH_NAME = 30;
 
     /**
-     * Constructs a meal with undefined length of tags
+     * Constructs a meal
      * 
      * @param mealName
      * @param difficulty
@@ -27,28 +27,8 @@ public class Meal extends TagBoxUser {
      * @param tags
      * @throws IllegalArgumentException if invalid input
      */
-    public Meal(String mealName, char difficulty, List<Ingredient> ingredients, List<String> recipe, String... tags)
-            throws IllegalArgumentException {
-
-        Set<String> set = new HashSet<>();
-        for (String tag : tags) {
-            set.add(tag);
-        }
-
-        setMealName(mealName);
-        setDifficulty(difficulty);
-        this.ingredientContainer = new IngredientContainer(ingredients);
-        this.recipe = new Recipe(recipe);
-        tagBox = new TagBox(tags);
-    }
-
-    // This excists because not being able to convert from Set<String> to String[],
-    // used in filehandling
-    // TODO solve this?
     public Meal(String mealName, char difficulty, List<Ingredient> ingredients, List<String> recipe, Set<String> tags)
             throws IllegalArgumentException {
-
-        String[] foo = (String[]) tags.toArray();
 
         setMealName(mealName);
         setDifficulty(difficulty);
