@@ -15,7 +15,7 @@ public class IngredientContainer {
     private int numberOfIngredients;
 
     /**
-     * Creates container with {@linkplain Ingredient}
+     * Creates container with {@linkplain Ingredient}s
      * <p>
      * Add ingredients to container according to
      * {@linkplain IngredientContainer#addIngredient()}.
@@ -31,8 +31,11 @@ public class IngredientContainer {
 
     }
 
-    // Used for making it possible to generate container in menu
+    /**
+     * Generate empty container for use in construction of {@linkplain Menu}
+     */
     public IngredientContainer() {
+        // TODO do things smarter to remove this?
     }
 
     /**
@@ -46,7 +49,6 @@ public class IngredientContainer {
      * 
      * @param ingredient
      */
-
     public void addIngredient(Ingredient ingredient) {
 
         if (!this.ingredients.contains(ingredient)) {
@@ -71,7 +73,20 @@ public class IngredientContainer {
         });
     }
 
-    // TODO write documentation
+    /**
+     * <b>Remove ingredient from container<\b>
+     * <p>
+     * Remove ingredient if removing same amount as in container
+     * <p>
+     * Update ingredient if removing less amount than in container
+     * <p>
+     * Regenerate tags based on new content
+     * 
+     * @param ingredientToRemove
+     * @throws IllegalArgumentException if trying to remove ingredient not in
+     *                                  container
+     * @throws IllegalAmountException   if removing more ingredient than is possible
+     */
     public void removeIngredient(Ingredient ingredientToRemove)
             throws IllegalArgumentException, IllegalAmountException {
 
@@ -123,9 +138,9 @@ public class IngredientContainer {
     }
 
     /**
-     * Add intersection of tags based on {@linkplain Ingredient}
+     * Add intersection of tags based on {@linkplain Ingredient}s
      * <p>
-     * Add and initialize {@linkplain TagBox} if null
+     * Initialize {@linkplain TagBox} if null
      * 
      * @param ingredient
      */
@@ -146,15 +161,9 @@ public class IngredientContainer {
      * Generate tags to {@linkplain IngredientContainer} based on all
      * {@linkplain Ingredient} tags
      * <p>
-     * Only add tags that every ingredient has.
-     * This ensures that tags in container is valid for whole container.
-     * E.g. dont add vegan if container contains meat as ingredient
-     *
+     * Only adds intersection of tags
      */
     public void generateTags() {
-
-        tagBox = new TagBox();
-
         ingredients.forEach((ingredient) -> {
             addTags(ingredient);
         });
