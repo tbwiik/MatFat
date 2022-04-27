@@ -1,15 +1,16 @@
-package matFat;
+package matFat.Objects;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Menu extends TagBoxUser {
+public class Menu extends Tagged {
 
     private List<Meal> mealList = new ArrayList<>();
     private int numberOfMeals;
     private IngredientContainer ingredientContainer = new IngredientContainer();
+    // Inherits tagbox from super
 
     /**
      * Constructs menu
@@ -71,4 +72,24 @@ public class Menu extends TagBoxUser {
         numberOfMeals--;
     }
 
+    @Override
+    public String toString() {
+
+        StringBuilder sBuilder = new StringBuilder();
+
+        mealList.forEach((meal) -> {
+            sBuilder.append("Meal: " + meal.getMealName() + "\n");
+        });
+
+        sBuilder.append("Number of meals: " + numberOfMeals + "\n");
+
+        sBuilder.append("Tags: ");
+        getTags().forEach((tag) -> sBuilder.append(tag + " "));
+        sBuilder.append("\n");
+
+        sBuilder.append("Ingredients: " + ingredientContainer.toString());
+
+        return sBuilder.toString();
+
+    }
 }

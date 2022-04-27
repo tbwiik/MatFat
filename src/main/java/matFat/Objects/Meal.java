@@ -1,11 +1,11 @@
-package matFat;
+package matFat.Objects;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Meal extends TagBoxUser {
+public class Meal extends Tagged {
 
     private String mealName;
     private char difficulty;
@@ -121,4 +121,20 @@ public class Meal extends TagBoxUser {
         return allTags;
     }
 
+    @Override
+    public String toString() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("Meal: " + mealName);
+        stringBuilder.append("\nDifficulty: " + difficulty);
+
+        stringBuilder.append("\nTags: ");
+        getTags().forEach((tag) -> stringBuilder.append(tag + " "));
+
+        stringBuilder.append("\nIngredients: \n" + ingredientContainer.toString());
+        stringBuilder.append("Recipe: \n" + recipe.toString());
+
+        return stringBuilder.toString();
+    }
 }

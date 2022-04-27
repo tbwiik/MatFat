@@ -1,7 +1,6 @@
 package matFat.exceptions;
 
-// TODO change super-extension
-public class IllegalFileFormatException extends IllegalArgumentException {
+public class IllegalFileFormatException extends Exception {
 
     public IllegalFileFormatException(String errorMessage) {
         super(errorMessage);

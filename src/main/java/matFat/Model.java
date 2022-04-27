@@ -1,10 +1,17 @@
 package matFat;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import matFat.Objects.*;
+import matFat.exceptions.IllegalAmountException;
+import matFat.filehandling.*;
 
 public class Model {
 
@@ -14,7 +21,10 @@ public class Model {
         this.allMeals = allMeals;
     }
 
-    public Menu generateMenu(int numberOfMeals, Set<String> tags) throws NoSuchElementException {
+    public Menu generateMenu(int numberOfMeals, Set<String> tags)
+            throws NoSuchElementException, IllegalArgumentException {
+
+        checkNum(numberOfMeals);
 
         List<Meal> validMeals = allMeals.stream().filter((meal) -> validateTags(tags, meal.getTags())).toList();
         List<Meal> mealList = new ArrayList<>();
@@ -30,7 +40,6 @@ public class Model {
 
     }
 
-    // TODO redefine this too only have similar? or userTags more? or mealTags more?
     /**
      * Checks if mealTags contains all specified userTags (or more)
      * 
@@ -43,11 +52,21 @@ public class Model {
         if (userTags.isEmpty())
             return true;
 
+        // TODO fix to be exclusive
         for (String tag : userTags) {
             if (!mealTags.contains(tag))
                 return false;
         }
+
         return true;
+    }
+
+    private void checkNum(int n) throws IllegalAmountException {
+        if (n <= 0)
+            throw new IllegalAmountException("Too low amount of meals");
+        if (n > 100)
+            throw new IllegalAmountException("Too high amount of meals");
+
     }
 
     private Meal getRandomMeal(List<Meal> allMeals) {
@@ -60,4 +79,48 @@ public class Model {
 
     }
 
+    public static Ingredient strToIng(String ingStr) throws IllegalArgumentException {
+        String[] ingArgs = ingStr.strip().split(" ");
+        return new Ingredient(ingArgs);
+    }
+
+    public static Set<String> strToStrSet(String str) {
+        // TODO add more validation here?
+        Set<String> tmpSet = new HashSet<>();
+
+        if (!str.strip().isEmpty()) {
+            String[] tmpArray = str.strip().split(",");
+            for (String item : tmpArray) {
+                tmpSet.add(item.strip());
+            }
+        }
+
+        return tmpSet;
+    }
+
+    public static int strToInt(String str) throws IllegalArgumentException {
+        try {
+            return (int) Integer.parseInt(str.strip());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Not valid number");
+        }
+    }
+
+    public static char strToChar(String str) throws IllegalArgumentException {
+        char[] charArray = str.strip().toCharArray();
+        if (charArray.length != 1)
+            throw new IllegalArgumentException("Not accepted character");
+        return charArray[0];
+    }
+
+    // TODO
+    private void showErrorMessage(String errorMessage) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setAlertType(alertType);
+    }
+
+    public static void main(String[] args) {
+        Set<String> tmp = strToStrSet("lol, foo, bar");
+        tmp.forEach(System.out::println);
+    }
 }

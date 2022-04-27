@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="519.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="matFat.controllers.MainPageController.java">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="519.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="matFat.MainPageController">
     <children>
       <VBox alignment="CENTER" prefHeight="519.0" prefWidth="470.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -23,7 +23,7 @@
                   <VBox alignment="CENTER" prefHeight="53.0" prefWidth="169.0">
                      <children>
                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of meals" />
-                        <TextField alignment="CENTER" prefHeight="26.0" prefWidth="163.0" />
+                        <TextField fx:id="numbMealsTextField" alignment="CENTER" prefHeight="26.0" prefWidth="163.0" />
                      </children>
                   </VBox>
                </children>
@@ -33,7 +33,7 @@
                   <VBox alignment="CENTER" prefHeight="81.0" prefWidth="168.0">
                      <children>
                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tags" />
-                        <TextField />
+                        <TextField fx:id="tagsTextField" />
                      </children>
                      <HBox.margin>
                         <Insets />
@@ -43,7 +43,7 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="generateMenuButton" mnemonicParsing="false" text="Generate menu" />
+                  <Button fx:id="generateMenuButton" mnemonicParsing="false" onAction="#generateMenu" text="Generate menu" />
                   <Button mnemonicParsing="false" text="Remove meal from menu" />
                   <Button mnemonicParsing="false" text="Add Meal to menu" />
                </children>

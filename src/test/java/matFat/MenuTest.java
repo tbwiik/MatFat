@@ -9,6 +9,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import matFat.Objects.Ingredient;
+import matFat.Objects.IngredientContainer;
+import matFat.Objects.Meal;
+import matFat.Objects.Menu;
+import matFat.filehandling.FileHandler;
+
 public class MenuTest {
 
     Menu menu;
@@ -75,7 +81,7 @@ public class MenuTest {
         re3.add("Boil eggs.");
         re3.add("Grill meat.");
 
-        m1 = new Meal("Pasta Carbonara", 'M', il1, re1, m1Tags);
+        m1 = new Meal("Vegan Burger", 'M', il1, re1, m1Tags);
         m2 = new Meal("Tomatosoup", 'E', il2, re2, m2Tags);
         mealList.add(m1);
         mealList.add(m2);
@@ -184,8 +190,12 @@ public class MenuTest {
 
     @Test
     void testReadFromFile() {
-        FileHandler fileHandler = new FileHandler();
-        Menu menu = fileHandler.readFromFile("testfile");
+        try {
+            FileHandler fileHandler = new FileHandler();
+            Menu menu = fileHandler.readFromFile("testfile");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }

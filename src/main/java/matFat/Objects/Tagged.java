@@ -1,12 +1,10 @@
-package matFat;
+package matFat.Objects;
 
 import java.util.Set;
 
-//XXX trenger denne være abstract?
-public abstract class TagBoxUser {
+public abstract class Tagged {
 
-    // TODO hvilken synlighetmodifikator??
-    TagBox tagBox;
+    protected TagBox tagBox;
 
     public void addTag(String tag) throws IllegalArgumentException {
         tagBox.addTag(tag);

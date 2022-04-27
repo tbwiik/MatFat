@@ -1,4 +1,4 @@
-package matFat;
+package matFat.Objects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,10 @@ public class Recipe {
 
     List<String> recipe = new ArrayList<>();
 
+    public Recipe(String recipeLine) throws IllegalArgumentException {
+        addRecipeLine(recipeLine);
+    }
+
     public Recipe(List<String> recipe) throws IllegalArgumentException {
         setRecipe(recipe);
     }
@@ -16,8 +20,7 @@ public class Recipe {
         // XXX Consider making public to be able to rewrite whole recipe in one push.
 
         for (String recipeLine : recipe) {
-            checkRecipeLine(recipeLine);
-            this.recipe.add(recipeLine);
+            addRecipeLine(recipeLine);
         }
 
     }
@@ -52,8 +55,9 @@ public class Recipe {
      * 
      * @param recipeLines
      * @param indexes
+     * @throws IllegalArgumentException
      */
-    public void updateRecipeLines(Map<Integer, String> recipeLines) {
+    public void updateRecipeLines(Map<Integer, String> recipeLines) throws IllegalArgumentException {
         recipeLines.forEach((index, strUpdate) -> {
             checkRecipeLine(strUpdate);
             recipe.set(index, strUpdate);
@@ -67,10 +71,33 @@ public class Recipe {
      * 
      * @param recipeLine
      * @param listIndex
+     * @throws IllegalArgumentException
      */
-    public void updateRecipeLine(int listIndex, String recipeLine) {
+    public void updateRecipeLine(int listIndex, String recipeLine) throws IllegalArgumentException {
         checkRecipeLine(recipeLine);
         recipe.set(listIndex, recipeLine);
+    }
+
+    /**
+     * Append point in recipe to end of recipe-list
+     * 
+     * @param recipeLine
+     * @throws IllegalArgumentException
+     */
+    public void addRecipeLine(String recipeLine) throws IllegalArgumentException {
+        checkRecipeLine(recipeLine);
+        recipe.add(recipeLine);
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        recipe.forEach((point) -> stringBuilder.append(point + "\n"));
+
+        return stringBuilder.toString();
+
     }
 
 }

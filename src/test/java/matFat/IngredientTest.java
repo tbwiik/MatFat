@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import matFat.Ingredient.MEASUREMENTS;
+import matFat.Objects.Ingredient;
+import matFat.Objects.Ingredient.MEASUREMENTS;
 import matFat.exceptions.IllegalAmountException;
 import matFat.exceptions.IllegalMeasurementException;
 

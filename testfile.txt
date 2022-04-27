@@ -1,0 +1,32 @@
+{
+tags : cheap 
+meal : {
+mealName : Vegan Burger
+difficulty : M
+ingredients : {
+	Burgerbrød 2 stk vegan 
+	Salat 1 stk vegan 
+	Veganburger 2 stk vegan 
+},
+recipe : {
+	Grill burger.
+	Varm the bread.
+	Put everything together and serve!
+},
+tags : quick vegan 
+}
+meal : {
+mealName : Tomatosoup
+difficulty : E
+ingredients : {
+	Tomatsuppe-Toro 1 stk vegan 
+	Pølse 500 g meat 
+	Makaroni 500 g quick 
+},
+recipe : {
+	Boil water and insert macaroni. Cook for 10 min.
+	Heat the soup slowly and boil for 2 min.
+	Heat sausages and put everything together.
+},
+tags : easy 
+}

@@ -8,8 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="matFat.AddMealController">
    <children>
       <VBox alignment="CENTER" layoutX="166.0" layoutY="48.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -27,8 +26,7 @@
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add  name of meal" />
                               <HBox prefHeight="22.0" prefWidth="600.0">
                                  <children>
-                                    <TextField promptText="Pasta Carbonara" />
-                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="Button" />
+                                    <TextField fx:id="mealNameTextField" promptText="Pasta Carbonara" text="Testtext" />
                                  </children>
                               </HBox>
                            </children>
@@ -38,19 +36,17 @@
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add difficulty" />
                               <HBox prefHeight="22.0" prefWidth="600.0">
                                  <children>
-                                    <TextField promptText="E" />
-                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="68.0" text="Button" />
+                                    <TextField fx:id="difficultyTextField" promptText="E" text="M" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
                         <VBox prefHeight="18.0" prefWidth="600.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add tag" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add tags" />
                               <HBox prefHeight="22.0" prefWidth="600.0">
                                  <children>
-                                    <TextField promptText="cheap" />
-                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="69.0" text="Button" />
+                                    <TextField fx:id="tagsTextField" promptText="cheap, vegan" text="vegan, lowcarb" />
                                  </children>
                               </HBox>
                            </children>
@@ -60,8 +56,13 @@
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add Ingredient" />
                               <HBox prefHeight="22.0" prefWidth="600.0">
                                  <children>
-                                    <TextField promptText="Pasta 1 pk" />
-                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="68.0" text="Button" />
+                                    <VBox prefHeight="52.0" prefWidth="199.0">
+                                       <children>
+                                          <TextField fx:id="ingredientTextField" prefWidth="138.0" promptText="Pasta 1 pk " />
+                                          <TextField fx:id="ingredientTagsTextField" promptText="vegan, cheap" />
+                                       </children>
+                                    </VBox>
+                                    <Button fx:id="addIngredientButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addIngredient" prefHeight="52.0" prefWidth="96.0" text="Add" />
                                  </children>
                               </HBox>
                            </children>
@@ -71,17 +72,18 @@
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add Point in recipe" />
                               <HBox prefHeight="22.0" prefWidth="600.0">
                                  <children>
-                                    <TextField promptText="Boil water" />
-                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="68.0" text="Button" />
+                                    <TextField fx:id="recipePointTextField" promptText="Boil water" />
+                                    <Button fx:id="addRecipePointButton" mnemonicParsing="false" onAction="#addRecipePoint" prefHeight="26.0" prefWidth="68.0" text="Button" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
+                        <Button fx:id="addMealButton" mnemonicParsing="false" onAction="#addMeal" prefHeight="26.0" prefWidth="218.0" text="Add meal" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="286.0" prefWidth="402.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="mealInfoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
                      </children>
                   </VBox>
                </children>

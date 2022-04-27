@@ -1,4 +1,4 @@
-package matFat;
+package matFat.Objects;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +12,7 @@ public class Ingredient {
     private String ingredientName;
     private Integer ingredientAmount;
     private MEASUREMENTS ingredientMeasurement;
-    private TagBox tagBox;
+    private TagBox tagBox = new TagBox();
 
     private static final String INGNAMEREG_STRING = "[a-zA-ZæøåÆØÅ-]*"; // Dont allow whitespace due to filehandling
 
@@ -62,6 +62,7 @@ public class Ingredient {
         this.tagBox = new TagBox(strArrayToSet(tags));
     }
 
+    // TODO implement iterator??
     /**
      * Constructs Ingredient
      * <p>
@@ -80,10 +81,12 @@ public class Ingredient {
         }
         setIngredientMeasurement(ingArgs[2]);
 
-        if (ingArgs.length > 3)
-            tagBox = new TagBox(ingArgs[3]); // Initialize TagBox
-        for (int i = 4; i < ingArgs.length; i++)
-            tagBox.addTag(ingArgs[i]);
+        if (ingArgs.length > 3) {
+            Set<String> tagSet = new HashSet<>();
+            for (int i = 3; i < ingArgs.length; i++)
+                tagSet.add(ingArgs[i]);
+            tagBox = new TagBox(tagSet);
+        }
 
     }
 
@@ -137,7 +140,6 @@ public class Ingredient {
         if (ingredientAmount <= 0)
             throw new IllegalAmountException("The amount of ingredient must be greater than 0");
 
-        // XXX Change datatype?
         if ((int) ingredientAmount > (int) (Math.pow(10, 6)))
             throw new IllegalAmountException("Way too much ingredients...");
 
@@ -245,9 +247,14 @@ public class Ingredient {
 
     @Override
     public String toString() {
-        // TODO write better using StringBuilder
-        return "Ingredient [ingredientAmount=" + ingredientAmount + ", ingredientMeasurement=" + ingredientMeasurement
-                + ", ingredientName=" + ingredientName + "]";
+
+        StringBuilder sBuilder = new StringBuilder();
+
+        sBuilder.append(
+                ingredientName + " " + ingredientAmount.toString() + " " + ingredientMeasurement.toString() + ", "
+                        + tagBox.toString());
+
+        return sBuilder.toString();
     }
 
 }

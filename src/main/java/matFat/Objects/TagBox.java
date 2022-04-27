@@ -1,10 +1,8 @@
-package matFat;
+package matFat.Objects;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import matFat.exceptions.IllegalAmountException;
 
 public class TagBox {
 
@@ -14,10 +12,15 @@ public class TagBox {
     private final static int MIN_LENGTH_TAG = 3;
     private final static int MAX_LENGTH_TAG = 10;
 
+    // Allowed with empty box
     public TagBox(Set<String> tags) throws IllegalArgumentException {
 
         setTagsSet(tags);
 
+    }
+
+    // (Can) be used in pretty much every class
+    public TagBox() {
     }
 
     private void checkTag(String tag) throws IllegalArgumentException {
@@ -33,11 +36,16 @@ public class TagBox {
             throw new IllegalArgumentException("Tag can only consist of chars");
     }
 
-    private void setTagsSet(Set<String> tags) throws IllegalAmountException {
-        tags.forEach((tag) -> {
-            checkTag(tag);
-            this.tags.add(tag);
-        });
+    private void setTagsSet(Set<String> tags) throws IllegalArgumentException {
+
+        if (tags.isEmpty()) {
+            this.tags = tags;
+        } else {
+            tags.forEach((tag) -> {
+                checkTag(tag);
+                this.tags.add(tag);
+            });
+        }
     }
 
     public Set<String> getTags() {
@@ -67,6 +75,16 @@ public class TagBox {
         for (String tag : tags) {
             removeTag(tag);
         }
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sBuilder = new StringBuilder();
+
+        tags.forEach((tag) -> sBuilder.append(tag + " "));
+
+        return sBuilder.toString();
     }
 
 }

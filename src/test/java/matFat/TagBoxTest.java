@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import matFat.Objects.TagBox;
+
 public class TagBoxTest {
 
     TagBox tagBox;
@@ -45,6 +47,10 @@ public class TagBoxTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             tagBox.addTag("ccccccccccc");
         });
+
+        // Test adding no tag to empty box
+        TagBox newTagBox = new TagBox(new HashSet<>());
+        Assertions.assertEquals(new HashSet<>(), newTagBox.getTags());
 
     }
 

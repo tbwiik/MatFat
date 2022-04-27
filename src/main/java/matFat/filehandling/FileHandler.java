@@ -1,36 +1,46 @@
-package matFat;
+package matFat.filehandling;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import matFat.Objects.Ingredient;
+import matFat.Objects.Meal;
+import matFat.Objects.Menu;
 import matFat.exceptions.IllegalFileFormatException;
 
 public class FileHandler implements fHandlerInterface {
 
+    public Path getFilePath(String filename) {
+        return Paths.get(getClass().getResource("data/").getFile() + filename + ".txt");
+    }
+
     @Override
-    public Menu readFromFile(String filename) throws IllegalArgumentException {
+    public Menu readFromFile(String filename) throws IllegalArgumentException, IllegalFileFormatException {
 
         BufferedReader reader = null;
         Set<String> menuTags = new HashSet<>();
         List<Meal> mealList = new ArrayList<>();
 
         try {
-            reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename + ".txt")));
+            // reader = new BufferedReader(new
+            // InputStreamReader(getClass().getResourceAsStream(filename + ".txt")));
+            // reader = new BufferedReader(new FileReader(getFilePath(filename)));
+
             // TODO fix reading from file
-            // reader = new BufferedReader(new FileReader(
-            // "/Users/torbjornwiik/Docs_nonDrive/TDT4100/TheProject/TDT4100_prosjekt_torbjw/testfile.txt"));
+            reader = new BufferedReader(new FileReader(
+                    "/Users/torbjornwiik/Docs_nonDrive/TDT4100/TheProject/TDT4100_prosjekt_torbjw/testfile.txt"));
 
             try {
                 if (reader.ready()) {
@@ -74,6 +84,8 @@ public class FileHandler implements fHandlerInterface {
                     reader.readLine();
                 }
 
+                // If writing to file is correct and file is non-corrupted this block will never
+                // run
             } catch (IllegalArgumentException | IndexOutOfBoundsException exceptions) {
                 exceptions.printStackTrace();
                 throw new IllegalFileFormatException("Cannot read from file due to wrong format");
@@ -95,36 +107,20 @@ public class FileHandler implements fHandlerInterface {
 
     }
 
-    // private List<Ingredient> StrToIngs(BufferedReader reader) {
-    // re
-
-    // }
-
-    private void StrToTags(BufferedReader reader) {
-
-    }
-
-    private void StrToRecipe(BufferedReader reader) {
-
-    }
-
-    private void StrToMeal(BufferedReader reader) {
-
-    }
-
-    private void StrToMenu(BufferedReader reader) {
-
-    }
-
     @Override
     public void writeToFile(Menu menu, String filename) {
 
         String content = menuToStr(menu);
 
         try {
-            File file = new File(getClass().getResource(filename).toURI());
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.append(content);
+            // File file = new File(getClass().getResource(filename).toURI());
+            // // File file2 = new File(arg0, arg1)
+            // BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+            PrintWriter writer = new PrintWriter(filename + ".txt");
+
+            // writer.append(content);
+            writer.print(content);
             writer.flush();
             writer.close();
         } catch (Exception e) {
@@ -196,6 +192,11 @@ public class FileHandler implements fHandlerInterface {
                         "}\n");
 
         return sBuilder.toString();
+    }
+
+    public static void main(String[] args) throws IllegalArgumentException, IllegalFileFormatException {
+        FileHandler fhandler = new FileHandler();
+        fhandler.readFromFile(" ");
     }
 
 }

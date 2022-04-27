@@ -1,4 +1,4 @@
-package matFat;
+package matFat.Objects;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,10 +33,16 @@ public class IngredientContainer {
     }
 
     /**
-     * Generate empty container for use in construction of {@linkplain Menu}
+     * Generate empty container for use in construction of {@linkplain Menu} and
+     * model
      */
     public IngredientContainer() {
         // TODO do things smarter to remove this?
+    }
+
+    // Use in Controller
+    public IngredientContainer(Ingredient ingredient) {
+        addIngredient(ingredient);
     }
 
     /**
@@ -171,4 +177,15 @@ public class IngredientContainer {
 
     }
 
+    @Override
+    public String toString() {
+
+        StringBuilder sBuilder = new StringBuilder();
+
+        ingredients.forEach((ingredient) -> {
+            sBuilder.append(ingredient + "\n");
+        });
+
+        return sBuilder.toString();
+    }
 }
