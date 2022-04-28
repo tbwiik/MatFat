@@ -20,7 +20,7 @@ import matFat.filehandling.*;
 
 public class AddMealController {
 
-    Model model;
+    GenericFunctions model;
     Meal meal;
     IngredientContainer ingredientContainer = new IngredientContainer();
     Recipe recipe = new Recipe();
@@ -46,7 +46,7 @@ public class AddMealController {
         try {
             String ingTagsStr = ingredientTagsTextField.getText().replace(",", ""); // Format tags correctly for
                                                                                     // appending to ingredient
-            Ingredient ing = Model.strToIng(ingStr + " " + ingTagsStr);
+            Ingredient ing = GenericFunctions.strToIng(ingStr + " " + ingTagsStr);
 
             ingredientContainer.addIngredient(ing);
 
@@ -86,8 +86,8 @@ public class AddMealController {
         try {
 
             String mealName = mealNameTextField.getText().strip();
-            char difficulty = Model.strToChar(difficultyTextField.getText());
-            Set<String> tags = Model.strToStrSet(tagsTextField.getText());
+            char difficulty = GenericFunctions.strToChar(difficultyTextField.getText());
+            Set<String> tags = GenericFunctions.strToStrSet(tagsTextField.getText());
 
             addIngredient();
             List<Ingredient> ingredients = ingredientContainer.getIngredients();
@@ -119,7 +119,7 @@ public class AddMealController {
     @FXML
     private void initialize() {
         try {
-            model = new Model();
+            model = new GenericFunctions();
         } catch (Exception e) {
             mealInfoText.setText("Error initializing file");
         }

@@ -21,7 +21,7 @@ public class MealDataBase implements FileHandlerInterface {
 
     private List<Meal> meals = new ArrayList<>();
     // TODO fix reading to default
-    String filename = "mealDataBase"; // Default place
+    String filename = "mealDataBase"; // Default filepath
 
     public MealDataBase(String filename) throws IllegalFileFormatException {
         this.filename = filename;
