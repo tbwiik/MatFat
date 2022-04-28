@@ -27,6 +27,7 @@ import matFat.Objects.Meal;
 import matFat.Objects.Menu;
 import matFat.exceptions.IllegalAmountException;
 import matFat.exceptions.IllegalFileFormatException;
+import matFat.filehandling.ManageData;
 
 public class MealDataBase {
 
@@ -35,7 +36,8 @@ public class MealDataBase {
     String defaultFilename = "mealDataBase"; // Default filepath
 
     public MealDataBase(String filename) throws IllegalFileFormatException, FileNotFoundException {
-
+        ManageData manDate = new ManageData();
+        meals = manDate.getData().getMealList();
     }
 
     public MealDataBase() throws IllegalFileFormatException, FileNotFoundException {
