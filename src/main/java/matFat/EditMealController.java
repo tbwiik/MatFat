@@ -7,16 +7,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import matFat.Objects.Ingredient;
 import matFat.Objects.Meal;
+import matFat.Objects.MealDataBase;
 import matFat.exceptions.IllegalDifficultyException;
 import matFat.exceptions.IllegalNameFormatException;
 import matFat.exceptions.IllegalRecipeFormatException;
 import matFat.exceptions.IllegalTagFormatException;
 
-import matFat.filehandling.FileHandler;
-
 public class EditMealController {
 
-    Model model;
+    MealDataBase mealDataBase;
     Meal meal;
 
     @FXML
@@ -42,7 +41,7 @@ public class EditMealController {
         if (mealName.isBlank())
             return;
 
-        for (Meal meal : model.getAllMeals())
+        for (Meal meal : mealDataBase.getMeals())
             if (meal.getMealName().equals(mealName)) {
                 updated = true;
                 this.meal = meal;
@@ -88,7 +87,7 @@ public class EditMealController {
 
             checkMealExist();
 
-            char difficulty = Model.strToChar(changeDifficultyTextField.getText());
+            char difficulty = GenericFunctions.strToChar(changeDifficultyTextField.getText());
 
             meal.setDifficulty(difficulty);
             mealInfoText.setText(meal.toString());
@@ -139,7 +138,7 @@ public class EditMealController {
 
             checkMealExist();
 
-            Ingredient ing = Model.strToIng(addIngredientTextField.getText());
+            Ingredient ing = GenericFunctions.strToIng(addIngredientTextField.getText());
             meal.addIngredient(ing);
             mealInfoText.setText(meal.toString());
             addIngredientTextField.clear();
@@ -155,7 +154,7 @@ public class EditMealController {
 
             checkMealExist();
 
-            Ingredient ing = Model.strToIng(removeIngredientTextField.getText());
+            Ingredient ing = GenericFunctions.strToIng(removeIngredientTextField.getText());
             meal.removeIngredient(ing);
             mealInfoText.setText(meal.toString());
             removeIngredientTextField.clear();
@@ -188,7 +187,7 @@ public class EditMealController {
 
             checkMealExist();
 
-            int index = Model.strToInt(removeRecipeStepTextField.getText());
+            int index = GenericFunctions.strToInt(removeRecipeStepTextField.getText());
 
             meal.removeRecipeStep(index);
             mealInfoText.setText(meal.toString());
@@ -201,7 +200,7 @@ public class EditMealController {
     @FXML
     private void initialize() {
         try {
-            model = new Model();
+            mealDataBase = new MealDataBase();
         } catch (Exception e) {
             mealInfoText.setText("Error initializing file");
         }

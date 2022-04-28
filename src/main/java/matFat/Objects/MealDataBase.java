@@ -1,45 +1,99 @@
-package matFat.filehandling;
+package matFat.Objects;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Set;
+import java.util.function.Predicate;
 
-import matFat.MatFatApp;
-import matFat.Objects.Ingredient;
-import matFat.Objects.Meal;
-import matFat.Objects.Menu;
-import matFat.exceptions.IllegalDifficultyException;
+import matFat.exceptions.IllegalAmountException;
 import matFat.exceptions.IllegalFileFormatException;
+import matFat.filehandling.FileHandlerInterface;
 
-public class FileHandler implements FileHandlerInterface {
+public class MealDataBase implements FileHandlerInterface {
 
-    public String getFilePathString(String filename) {
-        return (getClass().getResource("data/").getFile() + filename + ".txt");
+    private List<Meal> meals = new ArrayList<>();
+    // TODO fix reading to default
+    String filename = "mealDataBase"; // Default place
+
+    public MealDataBase(String filename) throws IllegalFileFormatException {
+        this.filename = filename;
+        readMealFromFile(filename);
     }
 
-    public Path getFilePath(String filename) {
-        return Paths.get((MatFatApp.class.getResource("/data/") + filename + ".txt"));
+    public MealDataBase() throws IllegalFileFormatException {
+        readMealFromFile(filename);
+    }
+
+    public List<Meal> getMeals() {
+        return new ArrayList<>(meals);
+    }
+
+    public void addMeal(Meal meal) {
+        meals.add(meal);
+        writeMealToFile(meal, filename);
+    }
+
+    public Meal getRandomMeal() {
+
+        Random rand = new Random();
+
+        return meals.get(rand.nextInt(meals.size()));
+
+    }
+
+    // TODO fix this messy thing
+    private List<Meal> validMeals(Predicate predicate) throws NoSuchElementException {
+
+        List<Meal> validMeals = new ArrayList<Meal>(meals.stream().filter(predicate).toList());
+
+        if (validMeals.isEmpty())
+            throw new NoSuchElementException("No meal meets the required tags");
+
+        return validMeals;
+    }
+
+    private void checkNum(int n) throws IllegalAmountException {
+        if (n <= 0)
+            throw new IllegalAmountException("Too low amount of meals");
+        if (n > 100)
+            throw new IllegalAmountException("Too high amount of meals");
+
+    }
+
+    public Meal getRandomMeal(Predicate predicate) throws NoSuchElementException {
+
+        Random rand = new Random();
+        Meal meal = validMeals(predicate).get(rand.nextInt(meals.size()));
+
+        return meal;
+    }
+
+    public List<Meal> getRandomMeals(Predicate predicate, int amount) throws NoSuchElementException {
+
+        List<Meal> randomMeals = new ArrayList<>();
+
+        checkNum(amount);
+
+        while (randomMeals.size() < amount)
+            getRandomMeal(predicate);
+
+        return randomMeals;
+
     }
 
     @Override
-    public Menu readFromFile(String filename) throws IllegalArgumentException, IllegalFileFormatException {
+    public Meal readMealFromFile(String filename) throws IllegalArgumentException {
 
         BufferedReader reader = null;
-        Set<String> menuTags = new HashSet<>();
-        List<Meal> mealList = new ArrayList<>();
+        Meal meal = null;
 
         try {
             // reader = new BufferedReader(new
@@ -53,45 +107,36 @@ public class FileHandler implements FileHandlerInterface {
                     "/Users/torbjornwiik/Docs_nonDrive/TDT4100/TheProject/TDT4100_prosjekt_torbjw/testfile.txt"));
 
             try {
-                if (reader.ready()) {
-                    reader.readLine();
-                    menuTags.addAll(Arrays.asList(reader.readLine().split(":")[1].strip().split(" ")));
-                    menuTags.forEach((item) -> item.strip());
+
+                String mealName = reader.readLine().split(":")[1].strip();
+                char difficulty = reader.readLine().split(":")[1].strip().charAt(0);
+                List<Ingredient> ingList = new ArrayList<>();
+                List<String> recipeList = new ArrayList<>();
+                Set<String> mealTags = new HashSet<>();
+
+                // Reads ingredients
+                reader.readLine();
+                while (true) {
+                    String line = reader.readLine().strip();
+                    if (line.equals("},"))
+                        break;
+                    ingList.add(new Ingredient(line.strip().split(" ")));
                 }
 
-                while (reader.ready()) {
-
-                    String mealName = reader.readLine().split(":")[1].strip();
-                    char difficulty = reader.readLine().split(":")[1].strip().charAt(0);
-                    List<Ingredient> ingList = new ArrayList<>();
-                    List<String> recipeList = new ArrayList<>();
-                    Set<String> mealTags = new HashSet<>();
-
-                    // Reads ingredients
-                    reader.readLine();
-                    while (true) {
-                        String line = reader.readLine().strip();
-                        if (line.equals("},"))
-                            break;
-                        ingList.add(new Ingredient(line.strip().split(" ")));
-                    }
-
-                    // Reads recipe
-                    reader.readLine();
-                    while (true) {
-                        String line = reader.readLine().strip();
-                        if (line.equals("},"))
-                            break;
-                        recipeList.add(line);
-                    }
-
-                    mealTags.addAll(Arrays.asList(reader.readLine().split(":")[1].strip().split(" ")));
-
-                    Meal meal = new Meal(mealName, difficulty, ingList, recipeList, mealTags);
-                    mealList.add(meal);
-
-                    reader.readLine();
+                // Reads recipe
+                reader.readLine();
+                while (true) {
+                    String line = reader.readLine().strip();
+                    if (line.equals("},"))
+                        break;
+                    recipeList.add(line);
                 }
+
+                mealTags.addAll(Arrays.asList(reader.readLine().split(":")[1].strip().split(" ")));
+
+                meal = new Meal(mealName, difficulty, ingList, recipeList, mealTags);
+
+                reader.readLine();
 
                 // If writing to file is correct and file is non-corrupted this block will never
                 // run
@@ -112,14 +157,14 @@ public class FileHandler implements FileHandlerInterface {
             }
         }
 
-        return new Menu(mealList, menuTags);
+        return meal;
 
     }
 
     @Override
-    public void writeToFile(Menu menu, String filename) {
+    public void writeMealToFile(Meal meal, String filename) {
 
-        String content = menuToStr(menu);
+        String content = mealToStr(meal);
 
         try {
             // BufferedWriter writer = new BufferedWriter(new FileWriter(new
@@ -129,28 +174,14 @@ public class FileHandler implements FileHandlerInterface {
 
             PrintWriter writer = new PrintWriter(filename + ".txt");
 
-            // writer.append(content);
             writer.write(content);
             writer.flush();
             writer.close();
         } catch (Exception e) {
-            // TODO change error quote
+            // TODO change error quote?
             System.err.println("Error writing content to file");
             e.printStackTrace();
         }
-    }
-
-    private String menuToStr(Menu menu) {
-
-        StringBuilder sBuilder = new StringBuilder();
-
-        sBuilder.append("{\n");
-        sBuilder.append("tags : " + tagsToStr(menu.getTags()) + "\n");
-        menu.getMealList().forEach((meal) -> {
-            sBuilder.append("meal : " + mealToStr(meal));
-        });
-
-        return sBuilder.toString();
     }
 
     private String ingsToStr(List<Ingredient> ingList) {
@@ -202,14 +233,6 @@ public class FileHandler implements FileHandlerInterface {
                         "}\n");
 
         return sBuilder.toString();
-    }
-
-    public static void main(String[] args) throws IllegalArgumentException, IllegalFileFormatException {
-        // FileHandler fhandler = new FileHandler();
-        // String str = FileHandler.class.getResource("data/").toString();
-        URL url = IllegalDifficultyException.class.getResource("/data/test.txt");
-        System.out.println(url.toString());
-        // System.out.println(IllegalDifficultyException);
     }
 
 }
