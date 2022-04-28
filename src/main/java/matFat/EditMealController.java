@@ -7,7 +7,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import matFat.Objects.Ingredient;
 import matFat.Objects.Meal;
-import matFat.Objects.MealDataBase;
 import matFat.exceptions.IllegalDifficultyException;
 import matFat.exceptions.IllegalNameFormatException;
 import matFat.exceptions.IllegalRecipeFormatException;

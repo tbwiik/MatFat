@@ -12,14 +12,22 @@ import javafx.scene.control.Alert.AlertType;
 import matFat.Objects.*;
 import matFat.exceptions.IllegalAmountException;
 import matFat.exceptions.IllegalDifficultyException;
-import matFat.exceptions.IllegalFileFormatException;
 import matFat.exceptions.IllegalMeasurementException;
 import matFat.exceptions.IllegalNameFormatException;
 import matFat.exceptions.IllegalTagFormatException;
-import matFat.filehandling.*;
 
 public class GenericFunctions {
 
+    /**
+     * Convert string to Ingredient
+     * 
+     * @param ingStr with every arguments separated by space
+     * @return {@linkplain Ingredient}
+     * @throws IllegalNameFormatException
+     * @throws IllegalAmountException
+     * @throws IllegalMeasurementException
+     * @throws IllegalTagFormatException
+     */
     public static Ingredient strToIng(String ingStr) throws IllegalNameFormatException, IllegalAmountException,
             IllegalMeasurementException, IllegalTagFormatException {
         String[] ingArgs = ingStr.strip().split(" ");

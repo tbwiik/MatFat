@@ -37,20 +37,20 @@ public class IngredientContainer {
     }
 
     /**
-     * Empty constructor used for initalizing in other classes
-     * <p>
-     * Ensures that toString and other functions don't break the program
-     */
-    public IngredientContainer() {
-    }
-
-    /**
      * Create container with one ingredient
      * 
      * @param ingredient
      */
     public IngredientContainer(Ingredient ingredient) {
         addIngredient(ingredient);
+    }
+
+    /**
+     * Empty constructor used for initalizing in other classes
+     * <p>
+     * Ensures that toString and other functions don't break the program
+     */
+    public IngredientContainer() {
     }
 
     /**
@@ -151,6 +151,37 @@ public class IngredientContainer {
     }
 
     /**
+     * Generate tags to {@linkplain IngredientContainer} based on all
+     * {@linkplain Ingredient} tags
+     * <p>
+     * Only adds intersection of tags
+     * <p>
+     * Use {@linkplain #addTags(Ingredient)} method
+     */
+    public void generateTags() {
+        ingredients.forEach((ingredient) -> {
+            addTags(ingredient);
+        });
+
+    }
+
+    /**
+     * Add intersection of tags based on {@linkplain Ingredient}s
+     * <p>
+     * Initialize {@linkplain TagBox} if null
+     * 
+     * @param ingredient added
+     */
+    private void addTags(Ingredient ingredient) {
+
+        if (tagBox == null) {
+            tagBox = new TagBox(ingredient.getTags());
+        } else {
+            tagBox.retainAll(ingredient.getTags());
+        }
+    }
+
+    /**
      * Returns ingredient on specific index
      * 
      * @param index in ingredient-list
@@ -178,41 +209,10 @@ public class IngredientContainer {
     }
 
     /**
-     * Add intersection of tags based on {@linkplain Ingredient}s
-     * <p>
-     * Initialize {@linkplain TagBox} if null
-     * 
-     * @param ingredient added
-     */
-    private void addTags(Ingredient ingredient) {
-
-        if (tagBox == null) {
-            tagBox = new TagBox(ingredient.getTags());
-        } else {
-            tagBox.retainAll(ingredient.getTags());
-        }
-    }
-
-    /**
      * @return tags in container
      */
     public Set<String> getTags() {
         return new HashSet<>(tagBox.getTags());
-    }
-
-    /**
-     * Generate tags to {@linkplain IngredientContainer} based on all
-     * {@linkplain Ingredient} tags
-     * <p>
-     * Only adds intersection of tags
-     * <p>
-     * Use {@linkplain #addTags(Ingredient)} method
-     */
-    public void generateTags() {
-        ingredients.forEach((ingredient) -> {
-            addTags(ingredient);
-        });
-
     }
 
     @Override

@@ -1,35 +1,46 @@
-package matFat.Objects;
+package matFat;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import matFat.Objects.Ingredient;
+import matFat.Objects.Meal;
+import matFat.Objects.Menu;
 import matFat.exceptions.IllegalAmountException;
 import matFat.exceptions.IllegalFileFormatException;
-import matFat.filehandling.FileHandlerInterface;
 
-public class MealDataBase implements FileHandlerInterface {
+public class MealDataBase {
 
     private List<Meal> meals = new ArrayList<>();
     // TODO fix reading to default
     String filename = "mealDataBase"; // Default filepath
 
-    public MealDataBase(String filename) throws IllegalFileFormatException {
+    public MealDataBase(String filename) throws IllegalFileFormatException, FileNotFoundException {
         this.filename = filename;
-        readMealFromFile(filename);
+        readFromFile(filename);
     }
 
-    public MealDataBase() throws IllegalFileFormatException {
-        readMealFromFile(filename);
+    public MealDataBase() throws IllegalFileFormatException, FileNotFoundException {
+        readFromFile(filename);
     }
 
     public List<Meal> getMeals() {
@@ -89,82 +100,81 @@ public class MealDataBase implements FileHandlerInterface {
 
     }
 
-    @Override
-    public Meal readMealFromFile(String filename) throws IllegalArgumentException {
+    public File getFile(String filename) {
+        return new File(MealDataBase.class.getResource("data/").getFile() + filename + ".txt");
+    }
 
-        BufferedReader reader = null;
-        Meal meal = null;
+    private void readFromFile(String filename) throws FileNotFoundException, IllegalFileFormatException {
+
+        Scanner scanner = null;
 
         try {
-            // reader = new BufferedReader(new
-            // InputStreamReader(getClass().getResourceAsStream(filename + ".txt")));
 
-            // reader = new BufferedReader(new FileReader(new
-            // File(getFilePathString(filename))));
-
-            // TODO fix reading from file
-            reader = new BufferedReader(new FileReader(
-                    "/Users/torbjornwiik/Docs_nonDrive/TDT4100/TheProject/TDT4100_prosjekt_torbjw/testfile.txt"));
+            // scanner = new Scanner(getFile(filename));
+            scanner = new Scanner(getFile(filename));
 
             try {
 
-                String mealName = reader.readLine().split(":")[1].strip();
-                char difficulty = reader.readLine().split(":")[1].strip().charAt(0);
-                List<Ingredient> ingList = new ArrayList<>();
-                List<String> recipeList = new ArrayList<>();
-                Set<String> mealTags = new HashSet<>();
+                // Ignores tags when reading to database
+                scanner.nextLine();
+                scanner.nextLine();
 
-                // Reads ingredients
-                reader.readLine();
-                while (true) {
-                    String line = reader.readLine().strip();
-                    if (line.equals("},"))
-                        break;
-                    ingList.add(new Ingredient(line.strip().split(" ")));
+                while (scanner.hasNext()) {
+
+                    scanner.nextLine(); // Reads first line of opening bracket
+
+                    String mealName = scanner.nextLine().split(":")[1].strip();
+                    char difficulty = scanner.nextLine().split(":")[1].strip().toCharArray()[0];
+                    List<Ingredient> ingList = new ArrayList<>();
+                    List<String> recipeList = new ArrayList<>();
+                    Set<String> mealTags = new HashSet<>();
+
+                    scanner.nextLine();
+                    while (scanner.hasNext()) {
+                        String line = scanner.nextLine().strip();
+                        if (line.equals("},"))
+                            break;
+                        ingList.add(GenericFunctions.strToIng(line));
+                    }
+
+                    scanner.nextLine();
+                    while (scanner.hasNext()) {
+                        String line = scanner.nextLine().strip();
+                        if (line.equals("},"))
+                            break;
+                        recipeList.add(line);
+                    }
+
+                    mealTags.addAll(Arrays.asList(scanner.nextLine().split(":")[1].strip().split(" ")));
+
+                    meals.add(new Meal(mealName, difficulty, ingList, recipeList, mealTags));
+
+                    scanner.nextLine(); // Ensures that the last line in meal is read
+
+                    // If writing to file is correct and file is non-corrupted this block will never
+                    // run
                 }
 
-                // Reads recipe
-                reader.readLine();
-                while (true) {
-                    String line = reader.readLine().strip();
-                    if (line.equals("},"))
-                        break;
-                    recipeList.add(line);
-                }
-
-                mealTags.addAll(Arrays.asList(reader.readLine().split(":")[1].strip().split(" ")));
-
-                meal = new Meal(mealName, difficulty, ingList, recipeList, mealTags);
-
-                reader.readLine();
-
-                // If writing to file is correct and file is non-corrupted this block will never
-                // run
             } catch (IllegalArgumentException | IndexOutOfBoundsException exceptions) {
                 exceptions.printStackTrace();
                 throw new IllegalFileFormatException("Cannot read from file due to wrong format");
             }
-
-        } catch (
-
-        IOException ioeRead) {
+        } catch (IOException ioeRead) {
             ioeRead.printStackTrace();
         } finally {
+            // XXX this block necessary?
             try {
-                reader.close();
-            } catch (IOException ioeClose) {
-                ioeClose.printStackTrace();
+                scanner.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
-        return meal;
-
     }
 
-    @Override
-    public void writeMealToFile(Meal meal, String filename) {
+    public void writeMealToFile(Menu menu, String filename) {
 
-        String content = mealToStr(meal);
+        String content = menuToStr(menu);
 
         try {
             // BufferedWriter writer = new BufferedWriter(new FileWriter(new
@@ -172,7 +182,7 @@ public class MealDataBase implements FileHandlerInterface {
 
             // BufferedWriter writer = Files.newBufferedWriter(getFilePath(filename));
 
-            PrintWriter writer = new PrintWriter(filename + ".txt");
+            PrintWriter writer = new PrintWriter(getFile(filename));
 
             writer.write(content);
             writer.flush();
@@ -235,4 +245,23 @@ public class MealDataBase implements FileHandlerInterface {
         return sBuilder.toString();
     }
 
+    private String menuToStr(Menu menu) {
+
+        StringBuilder sBuilder = new StringBuilder();
+
+        sBuilder.append("{\n");
+        sBuilder.append("tags : " + tagsToStr(menu.getTags()) + "\n");
+        menu.getMealList().forEach((meal) -> {
+            sBuilder.append("meal : " + mealToStr(meal));
+        });
+
+        return sBuilder.toString();
+    }
+
+    public static void main(String[] args) throws FileNotFoundException, IllegalFileFormatException {
+        MealDataBase mDB = new MealDataBase("mealDataBase");
+        System.out.println(mDB.getMeals().size());
+        Menu menu = new Menu(mDB.getMeals(), new HashSet<>());
+        mDB.writeMealToFile(menu, "newFile");
+    }
 }

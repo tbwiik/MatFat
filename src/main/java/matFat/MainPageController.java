@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import matFat.Objects.Meal;
-import matFat.Objects.MealDataBase;
 import matFat.Objects.Menu;
 import matFat.filehandling.FileHandler;
 
