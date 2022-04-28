@@ -11,7 +11,6 @@ import matFat.exceptions.IllegalMeasurementException;
 import matFat.exceptions.IllegalNameFormatException;
 import matFat.exceptions.IllegalTagFormatException;
 
-//TODO approx all exceptions and docs are wrong
 public class Ingredient {
 
     private String ingredientName;
@@ -81,7 +80,6 @@ public class Ingredient {
         this.tagBox = new TagBox(GenericFunctions.strArrayToSet(tags));
     }
 
-    // TODO implement iterator??
     /**
      * Constructs Ingredient with string array
      * <p>
@@ -110,27 +108,6 @@ public class Ingredient {
 
         setTags(ingArgs);
 
-    }
-
-    /**
-     * Set tags based on array
-     * <p>
-     * Use same array as ingredient and will therefore start on index 3
-     * 
-     * @param ingArgs
-     * @throws IllegalTagFormatException
-     */
-    private void setTags(String[] ingArgs) throws IllegalTagFormatException {
-        if (ingArgs.length > 3) {
-            Set<String> tagSet = new HashSet<>();
-            for (int i = 3; i < ingArgs.length; i++)
-                tagSet.add(ingArgs[i]);
-            tagBox = new TagBox(tagSet);
-        }
-    }
-
-    public String getIngredientName() {
-        return ingredientName;
     }
 
     /**
@@ -165,10 +142,6 @@ public class Ingredient {
         this.ingredientName = ingredientName;
     }
 
-    public Integer getIngredientAmount() {
-        return ingredientAmount;
-    }
-
     /**
      * Checks if amount for ingredient meets specified requirements
      * 
@@ -196,8 +169,21 @@ public class Ingredient {
         this.ingredientAmount = ingredientAmount;
     }
 
-    public MEASUREMENTS getIngredientMeasurement() {
-        return ingredientMeasurement;
+    /**
+     * Set tags based on array
+     * <p>
+     * Use same array as ingredient and will therefore start on index 3
+     * 
+     * @param ingArgs
+     * @throws IllegalTagFormatException
+     */
+    private void setTags(String[] ingArgs) throws IllegalTagFormatException {
+        if (ingArgs.length > 3) {
+            Set<String> tagSet = new HashSet<>();
+            for (int i = 3; i < ingArgs.length; i++)
+                tagSet.add(ingArgs[i]);
+            tagBox = new TagBox(tagSet);
+        }
     }
 
     /**
@@ -232,6 +218,18 @@ public class Ingredient {
      */
     public void setIngredientMeasurement(MEASUREMENTS ingredientMeasurement) {
         this.ingredientMeasurement = ingredientMeasurement;
+    }
+
+    public String getIngredientName() {
+        return ingredientName;
+    }
+
+    public Integer getIngredientAmount() {
+        return ingredientAmount;
+    }
+
+    public MEASUREMENTS getIngredientMeasurement() {
+        return ingredientMeasurement;
     }
 
     public Set<String> getTags() {

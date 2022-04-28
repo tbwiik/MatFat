@@ -44,6 +44,7 @@ public class AddMealController {
             return;
 
         try {
+            // TODO fix problem with multiple whitespaces
             String ingTagsStr = ingredientTagsTextField.getText().replace(",", ""); // Format tags correctly for
                                                                                     // appending to ingredient
             Ingredient ing = GenericFunctions.strToIng(ingStr + " " + ingTagsStr);
