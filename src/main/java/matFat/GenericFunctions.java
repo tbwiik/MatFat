@@ -40,6 +40,22 @@ public class GenericFunctions {
         return tmpSet;
     }
 
+    /**
+     * Converts string[] to Set of strings
+     * 
+     * @param strArray
+     * @return Set of Strings
+     */
+    public static Set<String> strArrayToSet(String[] strArray) {
+
+        Set<String> set = new HashSet<>();
+        for (String tag : strArray) {
+            set.add(tag);
+        }
+
+        return set;
+    }
+
     public static int strToInt(String str) throws IllegalArgumentException {
         try {
             return (int) Integer.parseInt(str.strip());

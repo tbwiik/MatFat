@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import matFat.GenericFunctions;
 import matFat.exceptions.IllegalAmountException;
 import matFat.exceptions.IllegalIngredientFormatException;
 import matFat.exceptions.IllegalMeasurementException;
@@ -44,8 +45,9 @@ public class Ingredient {
      * @param ingredientAmount
      * @param ingredientMeasurement
      * @param tags
-     * @throws IllegalArgumentException
+     * @throws IllegalNameFormatException
      * @throws IllegalAmountException
+     * @throws IllegalTagFormatException
      */
     public Ingredient(String ingredientName, Integer ingredientAmount, MEASUREMENTS ingredientMeasurement,
             String... tags)
@@ -53,10 +55,22 @@ public class Ingredient {
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         this.ingredientMeasurement = ingredientMeasurement;
-        this.tagBox = new TagBox(strArrayToSet(tags));
+        this.tagBox = new TagBox(GenericFunctions.strArrayToSet(tags));
     }
 
     // TODO put these together?
+    /**
+     * Constructs Ingredient object where measurement is string
+     * 
+     * @param ingredientName
+     * @param ingredientAmount
+     * @param ingredientMeasurement
+     * @param tags
+     * @throws IllegalNameFormatException
+     * @throws IllegalAmountException
+     * @throws IllegalMeasurementException
+     * @throws IllegalTagFormatException
+     */
     public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement, String... tags)
             throws IllegalNameFormatException, IllegalAmountException, IllegalMeasurementException,
             IllegalTagFormatException {
@@ -64,19 +78,20 @@ public class Ingredient {
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         setIngredientMeasurement(ingredientMeasurement);
-        this.tagBox = new TagBox(strArrayToSet(tags));
+        this.tagBox = new TagBox(GenericFunctions.strArrayToSet(tags));
     }
 
     // TODO implement iterator??
-    // XXX uncorrect docs
     /**
-     * Constructs Ingredient
+     * Constructs Ingredient with string array
      * <p>
-     * Used in filehandling
+     * Used in filehandling and ui
      * 
      * @param ingArgs name, amount, measurement, tags...
-     * @throws IllegalArgumentException
-     * @throws IllegalAmountException
+     * @throws IllegalIngredientFormatException
+     * @throws NumberFormatException
+     * @throws IllegalMeasurementException
+     * @throws IIllegalTagFormatException
      */
     public Ingredient(String[] ingArgs) throws IllegalIngredientFormatException, NumberFormatException,
             IllegalMeasurementException, IllegalTagFormatException {
@@ -93,13 +108,25 @@ public class Ingredient {
         }
         setIngredientMeasurement(ingArgs[2]);
 
+        setTags(ingArgs);
+
+    }
+
+    /**
+     * Set tags based on array
+     * <p>
+     * Use same array as ingredient and will therefore start on index 3
+     * 
+     * @param ingArgs
+     * @throws IllegalTagFormatException
+     */
+    private void setTags(String[] ingArgs) throws IllegalTagFormatException {
         if (ingArgs.length > 3) {
             Set<String> tagSet = new HashSet<>();
             for (int i = 3; i < ingArgs.length; i++)
                 tagSet.add(ingArgs[i]);
             tagBox = new TagBox(tagSet);
         }
-
     }
 
     public String getIngredientName() {
@@ -110,7 +137,7 @@ public class Ingredient {
      * Checks if ingreidnetName meets specified requirements
      * 
      * @param ingredientName
-     * @throws IllegalArgumentException
+     * @throws IllegalNameFormatException
      */
     private void checkIngredientName(String ingredientName) throws IllegalNameFormatException {
 
@@ -143,7 +170,7 @@ public class Ingredient {
     }
 
     /**
-     * Checks if amount meets specified requirements
+     * Checks if amount for ingredient meets specified requirements
      * 
      * @param ingredientAmount
      * @throws IllegalAmountException
@@ -207,22 +234,6 @@ public class Ingredient {
         this.ingredientMeasurement = ingredientMeasurement;
     }
 
-    /**
-     * Converts string[] to Set of strings
-     * 
-     * @param strArray
-     * @return Set of Strings
-     */
-    private Set<String> strArrayToSet(String... strArray) {
-
-        Set<String> set = new HashSet<>();
-        for (String tag : strArray) {
-            set.add(tag);
-        }
-
-        return set;
-    }
-
     public Set<String> getTags() {
         return new HashSet<>(tagBox.getTags());
     }
@@ -238,6 +249,9 @@ public class Ingredient {
         setIngredientAmount(this.ingredientAmount + ingredientAmount);
     }
 
+    /**
+     * ingredient equals another if name and measurement is the same
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

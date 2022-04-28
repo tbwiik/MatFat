@@ -97,9 +97,9 @@ public class Recipe {
     }
 
     // TODO add tests
-    public void removeRecipeLine(int index) throws IllegalArgumentException {
+    public void removeRecipeLine(int index) throws IndexOutOfBoundsException {
         if (index < 0 && index > recipe.size() - 1)
-            throw new IllegalArgumentException("No such index in recipe-list");
+            throw new IndexOutOfBoundsException("No such index in recipe-list");
         recipe.remove(index);
     }
 

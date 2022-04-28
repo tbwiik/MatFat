@@ -11,7 +11,7 @@ import matFat.exceptions.IllegalAmountException;
 public class IngredientContainer {
 
     private List<Ingredient> ingredients = new ArrayList<>();
-    private TagBox tagBox; // Dont initialize here. Unecessary and breaks code for generating correct tags
+    private TagBox tagBox; // Initialize tagBox here breaks code used for generating correct tags
     private int numberOfIngredients;
 
     /**
@@ -23,6 +23,8 @@ public class IngredientContainer {
      * Merge similar ingredients to one
      * 
      * @param ingredients
+     * @throws IllegalArgumentException if trying to create empty
+     *                                  ingredient-container
      */
     public IngredientContainer(List<Ingredient> ingredients) throws IllegalArgumentException {
 
@@ -34,10 +36,19 @@ public class IngredientContainer {
 
     }
 
+    /**
+     * Empty constructor used for initalizing in other classes
+     * <p>
+     * Ensures that toString and other functions don't break the program
+     */
     public IngredientContainer() {
     }
 
-    // Use in Controller
+    /**
+     * Create container with one ingredient
+     * 
+     * @param ingredient
+     */
     public IngredientContainer(Ingredient ingredient) {
         addIngredient(ingredient);
     }
@@ -70,6 +81,11 @@ public class IngredientContainer {
 
     }
 
+    /**
+     * Adds ingredients to container using {@linkplain #addIngredient(Ingredient)}
+     * 
+     * @param ingredients
+     */
     public void addIngredients(List<Ingredient> ingredients) {
         ingredients.forEach((ingredient) -> {
             addIngredient(ingredient);
@@ -94,6 +110,7 @@ public class IngredientContainer {
     public void removeIngredient(Ingredient ingredientToRemove)
             throws IllegalArgumentException, IllegalAmountException {
 
+        // Create a optional ingredient that mach inputArgs
         Optional<Ingredient> optIng = ingredients.stream()
                 .filter((ingredient) -> ingredient.equals(ingredientToRemove))
                 .findFirst();
@@ -121,22 +138,41 @@ public class IngredientContainer {
 
     }
 
+    /**
+     * Remove multiple ingredients using {@linkplain #removeIngredient(Ingredient)}
+     * 
+     * @param ingredientsToRemove
+     * @throws IllegalArgumentException
+     * @throws IllegalAmountException
+     */
     public void removeIngredients(List<Ingredient> ingredientsToRemove)
             throws IllegalArgumentException, IllegalAmountException {
         ingredientsToRemove.forEach((ingredient) -> removeIngredient(ingredient));
     }
 
+    /**
+     * Returns ingredient on specific index
+     * 
+     * @param index in ingredient-list
+     * @return {@linkplain Ingredient}
+     * @throws IndexOutOfBoundsException if index is out of bounds for list
+     */
     public Ingredient getIngredient(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index > ingredients.size())
             throw new IndexOutOfBoundsException("Index in ingredient-container out of bounds");
         return ingredients.get(index);
     }
 
+    /**
+     * @return all ingredients in list
+     */
     public List<Ingredient> getIngredients() {
         return new ArrayList<>(ingredients);
     }
 
-    // TODO make sure that this is implemented everywhere
+    /**
+     * @return number of ingredients in list
+     */
     public int getNumberOfIngredients() {
         return numberOfIngredients;
     }
@@ -146,7 +182,7 @@ public class IngredientContainer {
      * <p>
      * Initialize {@linkplain TagBox} if null
      * 
-     * @param ingredient
+     * @param ingredient added
      */
     private void addTags(Ingredient ingredient) {
 
@@ -157,6 +193,9 @@ public class IngredientContainer {
         }
     }
 
+    /**
+     * @return tags in container
+     */
     public Set<String> getTags() {
         return new HashSet<>(tagBox.getTags());
     }
@@ -166,6 +205,8 @@ public class IngredientContainer {
      * {@linkplain Ingredient} tags
      * <p>
      * Only adds intersection of tags
+     * <p>
+     * Use {@linkplain #addTags(Ingredient)} method
      */
     public void generateTags() {
         ingredients.forEach((ingredient) -> {
@@ -187,8 +228,4 @@ public class IngredientContainer {
         return sBuilder.toString();
     }
 
-    public static void main(String[] args) {
-        List<String> tmp = new ArrayList<>();
-        System.out.println(new ArrayList<>(tmp));
-    }
 }
