@@ -34,6 +34,12 @@ public class GenericFunctions {
         return new Ingredient(ingArgs);
     }
 
+    /**
+     * split on ","
+     * 
+     * @param str
+     * @return
+     */
     public static Set<String> strToStrSet(String str) {
         // TODO add more validation here?
         Set<String> tmpSet = new HashSet<>();
