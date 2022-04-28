@@ -16,11 +16,11 @@ import matFat.exceptions.IllegalMeasurementException;
 import matFat.exceptions.IllegalNameFormatException;
 import matFat.exceptions.IllegalRecipeFormatException;
 import matFat.exceptions.IllegalTagFormatException;
-import matFat.filehandling.*;
+import matFat.filehandling.ManageData;
 
 public class AddMealController {
 
-    GenericFunctions model;
+    MealDataBase mealDataBase;
     Meal meal;
     IngredientContainer ingredientContainer = new IngredientContainer();
     Recipe recipe = new Recipe();
@@ -120,7 +120,7 @@ public class AddMealController {
     @FXML
     private void initialize() {
         try {
-            model = new GenericFunctions();
+            mealDataBase = new MealDataBase();
         } catch (Exception e) {
             mealInfoText.setText("Error initializing file");
         }

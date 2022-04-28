@@ -19,18 +19,11 @@ import matFat.exceptions.IllegalFileFormatException;
 
 public class ManageData {
 
-    Menu menu;
-    String defaultFilename = "mealDataBase";
-
-    public ManageData() throws FileNotFoundException, IllegalFileFormatException {
-        readFromFile(this.defaultFilename);
-    }
-
-    public File getFile(String filename) {
+    private static File getFile(String filename) {
         return new File(ManageData.class.getResource("data/").getFile() + filename + ".txt");
     }
 
-    private void readFromFile(String filename) throws FileNotFoundException, IllegalFileFormatException {
+    public static Menu readMenuFromFile(String filename) throws FileNotFoundException, IllegalFileFormatException {
 
         Scanner scanner = null;
         List<Meal> mealList = new ArrayList<>();
@@ -100,11 +93,15 @@ public class ManageData {
             }
         }
 
-        menu = new Menu(mealList, tagList);
+        return new Menu(mealList, tagList);
 
     }
 
-    public void writeMealToFile(Menu menu, String filename) {
+    public static List<Meal> readMealsFromFile(String filename) {
+        return new ArrayList<>(readMealsFromFile(filename));
+    }
+
+    public static void writeMenuToFile(Menu menu, String filename) {
 
         String content = menuToStr(menu);
 
@@ -126,7 +123,11 @@ public class ManageData {
         }
     }
 
-    private String ingsToStr(List<Ingredient> ingList) {
+    public static void writeMealsToFile(List<Meal> mealList, String filename) {
+        writeMenuToFile(new Menu(mealList, new HashSet<>()), filename);
+    }
+
+    private static String ingsToStr(List<Ingredient> ingList) {
 
         StringBuilder sBuilder = new StringBuilder();
 
@@ -143,7 +144,7 @@ public class ManageData {
         return sBuilder.toString();
     }
 
-    private String tagsToStr(Set<String> tags) {
+    private static String tagsToStr(Set<String> tags) {
 
         StringBuilder sBuilder = new StringBuilder();
 
@@ -152,7 +153,7 @@ public class ManageData {
         return sBuilder.toString();
     }
 
-    private String recipeToStr(List<String> recipeList) {
+    private static String recipeToStr(List<String> recipeList) {
 
         StringBuilder sBuilder = new StringBuilder();
 
@@ -161,7 +162,7 @@ public class ManageData {
         return sBuilder.toString();
     }
 
-    private String mealToStr(Meal meal) {
+    private static String mealToStr(Meal meal) {
 
         StringBuilder sBuilder = new StringBuilder();
 
@@ -177,7 +178,7 @@ public class ManageData {
         return sBuilder.toString();
     }
 
-    private String menuToStr(Menu menu) {
+    private static String menuToStr(Menu menu) {
 
         StringBuilder sBuilder = new StringBuilder();
 
@@ -190,7 +191,4 @@ public class ManageData {
         return sBuilder.toString();
     }
 
-    public Menu getData() {
-        return menu; // TODO innkapsle dette?
-    }
 }

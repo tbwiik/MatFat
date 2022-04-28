@@ -1,6 +1,5 @@
 package matFat;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -11,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import matFat.Objects.Meal;
 import matFat.Objects.Menu;
-import matFat.filehandling.FileHandler;
 
 public class MainPageController {
 
@@ -45,28 +43,6 @@ public class MainPageController {
         }
 
     }
-
-    // Copied from Model
-    // /**
-    // * Checks if mealTags contains all specified userTags (or more)
-    // *
-    // * @param userTags
-    // * @param mealTags
-    // * @return true if mealtags = usertags or more
-    // */
-    // private boolean validateTags(Set<String> userTags, Set<String> mealTags) {
-
-    // if (userTags.isEmpty())
-    // return true;
-
-    // // TODO fix to be exclusive
-    // for (String tag : userTags) {
-    // if (!mealTags.contains(tag))
-    // return false;
-    // }
-
-    // return true;
-    // }
 
     @FXML
     private void initialize() {

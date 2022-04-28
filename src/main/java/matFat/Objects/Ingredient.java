@@ -99,11 +99,7 @@ public class Ingredient {
                     "Too few arguments to create ingredient \n Must be on the format \"name amount measurement\"");
 
         setIngredientName(ingArgs[0]);
-        try {
-            setIngredientAmount(Integer.parseInt(ingArgs[1]));
-        } catch (NumberFormatException nFormatException) {
-            throw new NumberFormatException("Invalid number \nCannot parse ingredient-amount to int");
-        }
+        setIngredientAmount(GenericFunctions.strToInt(ingArgs[1]));
         setIngredientMeasurement(ingArgs[2]);
 
         setTags(ingArgs);

@@ -35,10 +35,12 @@ public class GenericFunctions {
     }
 
     /**
+     * Convert string to set
+     * <p>
      * split on ","
      * 
      * @param str
-     * @return
+     * @return set of string
      */
     public static Set<String> strToStrSet(String str) {
         // TODO add more validation here?
@@ -70,14 +72,28 @@ public class GenericFunctions {
         return set;
     }
 
-    public static int strToInt(String str) throws IllegalArgumentException {
+    /**
+     * Converts String to Integer
+     * 
+     * @param str
+     * @return Integer
+     * @throws NumberFormatException if not able to parse string to int
+     */
+    public static Integer strToInt(String str) throws NumberFormatException {
         try {
-            return (int) Integer.parseInt(str.strip());
+            return Integer.parseInt(str.strip());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Not valid number");
+            throw new NumberFormatException("Invalid number \nCannot parse ingredient-amount to int");
         }
     }
 
+    /**
+     * Converts string to char
+     * 
+     * @param str
+     * @return
+     * @throws IllegalDifficultyException if string with length != 1
+     */
     public static char strToChar(String str) throws IllegalDifficultyException {
         char[] charArray = str.strip().toCharArray();
         if (charArray.length != 1)
