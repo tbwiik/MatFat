@@ -18,7 +18,7 @@ public class MatFatApp extends Application {
         primaryStage.setTitle("MatFat App");
         // primaryStage.setScene(new
         // Scene(FXMLLoader.load(getClass().getResource("MainPage.fxml"))));
-        primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("AddMeal.fxml"))));
+        primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("EditMeal.fxml"))));
         primaryStage.show();
     }
 

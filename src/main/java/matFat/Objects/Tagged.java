@@ -4,7 +4,7 @@ import java.util.Set;
 
 public abstract class Tagged {
 
-    protected TagBox tagBox;
+    protected TagBox tagBox = new TagBox();
 
     public void addTag(String tag) throws IllegalArgumentException {
         tagBox.addTag(tag);

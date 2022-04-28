@@ -5,13 +5,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import matFat.exceptions.IllegalAmountException;
+import matFat.exceptions.IllegalDifficultyException;
+import matFat.exceptions.IllegalNameFormatException;
+import matFat.exceptions.IllegalRecipeFormatException;
+
 public class Meal extends Tagged {
 
     private String mealName;
     private char difficulty;
-    private IngredientContainer ingredientContainer;
-    private Recipe recipe;
+    private IngredientContainer ingredientContainer = new IngredientContainer();
+    private Recipe recipe = new Recipe();
     // Inherit TagBox from superclass
+    // TagBox does not contain tags from ingredient-container
 
     private final static char[] ACCEPTED_DIFFICUILTIES = { 'E', 'M', 'H' };
     private final static int MIN_LENGTH_NAME = 3;
@@ -28,7 +34,7 @@ public class Meal extends Tagged {
      * @throws IllegalArgumentException if invalid input
      */
     public Meal(String mealName, char difficulty, List<Ingredient> ingredients, List<String> recipe, Set<String> tags)
-            throws IllegalArgumentException {
+            throws IllegalNameFormatException, IllegalDifficultyException {
 
         setMealName(mealName);
         setDifficulty(difficulty);
@@ -41,23 +47,23 @@ public class Meal extends Tagged {
      * Checks if length of name is valid
      * 
      * @param mealName
-     * @throws IllegalArgumentException
+     * @throws IllegalNameFormatException
      */
-    private void checkMealName(String mealName) throws IllegalArgumentException {
+    private void checkMealName(String mealName) throws IllegalNameFormatException {
         if (mealName.length() < MIN_LENGTH_NAME)
-            throw new IllegalArgumentException("Too short mealName");
+            throw new IllegalNameFormatException("Too short name of meal");
         if (mealName.length() > MAX_LENGTH_NAME)
-            throw new IllegalArgumentException("Too long mealName");
+            throw new IllegalNameFormatException("Too long name of meal");
     }
 
     /**
      * Sets new meal-name
      * 
      * @param mealName
-     * @throws IllegalArgumentException if unvalid input per
-     *                                  {@linkplain #checkMealName(String)}
+     * @throws IllegalNameFormatException if unvalid input per
+     *                                    {@linkplain #checkMealName(String)}
      */
-    public void setMealName(String mealName) throws IllegalArgumentException {
+    public void setMealName(String mealName) throws IllegalNameFormatException {
         checkMealName(mealName);
         this.mealName = mealName;
     }
@@ -70,14 +76,14 @@ public class Meal extends Tagged {
      * Checks if accepted difficulty
      * 
      * @param difficulty
-     * @throws IllegalArgumentException
+     * @throws IllegalDifficultyException
      */
-    private void checkDifficulty(char difficulty) throws IllegalArgumentException {
+    private void checkDifficulty(char difficulty) throws IllegalDifficultyException {
         for (int i = 0; i < ACCEPTED_DIFFICUILTIES.length; i++) {
             if (ACCEPTED_DIFFICUILTIES[i] == difficulty)
                 return;
         }
-        throw new IllegalArgumentException("Not accepted difficulty");
+        throw new IllegalDifficultyException("Not accepted difficulty \n Must be either \"E/M/H\"");
     }
 
     public char getDifficulty() {
@@ -89,10 +95,10 @@ public class Meal extends Tagged {
      * Sets new difficulty
      * 
      * @param difficulty
-     * @throws IllegalArgumentException if unvalid input per
-     *                                  {@linkplain #checkDifficulty(char)}
+     * @throws IllegalDifficultyException if unvalid input per
+     *                                    {@linkplain #checkDifficulty(char)}
      */
-    public void setDifficulty(char difficulty) throws IllegalArgumentException {
+    public void setDifficulty(char difficulty) throws IllegalDifficultyException {
         checkDifficulty(difficulty);
         this.difficulty = difficulty;
     }
@@ -116,9 +122,25 @@ public class Meal extends Tagged {
      */
     public Set<String> getTags() {
         Set<String> allTags = new HashSet<>();
-        allTags.addAll(ingredientContainer.getTags());
-        allTags.addAll(tagBox.getTags());
+        allTags.addAll(ingredientContainer.getTags()); // Tags from ingredient-container
+        allTags.addAll(tagBox.getTags()); // User defined tags
         return allTags;
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        ingredientContainer.addIngredient(ingredient);
+    }
+
+    public void removeIngredient(Ingredient ingredient) throws IllegalArgumentException, IllegalAmountException {
+        ingredientContainer.removeIngredient(ingredient);
+    }
+
+    public void addRecipeStep(String recipeStep) throws IllegalRecipeFormatException {
+        recipe.addRecipeLine(recipeStep);
+    }
+
+    public void removeRecipeStep(int index) throws IllegalArgumentException {
+        recipe.removeRecipeLine(index);
     }
 
     @Override
@@ -126,15 +148,18 @@ public class Meal extends Tagged {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("Meal: " + mealName);
-        stringBuilder.append("\nDifficulty: " + difficulty);
+        stringBuilder.append("Meal: " + mealName + "\n");
+        stringBuilder.append("Difficulty: " + difficulty + "\n");
 
-        stringBuilder.append("\nTags: ");
+        // Dont use tagBox because tagBox doesnt contain tags from ingredient container
+        stringBuilder.append("Tags: ");
         getTags().forEach((tag) -> stringBuilder.append(tag + " "));
+        stringBuilder.append("\n");
 
-        stringBuilder.append("\nIngredients: \n" + ingredientContainer.toString());
-        stringBuilder.append("Recipe: \n" + recipe.toString());
+        stringBuilder.append(ingredientContainer.toString());
+        stringBuilder.append(recipe.toString());
 
         return stringBuilder.toString();
     }
+
 }

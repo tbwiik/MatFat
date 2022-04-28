@@ -11,14 +11,24 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import matFat.Objects.*;
 import matFat.exceptions.IllegalAmountException;
+import matFat.exceptions.IllegalDifficultyException;
+import matFat.exceptions.IllegalFileFormatException;
+import matFat.exceptions.IllegalMeasurementException;
+import matFat.exceptions.IllegalNameFormatException;
+import matFat.exceptions.IllegalTagFormatException;
 import matFat.filehandling.*;
 
 public class Model {
 
-    List<Meal> allMeals = new ArrayList<>();
+    private List<Meal> allMeals = new ArrayList<>();
 
-    public Model(List<Meal> allMeals) {
-        this.allMeals = allMeals;
+    public Model() throws IllegalFileFormatException {
+        FileHandler fileHandler = new FileHandler();
+        this.allMeals = fileHandler.readFromFile("test").getMealList();
+    }
+
+    public List<Meal> getAllMeals() {
+        return new ArrayList<>(allMeals);
     }
 
     public Menu generateMenu(int numberOfMeals, Set<String> tags)
@@ -79,7 +89,8 @@ public class Model {
 
     }
 
-    public static Ingredient strToIng(String ingStr) throws IllegalArgumentException {
+    public static Ingredient strToIng(String ingStr) throws IllegalNameFormatException, IllegalAmountException,
+            IllegalMeasurementException, IllegalTagFormatException {
         String[] ingArgs = ingStr.strip().split(" ");
         return new Ingredient(ingArgs);
     }
@@ -106,11 +117,11 @@ public class Model {
         }
     }
 
-    public static char strToChar(String str) throws IllegalArgumentException {
+    public static char strToChar(String str) throws IllegalDifficultyException {
         char[] charArray = str.strip().toCharArray();
         if (charArray.length != 1)
-            throw new IllegalArgumentException("Not accepted character");
-        return charArray[0];
+            throw new IllegalDifficultyException("Not accepted character");
+        return Character.toUpperCase(charArray[0]);
     }
 
     // TODO

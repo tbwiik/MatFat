@@ -184,7 +184,7 @@ public class MenuTest {
     @Test
     void testWriteToFile() {
         FileHandler fHandler = new FileHandler();
-        fHandler.writeToFile(menu, "testfile");
+        fHandler.writeToFile(menu, "test");
 
     }
 
@@ -192,7 +192,7 @@ public class MenuTest {
     void testReadFromFile() {
         try {
             FileHandler fileHandler = new FileHandler();
-            Menu menu = fileHandler.readFromFile("testfile");
+            Menu menu = fileHandler.readFromFile("test");
         } catch (Exception e) {
             e.printStackTrace();
         }

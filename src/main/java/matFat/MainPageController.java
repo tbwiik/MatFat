@@ -45,9 +45,7 @@ public class MainPageController {
     @FXML
     private void initialize() {
         try {
-            FileHandler fHandler = new FileHandler();
-            List<Meal> allMeals = fHandler.readFromFile("testfile").getMealList();
-            model = new Model(allMeals);
+            model = new Model();
         } catch (Exception e) {
             menuInfoText.setText("Error initializing file");
         }

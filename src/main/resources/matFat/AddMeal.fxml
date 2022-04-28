@@ -26,7 +26,7 @@
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add  name of meal" />
                               <HBox prefHeight="22.0" prefWidth="600.0">
                                  <children>
-                                    <TextField fx:id="mealNameTextField" promptText="Pasta Carbonara" text="Testtext" />
+                                    <TextField fx:id="mealNameTextField" promptText="Pasta Carbonara" />
                                  </children>
                               </HBox>
                            </children>
@@ -36,17 +36,17 @@
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add difficulty" />
                               <HBox prefHeight="22.0" prefWidth="600.0">
                                  <children>
-                                    <TextField fx:id="difficultyTextField" promptText="E" text="M" />
+                                    <TextField fx:id="difficultyTextField" promptText="E" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
                         <VBox prefHeight="18.0" prefWidth="600.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add tags" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add tags for meal" />
                               <HBox prefHeight="22.0" prefWidth="600.0">
                                  <children>
-                                    <TextField fx:id="tagsTextField" promptText="cheap, vegan" text="vegan, lowcarb" />
+                                    <TextField fx:id="tagsTextField" promptText="cheap, vegan" />
                                  </children>
                               </HBox>
                            </children>
@@ -69,11 +69,11 @@
                         </VBox>
                         <VBox prefHeight="18.0" prefWidth="600.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add Point in recipe" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add recipe step" />
                               <HBox prefHeight="22.0" prefWidth="600.0">
                                  <children>
-                                    <TextField fx:id="recipePointTextField" promptText="Boil water" />
-                                    <Button fx:id="addRecipePointButton" mnemonicParsing="false" onAction="#addRecipePoint" prefHeight="26.0" prefWidth="68.0" text="Button" />
+                                    <TextField fx:id="recipeStepTextField" promptText="Boil water" />
+                                    <Button fx:id="addRecipeStepButton" mnemonicParsing="false" onAction="#addRecipeStep" prefHeight="26.0" prefWidth="68.0" text="Button" />
                                  </children>
                               </HBox>
                            </children>

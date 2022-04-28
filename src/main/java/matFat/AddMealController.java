@@ -11,66 +11,73 @@ import matFat.Objects.Ingredient;
 import matFat.Objects.IngredientContainer;
 import matFat.Objects.Meal;
 import matFat.Objects.Recipe;
+import matFat.exceptions.IllegalAmountException;
+import matFat.exceptions.IllegalMeasurementException;
+import matFat.exceptions.IllegalNameFormatException;
+import matFat.exceptions.IllegalRecipeFormatException;
+import matFat.exceptions.IllegalTagFormatException;
 import matFat.filehandling.*;
 
 public class AddMealController {
 
     Model model;
     Meal meal;
-    IngredientContainer ingredientContainer = new IngredientContainer(); // Use this because of validation
-    Recipe recipe; // Use this because of validation
-    // TODO implement differently?
+    IngredientContainer ingredientContainer = new IngredientContainer();
+    Recipe recipe = new Recipe();
 
     @FXML
     TextField mealNameTextField, difficultyTextField, tagsTextField, ingredientTextField, ingredientTagsTextField,
-            recipePointTextField;
+            recipeStepTextField;
 
     @FXML
-    Button addIngredientButton, addRecipePointButton, addMealButton;
+    Button addIngredientButton, addRecipeStepButton, addMealButton;
 
     @FXML
     Text mealInfoText;
 
     @FXML
-    private void addIngredient() throws IllegalArgumentException {
+    private void addIngredient() {
 
         String ingStr = ingredientTextField.getText();
 
         if (ingStr.isBlank())
             return;
 
-        // TODO move this into an own function?? or use a TagBox to format?
-        String ingTagsStr = ingredientTagsTextField.getText().replace(",", ""); // Format tags correctly for
-                                                                                // appending to ingredient
-        Ingredient ing = Model.strToIng(ingStr + " " + ingTagsStr);
+        try {
+            String ingTagsStr = ingredientTagsTextField.getText().replace(",", ""); // Format tags correctly for
+                                                                                    // appending to ingredient
+            Ingredient ing = Model.strToIng(ingStr + " " + ingTagsStr);
 
-        if (ingredientContainer == null) {
-            ingredientContainer = new IngredientContainer(ing);
-        } else {
             ingredientContainer.addIngredient(ing);
-        }
 
-        ingredientTextField.clear();
-        ingredientTagsTextField.clear();
-        mealInfoText.setText("Ingredients: \n" + ingredientContainer.toString());
+            ingredientTextField.clear();
+            ingredientTagsTextField.clear();
+            mealInfoText.setText(ingredientContainer.toString());
+
+        } catch (IllegalNameFormatException | IllegalAmountException | IllegalMeasurementException
+                | IllegalTagFormatException exception) {
+            mealInfoText.setText(exception.getMessage());
+        }
+        // TODO move this into an own function?? or use a TagBox to format?
+
     }
 
     @FXML
-    private void addRecipePoint() throws IllegalArgumentException {
+    private void addRecipeStep() {
 
-        String recLine = recipePointTextField.getText().strip();
+        String recLine = recipeStepTextField.getText().strip();
 
         if (recLine.isBlank())
             return;
 
-        if (recipe == null) {
-            recipe = new Recipe(recLine);
-        } else {
+        try {
             recipe.addRecipeLine(recLine);
+            recipeStepTextField.clear();
+            mealInfoText.setText(recipe.toString());
+        } catch (IllegalRecipeFormatException e) {
+            mealInfoText.setText(e.getMessage());
         }
 
-        recipePointTextField.setText("");
-        mealInfoText.setText("Recipe: \n" + recipe.toString());
     }
 
     @FXML
@@ -85,7 +92,7 @@ public class AddMealController {
             addIngredient();
             List<Ingredient> ingredients = ingredientContainer.getIngredients();
 
-            addRecipePoint();
+            addRecipeStep();
             List<String> recipeList = recipe.getRecipe();
 
             meal = new Meal(mealName, difficulty, ingredients, recipeList, tags);
@@ -96,24 +103,23 @@ public class AddMealController {
             difficultyTextField.setText("");
             tagsTextField.setText("");
 
+            ingredientContainer = new IngredientContainer();
+            recipe = new Recipe();
+
             // TODO how to implement adding meals to allMealsList between different
-            // controllers??
+            // controllers?? - save to file between each
 
             // TODO Change exception catch?
         } catch (Exception e) {
             mealInfoText.setText(e.getMessage());
         }
 
-        ingredientContainer = null;
-        recipe = null;
     }
 
     @FXML
     private void initialize() {
         try {
-            FileHandler fHandler = new FileHandler();
-            List<Meal> allMeals = fHandler.readFromFile("testfile").getMealList();
-            model = new Model(allMeals);
+            model = new Model();
         } catch (Exception e) {
             mealInfoText.setText("Error initializing file");
         }

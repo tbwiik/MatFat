@@ -1,12 +1,14 @@
 package matFat.filehandling;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -15,15 +17,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import matFat.MatFatApp;
 import matFat.Objects.Ingredient;
 import matFat.Objects.Meal;
 import matFat.Objects.Menu;
+import matFat.exceptions.IllegalDifficultyException;
 import matFat.exceptions.IllegalFileFormatException;
 
 public class FileHandler implements fHandlerInterface {
 
+    public String getFilePathString(String filename) {
+        return (getClass().getResource("data/").getFile() + filename + ".txt");
+    }
+
     public Path getFilePath(String filename) {
-        return Paths.get(getClass().getResource("data/").getFile() + filename + ".txt");
+        return Paths.get((MatFatApp.class.getResource("/data/") + filename + ".txt"));
     }
 
     @Override
@@ -36,7 +44,9 @@ public class FileHandler implements fHandlerInterface {
         try {
             // reader = new BufferedReader(new
             // InputStreamReader(getClass().getResourceAsStream(filename + ".txt")));
-            // reader = new BufferedReader(new FileReader(getFilePath(filename)));
+
+            // reader = new BufferedReader(new FileReader(new
+            // File(getFilePathString(filename))));
 
             // TODO fix reading from file
             reader = new BufferedReader(new FileReader(
@@ -113,14 +123,15 @@ public class FileHandler implements fHandlerInterface {
         String content = menuToStr(menu);
 
         try {
-            // File file = new File(getClass().getResource(filename).toURI());
-            // // File file2 = new File(arg0, arg1)
-            // BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            // BufferedWriter writer = new BufferedWriter(new FileWriter(new
+            // File(getFilePathString(filename))));
+
+            // BufferedWriter writer = Files.newBufferedWriter(getFilePath(filename));
 
             PrintWriter writer = new PrintWriter(filename + ".txt");
 
             // writer.append(content);
-            writer.print(content);
+            writer.write(content);
             writer.flush();
             writer.close();
         } catch (Exception e) {
@@ -195,8 +206,11 @@ public class FileHandler implements fHandlerInterface {
     }
 
     public static void main(String[] args) throws IllegalArgumentException, IllegalFileFormatException {
-        FileHandler fhandler = new FileHandler();
-        fhandler.readFromFile(" ");
+        // FileHandler fhandler = new FileHandler();
+        // String str = FileHandler.class.getResource("data/").toString();
+        URL url = IllegalDifficultyException.class.getResource("/data/test.txt");
+        System.out.println(url.toString());
+        // System.out.println(IllegalDifficultyException);
     }
 
 }

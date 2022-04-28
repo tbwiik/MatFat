@@ -5,8 +5,12 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import matFat.exceptions.IllegalAmountException;
+import matFat.exceptions.IllegalIngredientFormatException;
 import matFat.exceptions.IllegalMeasurementException;
+import matFat.exceptions.IllegalNameFormatException;
+import matFat.exceptions.IllegalTagFormatException;
 
+//TODO approx all exceptions and docs are wrong
 public class Ingredient {
 
     private String ingredientName;
@@ -45,7 +49,7 @@ public class Ingredient {
      */
     public Ingredient(String ingredientName, Integer ingredientAmount, MEASUREMENTS ingredientMeasurement,
             String... tags)
-            throws IllegalArgumentException, IllegalAmountException {
+            throws IllegalNameFormatException, IllegalAmountException, IllegalTagFormatException {
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
         this.ingredientMeasurement = ingredientMeasurement;
@@ -54,7 +58,8 @@ public class Ingredient {
 
     // TODO put these together?
     public Ingredient(String ingredientName, Integer ingredientAmount, String ingredientMeasurement, String... tags)
-            throws IllegalArgumentException, IllegalAmountException {
+            throws IllegalNameFormatException, IllegalAmountException, IllegalMeasurementException,
+            IllegalTagFormatException {
 
         setIngredientName(ingredientName);
         setIngredientAmount(ingredientAmount);
@@ -63,6 +68,7 @@ public class Ingredient {
     }
 
     // TODO implement iterator??
+    // XXX uncorrect docs
     /**
      * Constructs Ingredient
      * <p>
@@ -72,12 +78,18 @@ public class Ingredient {
      * @throws IllegalArgumentException
      * @throws IllegalAmountException
      */
-    public Ingredient(String[] ingArgs) throws IllegalArgumentException, IllegalAmountException {
+    public Ingredient(String[] ingArgs) throws IllegalIngredientFormatException, NumberFormatException,
+            IllegalMeasurementException, IllegalTagFormatException {
+
+        if (ingArgs.length < 3)
+            throw new IllegalIngredientFormatException(
+                    "Too few arguments to create ingredient \n Must be on the format \"name amount measurement\"");
+
         setIngredientName(ingArgs[0]);
         try {
             setIngredientAmount(Integer.parseInt(ingArgs[1]));
         } catch (NumberFormatException nFormatException) {
-            throw new IllegalArgumentException("Cannot parse ingredient-amount to int");
+            throw new NumberFormatException("Invalid number \nCannot parse ingredient-amount to int");
         }
         setIngredientMeasurement(ingArgs[2]);
 
@@ -100,28 +112,28 @@ public class Ingredient {
      * @param ingredientName
      * @throws IllegalArgumentException
      */
-    private void checkIngredientName(String ingredientName) throws IllegalArgumentException {
+    private void checkIngredientName(String ingredientName) throws IllegalNameFormatException {
 
         if (ingredientName.length() < 3)
-            throw new IllegalArgumentException("Too short Ingredient-name");
+            throw new IllegalNameFormatException("Too short Ingredient-name");
 
         if (ingredientName.length() > 50)
-            throw new IllegalArgumentException("Too long Ingredient-name");
+            throw new IllegalNameFormatException("Too long Ingredient-name");
 
         boolean iNameMatch = Pattern.matches(INGNAMEREG_STRING, ingredientName);
 
         if (!iNameMatch)
-            throw new IllegalArgumentException("Ingredient-name can only consist of chars");
+            throw new IllegalNameFormatException("Ingredient-name can only consist of chars");
     }
 
     /**
      * Sets new name of Ingredient
      * 
      * @param ingredientName
-     * @throws IllegalArgumentException if unvalid name per
-     *                                  {@linkplain #checkIngredientName(String)}
+     * @throws IllegalNameFormatException if unvalid name per
+     *                                    {@linkplain #checkIngredientName(String)}
      */
-    public void setIngredientName(String ingredientName) throws IllegalArgumentException {
+    public void setIngredientName(String ingredientName) throws IllegalNameFormatException {
         checkIngredientName(ingredientName);
         this.ingredientName = ingredientName;
     }

@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import matFat.exceptions.IllegalTagFormatException;
+
 public class TagBox {
 
     private Set<String> tags = new HashSet<>();
@@ -13,7 +15,7 @@ public class TagBox {
     private final static int MAX_LENGTH_TAG = 10;
 
     // Allowed with empty box
-    public TagBox(Set<String> tags) throws IllegalArgumentException {
+    public TagBox(Set<String> tags) throws IllegalTagFormatException {
 
         setTagsSet(tags);
 
@@ -23,20 +25,20 @@ public class TagBox {
     public TagBox() {
     }
 
-    private void checkTag(String tag) throws IllegalArgumentException {
+    private void checkTag(String tag) throws IllegalTagFormatException {
         if (tag.length() < MIN_LENGTH_TAG)
-            throw new IllegalArgumentException("Too short tag");
+            throw new IllegalTagFormatException("Too short tag");
 
         if (tag.length() > MAX_LENGTH_TAG)
-            throw new IllegalArgumentException("Too long tag");
+            throw new IllegalTagFormatException("Too long tag");
 
         boolean iNameMatch = Pattern.matches(NAMEREG_STRING, tag);
 
         if (!iNameMatch)
-            throw new IllegalArgumentException("Tag can only consist of chars");
+            throw new IllegalTagFormatException("Tag can only consist of chars");
     }
 
-    private void setTagsSet(Set<String> tags) throws IllegalArgumentException {
+    private void setTagsSet(Set<String> tags) throws IllegalTagFormatException {
 
         if (tags.isEmpty()) {
             this.tags = tags;
@@ -56,12 +58,12 @@ public class TagBox {
         this.tags.retainAll(tags);
     }
 
-    public void addTag(String tag) throws IllegalArgumentException {
+    public void addTag(String tag) throws IllegalTagFormatException {
         checkTag(tag);
         tags.add(tag);
     }
 
-    public void addTags(Set<String> tags) throws IllegalArgumentException {
+    public void addTags(Set<String> tags) throws IllegalTagFormatException {
         tags.forEach((tag) -> addTag(tag));
     }
 

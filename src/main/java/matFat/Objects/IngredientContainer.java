@@ -11,7 +11,7 @@ import matFat.exceptions.IllegalAmountException;
 public class IngredientContainer {
 
     private List<Ingredient> ingredients = new ArrayList<>();
-    private TagBox tagBox;
+    private TagBox tagBox; // Dont initialize here. Unecessary and breaks code for generating correct tags
     private int numberOfIngredients;
 
     /**
@@ -24,20 +24,17 @@ public class IngredientContainer {
      * 
      * @param ingredients
      */
-    public IngredientContainer(List<Ingredient> ingredients) {
+    public IngredientContainer(List<Ingredient> ingredients) throws IllegalArgumentException {
 
+        if (ingredients.isEmpty())
+            throw new IllegalArgumentException("Can't create ingredient-container with no ingredients");
         for (Ingredient ingredient : ingredients) {
             addIngredient(ingredient);
         }
 
     }
 
-    /**
-     * Generate empty container for use in construction of {@linkplain Menu} and
-     * model
-     */
     public IngredientContainer() {
-        // TODO do things smarter to remove this?
     }
 
     // Use in Controller
@@ -182,10 +179,16 @@ public class IngredientContainer {
 
         StringBuilder sBuilder = new StringBuilder();
 
+        sBuilder.append("Ingredients: \n");
         ingredients.forEach((ingredient) -> {
             sBuilder.append(ingredient + "\n");
         });
 
         return sBuilder.toString();
+    }
+
+    public static void main(String[] args) {
+        List<String> tmp = new ArrayList<>();
+        System.out.println(new ArrayList<>(tmp));
     }
 }

@@ -4,20 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import matFat.exceptions.IllegalRecipeFormatException;
+
 public class Recipe {
 
     List<String> recipe = new ArrayList<>();
 
-    public Recipe(String recipeLine) throws IllegalArgumentException {
+    public Recipe(String recipeLine) throws IllegalArgumentException, IllegalRecipeFormatException {
         addRecipeLine(recipeLine);
     }
 
-    public Recipe(List<String> recipe) throws IllegalArgumentException {
+    public Recipe(List<String> recipe) throws IllegalArgumentException, IllegalRecipeFormatException {
         setRecipe(recipe);
     }
 
-    private void setRecipe(List<String> recipe) throws IllegalArgumentException {
+    public Recipe() {
+    }
+
+    private void setRecipe(List<String> recipe) throws IllegalArgumentException, IllegalRecipeFormatException {
         // XXX Consider making public to be able to rewrite whole recipe in one push.
+        if (recipe.isEmpty())
+            throw new IllegalArgumentException("Can't create recipe with no content");
 
         for (String recipeLine : recipe) {
             addRecipeLine(recipeLine);
@@ -29,15 +36,15 @@ public class Recipe {
      * Checks if a line in recipe is valid
      * 
      * @param recipeLine point in the recipe-list
-     * @throws IllegalArgumentException if too long or too short
+     * @throws IllegalRecipeFormatException if too long or too short
      */
-    private void checkRecipeLine(String recipeLine) throws IllegalArgumentException {
+    private void checkRecipeLine(String recipeLine) throws IllegalRecipeFormatException {
         if (recipeLine.length() < 3)
-            throw new IllegalArgumentException("Too short recipeline");
+            throw new IllegalRecipeFormatException("Too short recipeline");
 
         // XXX Consider changing the length of this?
         if (recipeLine.length() > 3000)
-            throw new IllegalArgumentException("Too long recipeline");
+            throw new IllegalRecipeFormatException("Too long recipeline");
     }
 
     public List<String> getRecipe() {
@@ -55,9 +62,9 @@ public class Recipe {
      * 
      * @param recipeLines
      * @param indexes
-     * @throws IllegalArgumentException
+     * @throws IllegalRecipeFormatException
      */
-    public void updateRecipeLines(Map<Integer, String> recipeLines) throws IllegalArgumentException {
+    public void updateRecipeLines(Map<Integer, String> recipeLines) throws IllegalRecipeFormatException {
         recipeLines.forEach((index, strUpdate) -> {
             checkRecipeLine(strUpdate);
             recipe.set(index, strUpdate);
@@ -71,9 +78,9 @@ public class Recipe {
      * 
      * @param recipeLine
      * @param listIndex
-     * @throws IllegalArgumentException
+     * @throws IllegalRecipeFormatException
      */
-    public void updateRecipeLine(int listIndex, String recipeLine) throws IllegalArgumentException {
+    public void updateRecipeLine(int listIndex, String recipeLine) throws IllegalRecipeFormatException {
         checkRecipeLine(recipeLine);
         recipe.set(listIndex, recipeLine);
     }
@@ -82,11 +89,18 @@ public class Recipe {
      * Append point in recipe to end of recipe-list
      * 
      * @param recipeLine
-     * @throws IllegalArgumentException
+     * @throws IllegalRecipeFormatException
      */
-    public void addRecipeLine(String recipeLine) throws IllegalArgumentException {
+    public void addRecipeLine(String recipeLine) throws IllegalRecipeFormatException {
         checkRecipeLine(recipeLine);
         recipe.add(recipeLine);
+    }
+
+    // TODO add tests
+    public void removeRecipeLine(int index) throws IllegalArgumentException {
+        if (index < 0 && index > recipe.size() - 1)
+            throw new IllegalArgumentException("No such index in recipe-list");
+        recipe.remove(index);
     }
 
     @Override
@@ -94,6 +108,7 @@ public class Recipe {
 
         StringBuilder stringBuilder = new StringBuilder();
 
+        stringBuilder.append("Recipe: \n");
         recipe.forEach((point) -> stringBuilder.append(point + "\n"));
 
         return stringBuilder.toString();
