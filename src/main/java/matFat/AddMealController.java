@@ -1,12 +1,19 @@
 package matFat;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import matFat.Objects.Ingredient;
 import matFat.Objects.IngredientContainer;
 import matFat.Objects.Meal;
@@ -16,7 +23,6 @@ import matFat.exceptions.IllegalMeasurementException;
 import matFat.exceptions.IllegalNameFormatException;
 import matFat.exceptions.IllegalRecipeFormatException;
 import matFat.exceptions.IllegalTagFormatException;
-import matFat.filehandling.ManageData;
 
 public class AddMealController {
 
@@ -30,7 +36,7 @@ public class AddMealController {
             recipeStepTextField;
 
     @FXML
-    Button addIngredientButton, addRecipeStepButton, addMealButton;
+    Button addIngredientButton, addRecipeStepButton, addMealButton, returnToStartPageButton;
 
     @FXML
     Text mealInfoText;
@@ -107,13 +113,26 @@ public class AddMealController {
             ingredientContainer = new IngredientContainer();
             recipe = new Recipe();
 
-            // TODO how to implement adding meals to allMealsList between different
-            // controllers?? - save to file between each
+            mealDataBase.addMeal(meal); // write meal to database
 
             // TODO Change exception catch?
         } catch (Exception e) {
             mealInfoText.setText(e.getMessage());
         }
+
+    }
+
+    @FXML
+    private void returnToStartPage(ActionEvent event) throws IOException{
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("MainPage.fxml"));
+        Parent p = fxmlLoader.load();
+        Scene s = new Scene(p);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setTitle("Start Page");
+        window.setScene(s);
+        window.show();
 
     }
 

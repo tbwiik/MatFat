@@ -17,7 +17,7 @@ public class MatFatApp extends Application {
 
     @Override
     public void init() throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Main.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
         rootNode = fxmlLoader.load();
     }
 

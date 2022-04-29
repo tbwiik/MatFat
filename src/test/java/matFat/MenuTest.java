@@ -13,7 +13,6 @@ import matFat.Objects.Ingredient;
 import matFat.Objects.IngredientContainer;
 import matFat.Objects.Meal;
 import matFat.Objects.Menu;
-import matFat.filehandling.FileHandler;
 
 public class MenuTest {
 

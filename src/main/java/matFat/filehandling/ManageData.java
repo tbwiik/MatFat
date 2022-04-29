@@ -97,8 +97,9 @@ public class ManageData {
 
     }
 
-    public static List<Meal> readMealsFromFile(String filename) {
-        return new ArrayList<>(readMealsFromFile(filename));
+    public static List<Meal> readMealsFromFile(String filename)
+            throws FileNotFoundException, IllegalFileFormatException {
+        return new ArrayList<>(readMenuFromFile(filename).getMealList());
     }
 
     public static void writeMenuToFile(Menu menu, String filename) {
@@ -191,4 +192,8 @@ public class ManageData {
         return sBuilder.toString();
     }
 
+    public static void main(String[] args) {
+        ManageData md = new ManageData();
+        md.getFile("mealDataBase").toString();
+    }
 }

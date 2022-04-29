@@ -136,6 +136,7 @@
                   <Insets />
                </VBox.margin>
             </HBox>
+            <Button fx:id="returnToStartPageButton" mnemonicParsing="false" onAction="#returnToStartPage" text="Return to start Page" />
          </children>
       </VBox>
    </children>

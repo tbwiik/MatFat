@@ -2,9 +2,14 @@ package matFat;
 
 import java.util.NoSuchElementException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import matFat.Objects.Ingredient;
 import matFat.Objects.Meal;
 import matFat.exceptions.IllegalDifficultyException;
@@ -27,32 +32,36 @@ public class EditMealController {
 
     @FXML
     Button searchMealButton, changeMealNameButton, changeDifficultyButton, addTagButton, removeTagButton,
-            addIngredientButton, removeIngredientButton, addRecipeStepButton, removeRecipeStepButton, submitMealButton;
+            addIngredientButton, removeIngredientButton, addRecipeStepButton, removeRecipeStepButton, submitMealButton,
+            returnToStartPageButton;
 
-    // TODO move this to menu/modell??
+    // TODO move this to genericfunctions??
+    public static Meal searchMeal(String mealName, MealDataBase mealDataBase) {
+
+        if (mealName.isBlank())
+            return null;
+
+        for (Meal meal : mealDataBase.getMeals()) {
+            if (meal.getMealName().equals(mealName)) {
+                return meal;
+            }
+        }
+
+        return null;
+
+    }
+
     @FXML
     private void searchMeal() {
 
-        boolean updated = false;
-
         String mealName = searchMealTextField.getText().strip();
 
-        if (mealName.isBlank())
-            return;
+        Meal tmpMeal = searchMeal(mealName, mealDataBase);
 
-        for (Meal meal : mealDataBase.getMeals())
-            if (meal.getMealName().equals(mealName)) {
-                updated = true;
-                this.meal = meal;
-            }
-
-        // Reset meal to null if none is found
-        if (!updated)
-            meal = null;
-
-        if (meal == null) {
+        if (tmpMeal == null) {
             mealInfoText.setText("Could not find meal");
         } else {
+            meal = tmpMeal; // Only update meal if it actually exist
             mealInfoText.setText(meal.toString());
         }
     }
@@ -194,6 +203,21 @@ public class EditMealController {
         } catch (IllegalArgumentException | NoSuchElementException e) {
             mealInfoText.setText(e.getMessage());
         }
+    }
+
+    // XXX identical to addmeal
+    @FXML
+    private void returnToStartPage(ActionEvent event) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("MainPage.fxml"));
+        Parent p = fxmlLoader.load();
+        Scene s = new Scene(p);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setTitle("Start Page");
+        window.setScene(s);
+        window.show();
+
     }
 
     @FXML
