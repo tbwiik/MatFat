@@ -52,6 +52,7 @@ public class Menu extends Tagged {
 
         mealList.forEach((meal) -> {
             ingredientContainer.addIngredients(meal.getIngredients());
+            numberOfMeals++;
         });
 
     }

@@ -2,6 +2,8 @@ package matFat.filehandling;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -17,22 +19,19 @@ import matFat.Objects.Meal;
 import matFat.Objects.Menu;
 import matFat.exceptions.IllegalFileFormatException;
 
-public class ManageData {
+public class ManageData implements FileHandlerInterface {
 
-    private static File getFile(String filename) {
+    private File getFile(String filename) {
         return new File(ManageData.class.getResource("data/").getFile() + filename + ".txt");
     }
 
-    public static Menu readMenuFromFile(String filename) throws FileNotFoundException, IllegalFileFormatException {
+    @Override
+    public Menu readMenuFromFile(String filename) throws FileNotFoundException, IllegalFileFormatException {
 
-        Scanner scanner = null;
         List<Meal> mealList = new ArrayList<>();
         Set<String> tagList = new HashSet<>();
 
-        try {
-
-            // scanner = new Scanner(getFile(filename));
-            scanner = new Scanner(getFile(filename));
+        try (Scanner scanner = new Scanner(getFile(filename))) {
 
             try {
 
@@ -52,6 +51,7 @@ public class ManageData {
                     List<String> recipeList = new ArrayList<>();
                     Set<String> mealTags = new HashSet<>();
 
+                    // Reads ingredient
                     scanner.nextLine();
                     while (scanner.hasNext()) {
                         String line = scanner.nextLine().strip();
@@ -60,6 +60,7 @@ public class ManageData {
                         ingList.add(GenericFunctions.strToIng(line));
                     }
 
+                    // Reads ingredient
                     scanner.nextLine();
                     while (scanner.hasNext()) {
                         String line = scanner.nextLine().strip();
@@ -68,7 +69,8 @@ public class ManageData {
                         recipeList.add(line);
                     }
 
-                    mealTags.addAll(Arrays.asList(scanner.nextLine().split(":")[1].strip().split(" ")));
+                    List<String> tmpTags = Arrays.asList(scanner.nextLine().split(":")[1].strip().split(" "));
+                    mealTags.addAll(tmpTags);
 
                     mealList.add(new Meal(mealName, difficulty, ingList, recipeList, mealTags));
 
@@ -84,39 +86,32 @@ public class ManageData {
             }
         } catch (IOException ioeRead) {
             ioeRead.printStackTrace();
-        } finally {
-            // XXX this block necessary?
-            try {
-                scanner.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
-
         return new Menu(mealList, tagList);
 
     }
 
-    public static List<Meal> readMealsFromFile(String filename)
+    @Override
+    public List<Meal> readMealsFromFile(String filename)
             throws FileNotFoundException, IllegalFileFormatException {
         return new ArrayList<>(readMenuFromFile(filename).getMealList());
     }
 
-    public static void writeMenuToFile(Menu menu, String filename) {
+    @Override
+    public void writeMenuToFile(Menu menu, String filename) {
 
         String content = menuToStr(menu);
-
         try {
-            // BufferedWriter writer = new BufferedWriter(new FileWriter(new
-            // File(getFilePathString(filename))));
 
-            // BufferedWriter writer = Files.newBufferedWriter(getFilePath(filename));
+            // PrintWriter writer = new PrintWriter(getFile(filename));
+            // PrintWriter writer = new PrintWriter(new FileOutputStream(getFile(filename)),
+            // false);
+            FileWriter writer = new FileWriter(getFile(filename));
 
-            PrintWriter writer = new PrintWriter(getFile(filename));
-
-            writer.write(content);
-            writer.flush();
+            writer.write(content); // Does this write or overwrite?? XXX
+            // writer.flush();
             writer.close();
+            System.out.println(content);
         } catch (Exception e) {
             // TODO change error quote?
             System.err.println("Error writing content to file");
@@ -124,11 +119,13 @@ public class ManageData {
         }
     }
 
-    public static void writeMealsToFile(List<Meal> mealList, String filename) {
-        writeMenuToFile(new Menu(mealList, new HashSet<>()), filename);
+    @Override
+    public void writeMealsToFile(List<Meal> mealList, String filename) {
+        Menu tmpMenu = new Menu(mealList, new HashSet<>());
+        writeMenuToFile(tmpMenu, filename);
     }
 
-    private static String ingsToStr(List<Ingredient> ingList) {
+    private String ingsToStr(List<Ingredient> ingList) {
 
         StringBuilder sBuilder = new StringBuilder();
 
@@ -145,7 +142,10 @@ public class ManageData {
         return sBuilder.toString();
     }
 
-    private static String tagsToStr(Set<String> tags) {
+    private String tagsToStr(Set<String> tags) {
+
+        if (tags.isEmpty())
+            return "";
 
         StringBuilder sBuilder = new StringBuilder();
 
@@ -154,7 +154,7 @@ public class ManageData {
         return sBuilder.toString();
     }
 
-    private static String recipeToStr(List<String> recipeList) {
+    private String recipeToStr(List<String> recipeList) {
 
         StringBuilder sBuilder = new StringBuilder();
 
@@ -163,7 +163,7 @@ public class ManageData {
         return sBuilder.toString();
     }
 
-    private static String mealToStr(Meal meal) {
+    private String mealToStr(Meal meal) {
 
         StringBuilder sBuilder = new StringBuilder();
 
@@ -179,7 +179,7 @@ public class ManageData {
         return sBuilder.toString();
     }
 
-    private static String menuToStr(Menu menu) {
+    private String menuToStr(Menu menu) {
 
         StringBuilder sBuilder = new StringBuilder();
 
@@ -192,8 +192,4 @@ public class ManageData {
         return sBuilder.toString();
     }
 
-    public static void main(String[] args) {
-        ManageData md = new ManageData();
-        md.getFile("mealDataBase").toString();
-    }
 }

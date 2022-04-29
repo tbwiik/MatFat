@@ -13,12 +13,13 @@ import matFat.filehandling.ManageData;
 
 public class MealDataBase {
 
+    ManageData manageData = new ManageData();
     private List<Meal> meals = new ArrayList<>();
 
     String defaultFilename = "mealDataBase"; // Default filepath for dataBase
 
     public MealDataBase() throws IllegalFileFormatException, FileNotFoundException {
-        meals = ManageData.readMealsFromFile(defaultFilename);
+        meals = manageData.readMealsFromFile(defaultFilename);
     }
 
     public List<Meal> getMeals() {
@@ -27,7 +28,7 @@ public class MealDataBase {
 
     public void addMeal(Meal meal) {
         meals.add(meal);
-        ManageData.writeMealsToFile(meals, defaultFilename);
+        manageData.writeMealsToFile(meals, defaultFilename);
     }
 
     /**
@@ -93,7 +94,7 @@ public class MealDataBase {
         checkNum(amount);
 
         while (randomMeals.size() < amount)
-            getRandomMeal(userTags);
+            randomMeals.add(getRandomMeal(userTags));
 
         return randomMeals;
 

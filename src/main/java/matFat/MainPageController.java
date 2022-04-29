@@ -16,10 +16,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import matFat.Objects.Meal;
 import matFat.Objects.Menu;
+import matFat.filehandling.ManageData;
 
 public class MainPageController {
 
     private MealDataBase mealDataBase;
+    private ManageData manageData;
     private Menu menu;
 
     @FXML
@@ -40,14 +42,16 @@ public class MainPageController {
     private void generateMenu() {
 
         try {
+
             int numberOfMeals = GenericFunctions.strToInt(numbMealsTextField.getText());
             Set<String> tags = GenericFunctions.strToStrSet(tagsTextField.getText().strip());
             List<Meal> meals = mealDataBase.getRandomMeals(tags, numberOfMeals);
             menu = new Menu(meals, tags);
-
+            manageData.writeMenuToFile(menu, "menu");
             showMenu();
 
         } catch (Exception e) {
+            e.printStackTrace();
             menuInfoText.setText(e.getMessage());
         }
 
@@ -69,32 +73,17 @@ public class MainPageController {
         showMenu();
     }
 
-    // XXX This code is cooked from Arran
     @FXML
     private void addNewMeal(ActionEvent event) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("AddMeal.fxml"));
-        Parent p = fxmlLoader.load();
-        Scene s = new Scene(p);
-        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setTitle("Add new meal");
-        window.setScene(s);
-        window.show();
+        changeScene(event, "AddMeal.fxml", "Add new meal");
 
     }
 
     @FXML
     private void editExistingMeal(ActionEvent event) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("EditMeal.fxml"));
-        Parent p = fxmlLoader.load();
-        Scene s = new Scene(p);
-        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setTitle("Edit meal");
-        window.setScene(s);
-        window.show();
+        changeScene(event, "EditMeal.fxml", "Edit meal");
 
     }
 
@@ -104,12 +93,28 @@ public class MainPageController {
         EditMealController.searchMeal(mealName, mealDataBase);
     }
 
+    // TODO this is cooked
+    public static void changeScene(ActionEvent event, String scene, String sceneTitle) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(MainPageController.class.getResource(scene));
+        Parent p = fxmlLoader.load();
+        Scene s = new Scene(p);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setTitle(sceneTitle);
+        window.setScene(s);
+        window.show();
+
+    }
+
     @FXML
     private void initialize() {
         try {
+            manageData = new ManageData();
             mealDataBase = new MealDataBase();
         } catch (Exception e) {
-            menuInfoText.setText("Error initializing file");
+            menuInfoText.setText(e.getMessage());
+            // menuInfoText.setText("Error initializing file");
         }
     }
 }

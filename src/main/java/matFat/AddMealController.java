@@ -91,6 +91,7 @@ public class AddMealController {
     private void addMeal() {
 
         try {
+            initialize();
 
             String mealName = mealNameTextField.getText().strip();
             char difficulty = GenericFunctions.strToChar(difficultyTextField.getText());
@@ -105,10 +106,9 @@ public class AddMealController {
             meal = new Meal(mealName, difficulty, ingredients, recipeList, tags);
             mealInfoText.setText(meal.toString());
 
-            // XXX better way to do this??
-            mealNameTextField.setText("");
-            difficultyTextField.setText("");
-            tagsTextField.setText("");
+            mealNameTextField.clear();
+            difficultyTextField.clear();
+            tagsTextField.clear();
 
             ingredientContainer = new IngredientContainer();
             recipe = new Recipe();
@@ -123,16 +123,9 @@ public class AddMealController {
     }
 
     @FXML
-    private void returnToStartPage(ActionEvent event) throws IOException{
+    private void returnToStartPage(ActionEvent event) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("MainPage.fxml"));
-        Parent p = fxmlLoader.load();
-        Scene s = new Scene(p);
-        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setTitle("Start Page");
-        window.setScene(s);
-        window.show();
+        MainPageController.changeScene(event, "MainPage.fxml", "Start Page");
 
     }
 

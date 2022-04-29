@@ -1,12 +1,20 @@
 package matFat.filehandling;
 
+import java.io.FileNotFoundException;
+import java.util.List;
+
 import matFat.Objects.Meal;
+import matFat.Objects.Menu;
+import matFat.exceptions.IllegalFileFormatException;
 
 public interface FileHandlerInterface {
 
-    // TODO reconsider exceptions
-    public Meal readMealFromFile(String filename) throws IllegalArgumentException;
+    public Menu readMenuFromFile(String filename) throws FileNotFoundException, IllegalFileFormatException;
 
-    public void writeMealToFile(Meal menu, String filename);
+    public List<Meal> readMealsFromFile(String filename) throws FileNotFoundException, IllegalFileFormatException;
+
+    public void writeMealsToFile(List<Meal> meals, String filename);
+
+    public void writeMenuToFile(Menu menu, String filename);
 
 }

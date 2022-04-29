@@ -1,6 +1,9 @@
 package matFat;
 
+import java.io.IOException;
 import java.util.NoSuchElementException;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -205,18 +208,10 @@ public class EditMealController {
         }
     }
 
-    // XXX identical to addmeal
     @FXML
     private void returnToStartPage(ActionEvent event) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("MainPage.fxml"));
-        Parent p = fxmlLoader.load();
-        Scene s = new Scene(p);
-        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setTitle("Start Page");
-        window.setScene(s);
-        window.show();
+        MainPageController.changeScene(event, "MainPage.fxml", "Start Page");
 
     }
 
@@ -231,7 +226,10 @@ public class EditMealController {
 
     @FXML
     private void submitMeal() {
-        // TODO
+
+        mealDataBase.addMeal(meal);
+        mealInfoText.setText("Meal submitted");
+
     }
 
 }

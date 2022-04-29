@@ -271,7 +271,7 @@ public class Ingredient {
         StringBuilder sBuilder = new StringBuilder();
 
         sBuilder.append(
-                ingredientName + " " + ingredientAmount.toString() + " " + ingredientMeasurement.toString() + ", "
+                ingredientName + " " + ingredientAmount.toString() + " " + ingredientMeasurement.toString() + " "
                         + tagBox.toString());
 
         return sBuilder.toString();

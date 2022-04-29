@@ -1,14 +1,8 @@
 package matFat;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Random;
 import java.util.Set;
-
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import matFat.Objects.*;
 import matFat.exceptions.IllegalAmountException;
 import matFat.exceptions.IllegalDifficultyException;
@@ -31,6 +25,10 @@ public class GenericFunctions {
     public static Ingredient strToIng(String ingStr) throws IllegalNameFormatException, IllegalAmountException,
             IllegalMeasurementException, IllegalTagFormatException {
         String[] ingArgs = ingStr.strip().split(" ");
+        // Set<String> tmp = new HashSet<>(Arrays.asList(ingArgs));
+        // tmp.stream().forEach((item) -> item.strip());
+
+        // return new Ingredient((String[]) tmp.toArray());
         return new Ingredient(ingArgs);
     }
 

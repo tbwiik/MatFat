@@ -67,10 +67,18 @@ public class TagBox {
      */
     private void setTagsSet(Set<String> tags) throws IllegalTagFormatException {
 
-        if (tags.isEmpty()) {
-            this.tags = tags;
+        Set<String> tmpTags = new HashSet<>();
+        // Could also use filter
+        tags.forEach((tag) -> {
+            if (!tag.isBlank())
+                tmpTags.add(tag);
+        });
+
+        if (tmpTags.isEmpty()) {
+            this.tags = tmpTags;
+
         } else {
-            tags.forEach((tag) -> {
+            tmpTags.forEach((tag) -> {
                 checkTag(tag);
                 this.tags.add(tag);
             });
