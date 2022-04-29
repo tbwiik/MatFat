@@ -34,10 +34,20 @@ public class MainPageController {
     private Button generateMenuButton, addMealToMenuButton, removeMealFromMenuButton, addNewMealButton,
             editExistingMealButton;
 
+    /**
+     * Show menu on ui
+     */
     private void showMenu() {
         menuInfoText.setText(menu.toString());
     }
 
+    /**
+     * If possible generates a menu based on number of meals and usertags
+     * <p>
+     * Show possible error on ui
+     * <p>
+     * Keyfunction {@linkplain MealDataBase#getRandomMeals(Set, int)}
+     */
     @FXML
     private void generateMenu() {
 
@@ -57,43 +67,55 @@ public class MainPageController {
 
     }
 
-    @FXML
-    private void addMealToMenu() {
-        // TODO
-    }
-
-    @FXML
-    private void removeMealFromMenu() {
-        // TODO
-    }
-
+    // Not implemented in UI
     @FXML
     private void addRandomMeal() {
         menu.addMeal(mealDataBase.getRandomMeal(menu.getTags()));
         showMenu();
     }
 
+    /**
+     * Send to {@linkplain AddMealController} where adding meal to database is
+     * handled
+     */
     @FXML
-    private void addNewMeal(ActionEvent event) throws IOException {
+    private void addNewMeal(ActionEvent event) {
 
-        changeScene(event, "AddMeal.fxml", "Add new meal");
+        try {
+            changeScene(event, "AddMeal.fxml", "Add new meal");
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            menuInfoText.setText("Could not change page");
+        }
 
     }
 
+    /**
+     * Send to {@linkplain EditMealController} where editing or removing meal to
+     * database is handled
+     */
     @FXML
-    private void editExistingMeal(ActionEvent event) throws IOException {
+    private void editExistingMeal(ActionEvent event) {
 
-        changeScene(event, "EditMeal.fxml", "Edit meal");
-
+        try {
+            changeScene(event, "EditMeal.fxml", "Edit meal");
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            menuInfoText.setText("Could not change page");
+        }
     }
 
-    private void removeMeal() {
-        // TODO
-        String mealName = null;
-        EditMealController.searchMeal(mealName, mealDataBase);
-    }
-
-    // TODO this is cooked
+    /**
+     * Change page (scene) in program
+     * <p>
+     * Retrieved from studass Arran Gabriel Kostveit 29.04.2022
+     * https://github.com/arrangabriel/IT1901-project-gr23/blob/master/get-fit/ui/src/main/java/ui/StartPageController.java
+     * 
+     * @param event
+     * @param scene      changing to
+     * @param sceneTitle title of new scene
+     * @throws IOException
+     */
     public static void changeScene(ActionEvent event, String scene, String sceneTitle) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -112,9 +134,9 @@ public class MainPageController {
         try {
             manageData = new ManageData();
             mealDataBase = new MealDataBase();
+            menuInfoText.setText("Start succesfull");
         } catch (Exception e) {
-            menuInfoText.setText(e.getMessage());
-            // menuInfoText.setText("Error initializing file");
+            menuInfoText.setText("Error initializing file\n" + e.getMessage());
         }
     }
 }

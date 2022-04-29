@@ -23,7 +23,7 @@ import matFat.exceptions.IllegalTagFormatException;
 public class EditMealController {
 
     MealDataBase mealDataBase;
-    Meal meal;
+    Meal meal, oldMeal;
 
     @FXML
     TextField searchMealTextField, changeMealNameTextField, changeDifficultyTextField, addTagTextField,
@@ -36,9 +36,16 @@ public class EditMealController {
     @FXML
     Button searchMealButton, changeMealNameButton, changeDifficultyButton, addTagButton, removeTagButton,
             addIngredientButton, removeIngredientButton, addRecipeStepButton, removeRecipeStepButton, submitMealButton,
+            removeMealButton,
             returnToStartPageButton;
 
-    // TODO move this to genericfunctions??
+    /**
+     * Search for meal in database
+     * 
+     * @param mealName
+     * @param mealDataBase
+     * @return null or {@linkplain Meal}
+     */
     public static Meal searchMeal(String mealName, MealDataBase mealDataBase) {
 
         if (mealName.isBlank())
@@ -54,6 +61,9 @@ public class EditMealController {
 
     }
 
+    /**
+     * Search for Meal in database
+     */
     @FXML
     private void searchMeal() {
 
@@ -69,12 +79,19 @@ public class EditMealController {
         }
     }
 
+    /**
+     * Check if meal is asigned
+     * 
+     * @throws NoSuchElementException
+     */
     private void checkMealExist() throws NoSuchElementException {
         if (meal == null)
             throw new NoSuchElementException("No meal is selected");
     }
 
-    // TODO reuse a lot of code
+    /**
+     * Change name of meal
+     */
     @FXML
     private void changeMealName() {
 
@@ -91,6 +108,9 @@ public class EditMealController {
         }
     }
 
+    /**
+     * Change difficulty of meal
+     */
     @FXML
     private void changeDifficulty() {
 
@@ -108,6 +128,9 @@ public class EditMealController {
         }
     }
 
+    /**
+     * Add tag to meal
+     */
     @FXML
     private void addTag() {
 
@@ -125,6 +148,9 @@ public class EditMealController {
         }
     }
 
+    /**
+     * Remove tag from meal
+     */
     @FXML
     private void removeTag() {
 
@@ -142,6 +168,9 @@ public class EditMealController {
         }
     }
 
+    /**
+     * Add ingredient to meal
+     */
     @FXML
     private void addIngredient() {
 
@@ -158,6 +187,9 @@ public class EditMealController {
         }
     }
 
+    /**
+     * Remove ingredient from meal
+     */
     @FXML
     private void removeIngredient() {
 
@@ -175,6 +207,9 @@ public class EditMealController {
         }
     }
 
+    /**
+     * Add step in recipe
+     */
     @FXML
     private void addRecipeStep() {
 
@@ -191,6 +226,9 @@ public class EditMealController {
         }
     }
 
+    /**
+     * Remove step in recipe based on index
+     */
     @FXML
     private void removeRecipeStep() {
 
@@ -208,11 +246,45 @@ public class EditMealController {
         }
     }
 
+    /**
+     * Write meal to file
+     */
     @FXML
-    private void returnToStartPage(ActionEvent event) throws IOException {
+    private void submitMeal() {
 
-        MainPageController.changeScene(event, "MainPage.fxml", "Start Page");
+        checkMealExist();
 
+        mealDataBase.addMeal(meal);
+        mealInfoText.setText("Meal submitted");
+
+    }
+
+    /**
+     * Remove meal from file
+     */
+    @FXML
+    private void removeMeal() {
+
+        checkMealExist();
+
+        mealDataBase.removeMeal(meal);
+        mealInfoText.setText("Meal succesfully removed");
+
+    }
+
+    /**
+     * Returns to startpage
+     * 
+     * @param event
+     */
+    @FXML
+    private void returnToStartPage(ActionEvent event) {
+
+        try {
+            MainPageController.changeScene(event, "MainPage.fxml", "Start Page");
+        } catch (Exception e) {
+            mealInfoText.setText("Could not return to start page");
+        }
     }
 
     @FXML
@@ -220,16 +292,8 @@ public class EditMealController {
         try {
             mealDataBase = new MealDataBase();
         } catch (Exception e) {
-            mealInfoText.setText("Error initializing file");
+            mealInfoText.setText("Error initializing file\n" + e.getMessage());
         }
-    }
-
-    @FXML
-    private void submitMeal() {
-
-        mealDataBase.addMeal(meal);
-        mealInfoText.setText("Meal submitted");
-
     }
 
 }

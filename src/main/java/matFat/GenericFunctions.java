@@ -25,10 +25,6 @@ public class GenericFunctions {
     public static Ingredient strToIng(String ingStr) throws IllegalNameFormatException, IllegalAmountException,
             IllegalMeasurementException, IllegalTagFormatException {
         String[] ingArgs = ingStr.strip().split(" ");
-        // Set<String> tmp = new HashSet<>(Arrays.asList(ingArgs));
-        // tmp.stream().forEach((item) -> item.strip());
-
-        // return new Ingredient((String[]) tmp.toArray());
         return new Ingredient(ingArgs);
     }
 
@@ -64,7 +60,8 @@ public class GenericFunctions {
 
         Set<String> set = new HashSet<>();
         for (String tag : strArray) {
-            set.add(tag);
+            if (!tag.isBlank())
+                set.add(tag);
         }
 
         return set;
@@ -98,11 +95,5 @@ public class GenericFunctions {
             throw new IllegalDifficultyException("Not accepted character");
         return Character.toUpperCase(charArray[0]);
     }
-
-    // TODO
-    // private void showErrorMessage(String errorMessage) {
-    // Alert alert = new Alert(AlertType.ERROR);
-    // alert.setAlertType(alertType);
-    // }
 
 }

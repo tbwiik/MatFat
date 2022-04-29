@@ -38,19 +38,14 @@
                   <HBox prefHeight="83.0" prefWidth="300.0">
                      <children>
                         <Button fx:id="generateMenuButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#generateMenu" text="Generate menu" />
-                        <VBox alignment="CENTER" prefHeight="83.0" prefWidth="181.0">
-                           <children>
-                              <Button fx:id="addMealToMenuButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addMealToMenu" text="Add Meal to menu" />
-                              <Button fx:id="removeMealFromMenuButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#removeMealFromMenu" text="Remove meal from menu" />
-                           </children>
-                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="83.0" prefWidth="181.0" />
                      </children>
                   </HBox>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="357.0" prefWidth="470.0">
                <children>
-                <Text fx:id="menuInfoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Start successfull" wrappingWidth="239.0" />
+                <Text fx:id="menuInfoText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="439.0" />
                </children></HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>

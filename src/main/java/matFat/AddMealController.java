@@ -6,14 +6,9 @@ import java.util.Set;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import matFat.Objects.Ingredient;
 import matFat.Objects.IngredientContainer;
 import matFat.Objects.Meal;
@@ -41,6 +36,9 @@ public class AddMealController {
     @FXML
     Text mealInfoText;
 
+    /**
+     * Add ingredient to meal
+     */
     @FXML
     private void addIngredient() {
 
@@ -69,6 +67,9 @@ public class AddMealController {
 
     }
 
+    /**
+     * Add step in recipe to meal
+     */
     @FXML
     private void addRecipeStep() {
 
@@ -87,11 +88,13 @@ public class AddMealController {
 
     }
 
+    /**
+     * Write meal to file
+     */
     @FXML
     private void addMeal() {
 
         try {
-            initialize();
 
             String mealName = mealNameTextField.getText().strip();
             char difficulty = GenericFunctions.strToChar(difficultyTextField.getText());
@@ -122,11 +125,19 @@ public class AddMealController {
 
     }
 
+    /**
+     * Return to startpage
+     * 
+     * @param event
+     */
     @FXML
-    private void returnToStartPage(ActionEvent event) throws IOException {
+    private void returnToStartPage(ActionEvent event) {
 
-        MainPageController.changeScene(event, "MainPage.fxml", "Start Page");
-
+        try {
+            MainPageController.changeScene(event, "MainPage.fxml", "Start Page");
+        } catch (Exception e) {
+            mealInfoText.setText("Unable to return to start page");
+        }
     }
 
     @FXML
@@ -134,14 +145,8 @@ public class AddMealController {
         try {
             mealDataBase = new MealDataBase();
         } catch (Exception e) {
-            mealInfoText.setText("Error initializing file");
+            mealInfoText.setText("Error initializing file\n" + e.getMessage());
         }
-    }
-
-    public static void main(String[] args) {
-        String str = "This, is, a, test";
-        String str2 = str.replaceAll(",", "");
-        System.out.println(str2);
     }
 
 }

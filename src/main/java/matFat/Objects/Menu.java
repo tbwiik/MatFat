@@ -118,9 +118,11 @@ public class Menu extends Tagged {
 
         StringBuilder sBuilder = new StringBuilder();
 
+        sBuilder.append("Meals: ");
         mealList.forEach((meal) -> {
-            sBuilder.append("Meal: " + meal.getMealName() + "\n");
+            sBuilder.append(meal.getMealName() + ", ");
         });
+        sBuilder.append("\n");
 
         sBuilder.append("Number of meals: " + numberOfMeals + "\n");
 
@@ -128,7 +130,7 @@ public class Menu extends Tagged {
         getTags().forEach((tag) -> sBuilder.append(tag + " "));
         sBuilder.append("\n");
 
-        sBuilder.append("Ingredients: " + ingredientContainer.toString());
+        sBuilder.append(ingredientContainer.toString());
 
         return sBuilder.toString();
 
