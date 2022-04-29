@@ -180,21 +180,4 @@ public class MenuTest {
 
     }
 
-    @Test
-    void testWriteToFile() {
-        FileHandler fHandler = new FileHandler();
-        fHandler.writeToFile(menu, "test");
-
-    }
-
-    @Test
-    void testReadFromFile() {
-        try {
-            FileHandler fileHandler = new FileHandler();
-            Menu menu = fileHandler.readFromFile("test");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 }

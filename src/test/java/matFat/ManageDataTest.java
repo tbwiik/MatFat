@@ -17,10 +17,12 @@ public class ManageDataTest {
     ManageData manageData = new ManageData();
     Menu menu;
     List<Meal> mealList = new ArrayList<>();
-    String defaultDataBaseName;
+    String defaultDataBaseName = "mealDataBase";
 
     @Test
     void testReadMealsFromFile() throws FileNotFoundException, IllegalFileFormatException {
+
+        meal
 
         mealList = manageData.readMealsFromFile(defaultDataBaseName);
 
