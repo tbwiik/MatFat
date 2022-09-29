@@ -22,8 +22,6 @@ public class ManageDataTest {
     @Test
     void testReadMealsFromFile() throws FileNotFoundException, IllegalFileFormatException {
 
-        meal
-
         mealList = manageData.readMealsFromFile(defaultDataBaseName);
 
     }

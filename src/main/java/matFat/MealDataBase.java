@@ -15,8 +15,7 @@ public class MealDataBase {
 
     private ManageData manageData = new ManageData();
     private List<Meal> meals = new ArrayList<>();
-
-    String defaultFilename = "mealDataBase"; // Default filepath for dataBase
+    private static String defaultFilename = "mealDataBase"; // Default filepath for dataBase
 
     /**
      * Create database with all meals already written to file
